@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import ColumnDefinition from '../column-definition';
+import ColumnDefinition from 'ember-table/models/column-definition';
 
 export default Ember.Controller.extend({
 

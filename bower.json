@@ -13,8 +13,8 @@
     "loader.js": "ember-cli/loader.js#3.2.0",
     "qunit": "~1.17.1",
     "ember-mocha": "~0.6.2",
-    "jquery-ui": "1.10.1",
+    "jquery-ui": "~1.11.4",
     "jquery-mousewheel": "~3.1.4",
-    "antiscroll": "fa3f81d3c07b647a63036da1de859fcaf1355993"
+    "antiscroll": "git://github.com/azirbel/antiscroll.git#90391fb371c7be769bc32e7287c5271981428356"
   }
 }
