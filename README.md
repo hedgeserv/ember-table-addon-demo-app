@@ -49,3 +49,8 @@ Specify what it takes to deploy your app.
 * Development Browser Extensions
   * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
   * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
+  * 
+
+## Developer Tips
+
+You can clone the wiki from git@github.com:hedgeserv/ember-table-addon-demo-app.wiki.git. This will allow you to easily see history of wiki pages. Be aware though that the wiki is a round-trip thing - it's editable via a web interface too.
