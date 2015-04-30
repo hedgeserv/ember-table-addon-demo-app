@@ -1,5 +1,4 @@
 import DS from 'ember-data';
-import Page1 from '../datasets/loandata-page1';
 
 let Loan = DS.Model.extend({
   activity: DS.attr(),
@@ -9,7 +8,4 @@ let Loan = DS.Model.extend({
   repayment_term: DS.attr()
 });
 
-Loan.reopenClass({
-  FIXTURES: Page1.loans
-});
 export default Loan;

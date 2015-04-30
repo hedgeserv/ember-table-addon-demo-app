@@ -23,12 +23,12 @@ export default Ember.Controller.extend({
     return [activityColumn, statusColumn];
   }.property(),
 
-  content: function () {
+  tableContent: function () {
     var generatedContent = this.get('model');
     return generatedContent;
   }.property(),
 
-  numRows: Ember.computed('content', function() {
-    return this.get('content').length;
+  numRows: Ember.computed('tableContent', function() {
+    return this.get('tableContent').length;
   })
 });
