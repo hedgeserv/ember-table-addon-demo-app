@@ -35,6 +35,6 @@
     "ember-export-application-global": "^1.0.2"
   },
   "dependencies": {
-    "ember-table": "git://github.com/hedgeserv/ember-table-addon#a30055d808220652a6545c5e8b1a7a923a111baf"
+    "ember-table": "*"
   }
 }

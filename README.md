@@ -1,6 +1,6 @@
 # ember-table-addon-demo-app
 
-Demo app for "ember-table-addon"
+Demo app for "ember-table-addon".
 
 ## Prerequisites
 
@@ -11,22 +11,34 @@ You will need the following things properly installed on your computer.
 * [Bower](http://bower.io/)
 * [Ember CLI](http://www.ember-cli.com/)
 * [PhantomJS](http://phantomjs.org/)
+* [ember-table-addon](https://github.com/hedgeserv/ember-table-addon)
+
+## Link to ember-table-addon
+You will need to make ember-table-addon locally available
+
+* change into ember-table-addon directory
+* `npm link`
+
+If you have cloned this repository before and didn't setup link to ember-table-addon
+
+* change into ember-table-addon-demo-app directory
+* `npm uninstall ember-table --save`
+* `npm link ember-table`
+* add entry `"ember-table": "*"` to `package.json`
 
 ## Installation
 
 * `git clone <repository-url>` this repository
 * change into the new directory
+* `npm link ember-table`
 * `npm install`
 * `bower install`
 
 ## Running / Development
 
 * `ember server`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
+* Visit [http://localhost:4200/loans](http://localhost:4200/loans) for demo of [Fully Loaded Set of Loans](https://github.com/hedgeserv/ember-table-addon-demo-app/wiki/Fully-Loaded-Set-of-Loans).
 
-### Code Generators
-
-Make use of the many generators for code, try `ember help generate` for more details
 
 ### Running Tests
 
@@ -38,9 +50,14 @@ Make use of the many generators for code, try `ember help generate` for more det
 * `ember build` (development)
 * `ember build --environment production` (production)
 
+### Continuous Integration
+
+* TBD: update .travis.yml to install ember-table-addon as npm link first
+* TBD: verify compatibility with Jenkins 
+
 ### Deploying
 
-Specify what it takes to deploy your app.
+TBD.
 
 ## Further Reading / Useful Links
 
@@ -53,4 +70,4 @@ Specify what it takes to deploy your app.
 
 ## Developer Tips
 
-You can clone the wiki from git@github.com:hedgeserv/ember-table-addon-demo-app.wiki.git. This will allow you to easily see history of wiki pages. Be aware though that the wiki is a round-trip thing - it's editable via a web interface too.
+
