@@ -13,21 +13,14 @@ You will need the following things properly installed on your computer.
 * [PhantomJS](http://phantomjs.org/)
 * [ember-table-addon](https://github.com/hedgeserv/ember-table-addon)
 
-## Link to ember-table-addon
-You will need to make ember-table-addon locally available
+### Npm link for ember-table-addon
 
-* change into ember-table-addon directory
+Your will need to make ember-table-addon locally available
+
+* Change into ember-table-addon directory
 * `npm link`
 
-If you have cloned this repository before and didn't setup link to ember-table-addon
-
-* change into ember-table-addon-demo-app directory
-* `npm uninstall ember-table --save`
-* `npm link ember-table`
-* add entry `"ember-table": "*"` to `package.json`
-
 ## Installation
-
 * `git clone <repository-url>` this repository
 * change into the new directory
 * `npm link ember-table`
