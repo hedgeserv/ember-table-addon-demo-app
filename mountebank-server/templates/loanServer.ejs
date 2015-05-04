@@ -1,0 +1,21 @@
+{
+  "port": 5555,
+  "protocol": "http",
+  "name": "origin",
+  "stubs": [
+    {
+      "responses": [
+        { "is": {
+          "headers": {
+          },
+          "body": "<%- stringify(filename, 'datasets/1.json') %>" }
+        },
+        { "is": {
+          "headers": {
+          },
+          "body": "<%- stringify(filename, 'datasets/2.json') %>" }
+        }
+      ]
+    }
+  ]
+}
