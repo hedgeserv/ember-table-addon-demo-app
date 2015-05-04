@@ -4,7 +4,16 @@ import ColumnDefinition from 'ember-table/models/column-definition';
 export default Ember.Controller.extend({
 
   columns: function () {
-    var activityColumn, statusColumn;
+    var rowNumberColumn, activityColumn, statusColumn;
+    rowNumberColumn = ColumnDefinition.create({
+      columnWidth: 20,
+      textAlign: 'text-align-left',
+      headerCellName: 'No.',
+      getCellContent: function(row) {
+        return row.get('rowNumber');
+      }
+    });
+
     activityColumn = ColumnDefinition.create({
       columnWidth: 150,
       textAlign: 'text-align-left',
@@ -20,7 +29,8 @@ export default Ember.Controller.extend({
         return row.get('status');
       }
     });
-    return [activityColumn, statusColumn];
+
+    return [rowNumberColumn, activityColumn, statusColumn];
   }.property(),
 
   tableContent: function () {

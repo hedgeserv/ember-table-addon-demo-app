@@ -7,7 +7,11 @@ export default Ember.Route.extend({
     });
     return Ember.RSVP.all(promises).then(function(loansArrays) {
       return loansArrays.reduce(function(previous, current) {
-        return previous.concat(current.loans);
+        var loans = current.loans.map(function(loan, index) {
+          loan.rowNumber = (1 + index) + (current.header.page - 1) * current.header.page_size;
+          return loan;
+        });
+        return previous.concat(loans);
       }, []);
     });
   }
