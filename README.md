@@ -15,19 +15,18 @@ You will need the following things properly installed on your computer.
 * [Python](https://www.python.org/) (2.7) - `brew install python`
 * [Mountebank](http://www.mbtest.org/) - `npm install -g mountebank --production`
 
-### Npm link for ember-table-addon
+### Npm link for ember-table-addon (for reuse later)
 
 Your will need to make ember-table-addon locally available
 
 * Change into ember-table-addon directory
 * `cd ../ember-table-addon && npm link`
 
-## Installation
-* `git clone <repository-url>` this repository - `brew install python`
-* change into the new directory
+## Installation (and using the link above)
+Ensure you're cd'd to the cloned ember-table-addon-demo-app working-copy directory
 * `npm link ember-table`
-* `npm install`
-* `bower install`
+* `npm install` (installing server-side modules locally)
+* `bower install` (installing client-side modules locally)
 
 ## Running / Development
 
