@@ -15,7 +15,6 @@ export default Ember.Route.extend({
 
     return Ember.RSVP.all(promises).then(function(pages) {
       return pages.reduce(function (previous, current) {
-        var startRowNumber = previous.length;
         return previous.concat(current.toArray());
       }, Ember.A([]));
     });
