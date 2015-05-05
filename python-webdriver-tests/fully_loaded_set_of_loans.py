@@ -50,9 +50,8 @@ driver = Driver("http://localhost:4200")
 try:
     driver.get("/loans")
 
-    scroll_down_to_last_row(driver)
-    row_number_cell_elem = select_row_number_of_last_row(driver)
-
-    assert "3500" in row_number_cell_elem.text
+    elements = driver.find_elements_by_css_selector(".ember-table-body-container .ember-table-table-row");
+    #TODO: remove last two invisible rows from elements
+    assert 3502==len(elements)
 finally:
     driver.close()
