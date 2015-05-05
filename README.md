@@ -6,14 +6,14 @@ Demo app for "ember-table-addon".
 
 You will need the following things properly installed on your computer.
 
-* [Git](http://git-scm.com/)
-* [Node.js](http://nodejs.org/)
+* [Git](http://git-scm.com/) - `brew install git`
+* [Node.js](http://nodejs.org/) - `brew install nodejs`
 * [Bower](http://bower.io/) - `npm install -g bower`
 * [Ember CLI](http://www.ember-cli.com/) - `npm install -g ember-cli`
 * [PhantomJS](http://phantomjs.org/) - `npm install -g phantomjs`
 * [ember-table-addon](https://github.com/hedgeserv/ember-table-addon)
-* [Python](https://www.python.org/) (2.7)
-* [Mountebank](http://www.mbtest.org/)
+* [Python](https://www.python.org/) (2.7) - `brew install python`
+* [Mountebank](http://www.mbtest.org/) - `npm install -g mountebank --production`
 
 ### Npm link for ember-table-addon
 
@@ -23,7 +23,7 @@ Your will need to make ember-table-addon locally available
 * `npm link`
 
 ## Installation
-* `git clone <repository-url>` this repository
+* `git clone <repository-url>` this repository - `brew install python`
 * change into the new directory
 * `npm link ember-table`
 * `npm install`
