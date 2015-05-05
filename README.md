@@ -30,7 +30,7 @@ Ensure you're cd'd to the cloned ember-table-addon-demo-app working-copy directo
 
 ## Running / Development
 
-* Start Mountebank
+* Start Mountebank - `mb &`
 * Setup imposters `node mountebank-server/setup-imposters.js `
 * `ember server`
 * Visit [http://localhost:4200/loans](http://localhost:4200/loans) for demo of [Fully Loaded Set of Loans](https://github.com/hedgeserv/ember-table-addon-demo-app/wiki/Fully-Loaded-Set-of-Loans).
@@ -38,15 +38,15 @@ Ensure you're cd'd to the cloned ember-table-addon-demo-app working-copy directo
 
 ### Running Ember Tests
 
-* `ember test`
-* `ember test --server`
+* `ember test` (runs tests with phantomjs and just reports a pass/fail)
+* `ember test --server` (runs tests with chrome and just reports a pass/fail)
 
 ### Running Webdriver Tests
 
 You will need to install required Python package and download chrome driver
 
+* `pip install -r python-webdriver-tests/requirements.txt`
 * change into `python-webdriver-tests` directory
-* `pip install -r requirements.txt`
 * download [chrome driver for mac] (http://chromedriver.storage.googleapis.com/2.15/chromedriver_mac32.zip)
 * put chromedriver on system path
 * run `python fully_loaded_set_of_loans.py`
