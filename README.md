@@ -7,10 +7,10 @@ Demo app for "ember-table-addon".
 You will need the following things properly installed on your computer.
 
 * [Git](http://git-scm.com/)
-* [Node.js](http://nodejs.org/) (with NPM)
-* [Bower](http://bower.io/)
-* [Ember CLI](http://www.ember-cli.com/)
-* [PhantomJS](http://phantomjs.org/)
+* [Node.js](http://nodejs.org/)
+* [Bower](http://bower.io/) - `npm install -g bower`
+* [Ember CLI](http://www.ember-cli.com/) - `npm install -g ember-cli`
+* [PhantomJS](http://phantomjs.org/) - `npm install -g phantomjs`
 * [ember-table-addon](https://github.com/hedgeserv/ember-table-addon)
 * [Python](https://www.python.org/) (2.7)
 * [Mountebank](http://www.mbtest.org/)
