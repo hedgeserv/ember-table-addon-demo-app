@@ -1,19 +1,173 @@
 {
   "port": 5555,
   "protocol": "http",
-  "name": "origin",
+  "name": "loans",
   "stubs": [
     {
       "responses": [
-        { "is": {
+        {
+          "is": {
+            "headers": {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*"
+            },
+            "body": "<%- stringify(filename, 'datasets/1.json') %>"
+          }
+        }
+      ],
+      "predicates": [
+        {
+          "equals": {
+            "method": "GET",
+            "path": "/loans",
+            "query": {
+              "page": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "responses": [
+        {
+          "is": {
+            "headers": {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*"
+            },
+            "body": "<%- stringify(filename, 'datasets/2.json') %>"
+          }
+        }
+      ],
+      "predicates": [
+        {
+          "equals": {
+            "method": "GET",
+            "path": "/loans",
+            "query": {
+              "page": "2"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "responses": [
+        {
+          "is": {
+            "headers": {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*"
+            },
+            "body": "<%- stringify(filename, 'datasets/3.json') %>"
+          }
+        }
+      ],
+      "predicates": [
+        {
+          "equals": {
+            "method": "GET",
+            "path": "/loans",
+            "query": {
+              "page": "3"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "responses": [
+        {
+          "is": {
+            "headers": {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*"
+            },
+            "body": "<%- stringify(filename, 'datasets/4.json') %>"
+          }
+        }
+      ],
+      "predicates": [
+        {
+          "equals": {
+            "method": "GET",
+            "path": "/loans",
+            "query": {
+              "page": "4"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "responses": [
+        {
+          "is": {
+            "headers": {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*"
+            },
+            "body": "<%- stringify(filename, 'datasets/5.json') %>"
+          }
+        }
+      ],
+      "predicates": [
+        {
+          "equals": {
+            "method": "GET",
+            "path": "/loans",
+            "query": {
+              "page": "5"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "responses": [
+        {
+          "is": {
           "headers": {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
           },
-          "body": "<%- stringify(filename, 'datasets/1.json') %>" }
-        },
-        { "is": {
-          "headers": {
-          },
-          "body": "<%- stringify(filename, 'datasets/2.json') %>" }
+          "body": "<%- stringify(filename, 'datasets/6.json') %>"
+          }
+        }
+      ],
+      "predicates": [
+        {
+          "equals": {
+            "method": "GET",
+            "path": "/loans",
+            "query": {
+              "page": "6"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "responses": [
+        {
+          "is": {
+            "headers": {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*"
+            },
+            "body": "<%- stringify(filename, 'datasets/7.json') %>"
+          }
+        }
+      ],
+      "predicates": [
+        {
+          "equals": {
+            "method": "GET",
+            "path": "/loans",
+            "query": {
+              "page": "7"
+            }
+          }
         }
       ]
     }

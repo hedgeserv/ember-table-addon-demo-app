@@ -1,9 +1,10 @@
 import Ember from 'ember';
+import DS from 'ember-data';
 
 export default Ember.Route.extend({
   model: function () {
     var promises = [1, 2, 3, 4, 5, 6, 7].map(function(id){
-      return Ember.$.getJSON("datasets/" + id + ".json");
+      return Ember.$.getJSON("http://localhost:5555/loans?page=" + id);
     });
     return Ember.RSVP.all(promises).then(function(loansArrays) {
       return loansArrays.reduce(function(previous, current) {
