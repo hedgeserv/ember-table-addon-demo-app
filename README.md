@@ -11,7 +11,7 @@ You will need the following things properly installed on your computer.
 * [Bower](http://bower.io/) - `npm install -g bower`
 * [Ember CLI](http://www.ember-cli.com/) - `npm install -g ember-cli`
 * [PhantomJS](http://phantomjs.org/) - `npm install -g phantomjs`
-* [ember-table-addon](https://github.com/hedgeserv/ember-table-addon)
+* [ember-table-addon](https://github.com/hedgeserv/ember-table-addon) - see below
 * [Python](https://www.python.org/) (2.7) - `brew install python`
 * [Mountebank](http://www.mbtest.org/) - `npm install -g mountebank --production`
 
@@ -20,7 +20,7 @@ You will need the following things properly installed on your computer.
 Your will need to make ember-table-addon locally available
 
 * Change into ember-table-addon directory
-* `npm link`
+* `cd ../ember-table-addon && npm link`
 
 ## Installation
 * `git clone <repository-url>` this repository - `brew install python`
