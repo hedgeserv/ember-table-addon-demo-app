@@ -46,6 +46,7 @@ You will need to install required Python package and download chrome driver
 * change into `python-webdriver-tests` directory
 * `pip install -r requirements.txt`
 * download [chrome driver for mac] (http://chromedriver.storage.googleapis.com/2.15/chromedriver_mac32.zip)
+* put chromedriver on system path
 * run `python fully_loaded_set_of_loans.py`
 
 You will also need to put chrome driver  

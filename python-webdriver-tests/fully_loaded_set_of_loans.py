@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 class Driver:
     def __init__(self, server_host):
         self._server_host = server_host
-        self._driver = webdriver.Chrome(executable_path="./chromedriver-mac")
+        self._driver = webdriver.Chrome()
         self._driver.implicitly_wait(10)
 
     def get(self, path):
