@@ -2,7 +2,7 @@ var fs = require('fs');
 var http = require('http');
 
 var allLoans = [1, 2, 3, 4, 5, 6, 7].map(function(index) {
-  return JSON.parse(fs.readFileSync('../datasets/1.json'));
+  return JSON.parse(fs.readFileSync(__dirname + '/../datasets/1.json'));
 }).reduce(function(previous, current){
   return previous.concat(current.loans);
 }, []);
