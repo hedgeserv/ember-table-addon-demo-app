@@ -2,7 +2,7 @@ var fs = require('fs');
 var http = require('http');
 
 var allLoans = [1, 2, 3, 4, 5, 6, 7].map(function(index) {
-  return JSON.parse(fs.readFileSync(__dirname + '/../datasets/1.json'));
+  return JSON.parse(fs.readFileSync(__dirname + '/../datasets/' + index + '.json'));
 }).reduce(function(previous, current){
   return previous.concat(current.loans);
 }, []);
@@ -39,13 +39,14 @@ function makeStubs(allLoans) {
   var pageSize = 50;
   var pageIndex = 1;
   while ((pageIndex - 1) * pageSize < allLoans.length) {
-    stubs.push(makeStub(allLoans, pageIndex, pageSize));
+    stubs.push(makePerPageStub(allLoans, pageIndex, pageSize));
     pageIndex++;
   }
+  stubs.push(makeAllLoansStub(allLoans));
   return stubs;
 }
 
-function makeStub(allLoans, pageIndex, pageSize) {
+function makePerPageStub(allLoans, pageIndex, pageSize) {
   var startRow = (pageIndex-1) * pageSize;
   var loans = allLoans.slice(startRow, startRow + pageSize);
   return {
@@ -78,6 +79,34 @@ function makeStub(allLoans, pageIndex, pageSize) {
       }
     }
   ]};
+}
+
+function makeAllLoansStub(allLoans) {
+  return {
+    "responses": [
+      {
+        "is": {
+          "headers": {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+          },
+          "body": JSON.stringify({
+            "header": {
+              "total": allLoans.length,
+              "date": new Date()
+            },
+            "loans": allLoans
+          })
+        }
+      }],
+    "predicates": [
+      {
+        "equals": {
+          "method": "GET",
+          "path": "/loans"
+        }
+      }
+    ]};
 }
 
 

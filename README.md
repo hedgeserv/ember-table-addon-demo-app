@@ -33,7 +33,7 @@ Ensure you're cd'd to the cloned ember-table-addon-demo-app working-copy directo
 * Start Mountebank - `mb &`
 * Setup imposters `node mountebank-server/setup-imposters.js `
 * `ember server`
-* Visit [http://localhost:4200/loans](http://localhost:4200/loans) for demo of [Fully Loaded Set of Loans](https://github.com/hedgeserv/ember-table-addon-demo-app/wiki/Fully-Loaded-Set-of-Loans).
+* Visit [http://localhost:4200/fully-loaded-loans](http://localhost:4200/fully-loaded-loans) for demo of [Fully Loaded Set of Loans](https://github.com/hedgeserv/ember-table-addon-demo-app/wiki/Fully-Loaded-Set-of-Loans).
 
 
 ### Running Ember Tests
