@@ -45,11 +45,12 @@ Ensure you're cd'd to the cloned ember-table-addon-demo-app working-copy directo
 
 You will need to install required Python package and download chrome driver
 
-* `pip install -r python-webdriver-tests/requirements.txt`
-* change into `python-webdriver-tests` directory
 * download [chrome driver for mac] (http://chromedriver.storage.googleapis.com/2.15/chromedriver_mac32.zip)
 * put chromedriver on system path
-* run `python fully_loaded_set_of_loans.py`
+* `pip install selenium`
+* `pip install nose`
+* change into `python-webdriver-tests` directory
+* run `nosetests`
 
 You will also need to put chrome driver  
 
