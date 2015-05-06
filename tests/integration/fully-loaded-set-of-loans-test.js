@@ -16,6 +16,6 @@ module('Fully loaded set of loans', {
 test("Should show all loans in a table", function(assert) {
   assert.expect(1);
   visit('/loans').then(function() {
-    assert.equal(find('.ember-table-table-row').length, 503, "Page contains list of models 503");
+    assert.equal(find('.ember-table-body-container .ember-table-table-row').length, 3502, "Page contains list of models 3502");
    });
  });
