@@ -48,7 +48,7 @@ def select_row_number_of_last_row(driver):
 
 driver = Driver("http://localhost:4200")
 try:
-    driver.get("/loans")
+    driver.get("/fully-loaded-loans")
 
     elements = driver.find_elements_by_css_selector(".ember-table-body-container .ember-table-table-row");
     #TODO: remove last two invisible rows from elements

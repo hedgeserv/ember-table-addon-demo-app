@@ -1,4 +1,5 @@
 import Ember from "ember";
+import DS from "ember-data";
 import { module, test } from 'qunit';
 import startApp from '../helpers/start-app';
 
@@ -14,8 +15,10 @@ module('Fully loaded set of loans', {
  });
 
 test("Should show all loans in a table", function(assert) {
+
+
   assert.expect(1);
-  visit('/loans').then(function() {
+  visit('/fully-loaded-loans').then(function() {
     assert.equal(find('.ember-table-body-container .ember-table-table-row').length, 3502, "Page contains list of models 3502");
    });
  });
