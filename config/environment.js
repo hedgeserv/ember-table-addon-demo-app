@@ -23,11 +23,13 @@ module.exports = function(environment) {
     'default-src': "'none'",
     'script-src': "'self'",
     'font-src': "'self'",
-    'connect-src': "'self' http://localhost:5555",
+    'connect-src': "'self' http://localhost:5555 http://localhost:2525",
     'img-src': "'self'",
     'style-src': "'self' 'unsafe-inline'",
     'media-src': "'self'"
   };
+
+  ENV.loansServerHost = "http://localhost:5555";
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
@@ -38,6 +40,9 @@ module.exports = function(environment) {
   }
 
   if (environment === 'test') {
+    ENV.loansServerHost = "http://localhost:8888";
+    ENV.mountebankServerHost = "http://localhost:2525";
+
     // Testem prefers this...
     ENV.baseURL = '/';
     ENV.locationType = 'none';

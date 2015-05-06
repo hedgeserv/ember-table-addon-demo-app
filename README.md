@@ -13,7 +13,7 @@ You will need the following things properly installed on your computer.
 * [PhantomJS](http://phantomjs.org/) - `npm install -g phantomjs`
 * [ember-table-addon](https://github.com/hedgeserv/ember-table-addon) - see below
 * [Python](https://www.python.org/) (2.7) - `brew install python`
-* [Mountebank](http://www.mbtest.org/) - `npm install -g mountebank --production`
+* [Mountebank](http://www.mbtest.org/)(^1.2.122) - `npm install -g mountebank --production`
 
 ### Npm link for ember-table-addon (for reuse later)
 
@@ -30,7 +30,7 @@ Ensure you're cd'd to the cloned ember-table-addon-demo-app working-copy directo
 
 ## Running / Development
 
-* Start Mountebank - `mb &`
+* Start Mountebank - `mb --allowCORS &`
 * Setup imposters `node mountebank-server/setup-imposters.js `
 * `ember server`
 * Visit [http://localhost:4200/fully-loaded-loans](http://localhost:4200/fully-loaded-loans) for demo of [Fully Loaded Set of Loans](https://github.com/hedgeserv/ember-table-addon-demo-app/wiki/Fully-Loaded-Set-of-Loans).
