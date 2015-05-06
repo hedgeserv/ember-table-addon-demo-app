@@ -1,8 +1,8 @@
 # ember-table-addon-demo-app
 
-Demo app for "ember-table-addon".
+Demo app for our fork of Addepar's <code>ember-table-addon</code>.
 
-## Prerequisites
+## Build Prerequisites
 
 You will need the following things properly installed on your computer.
 
@@ -17,9 +17,10 @@ You will need the following things properly installed on your computer.
 
 ### Npm link for ember-table-addon (for reuse later)
 
-Your will need to make ember-table-addon locally available
+Your will need to make [our fork of](https://github.com/hedgeserv/ember-table-addon) ember-table-addon locally available. Clone that project too, to an adjacent directory.
 
-* Change into ember-table-addon directory
+Change into the ember-table-addon directory, and link it:
+
 * `cd ../ember-table-addon && npm link`
 
 ## Installation (and using the link above)
@@ -45,14 +46,12 @@ Ensure you're cd'd to the cloned ember-table-addon-demo-app working-copy directo
 
 You will need to install required Python package and download chrome driver
 
-* download [chrome driver for mac] (http://chromedriver.storage.googleapis.com/2.15/chromedriver_mac32.zip)
+* download [chrome driver for mac](http://chromedriver.storage.googleapis.com/2.15/chromedriver_mac32.zip)
 * put chromedriver on system path
 * `pip install selenium`
 * `pip install nose`
 * change into `python-webdriver-tests` directory
 * run `nosetests`
-
-You will also need to put chrome driver  
 
 ### Building
 
