@@ -48,11 +48,8 @@ You will need to install required Python package and download chrome driver
 
 * download [chrome driver for mac](http://chromedriver.storage.googleapis.com/2.15/chromedriver_mac32.zip)
 * put chromedriver on system path
-* `pip install selenium`
-* `pip install nose`
-* `pip install unittest2`
-* change into `python-webdriver-tests` directory
-* run `nosetests`
+* `pip install -r python-webdriver-tests/requirements.txt`
+* `nosetests`
 
 ### Building
 
@@ -60,7 +57,10 @@ You will need to install required Python package and download chrome driver
 * `ember build --environment production` (production)
 
 ### Continuous Integration
+#### Run ember tests and python tests
+* `./test-ci.sh`
 
+#### Travis and Jenkins
 * TBD: update .travis.yml to install ember-table-addon as npm link first
 * TBD: verify compatibility with Jenkins 
 * TBD: integrate python webdriver tests
@@ -79,5 +79,4 @@ TBD.
   * 
 
 ## Developer Tips
-
 
