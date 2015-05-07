@@ -48,6 +48,8 @@ You will need to install required Python package and download chrome driver
 
 * download [chrome driver for mac](http://chromedriver.storage.googleapis.com/2.15/chromedriver_mac32.zip)
 * put chromedriver on system path
+* Start Mountebank - `mb --allowCORS &`
+* `ember serve -e ci`
 * `pip install -r python-webdriver-tests/requirements.txt`
 * `nosetests`
 

@@ -54,6 +54,12 @@ module.exports = function(environment) {
     ENV.APP.rootElement = '#ember-testing';
   }
 
+  if(environment === 'ci'){
+    ENV.loansServerHost = "http://localhost:8888";
+    ENV.mountebankServerHost = "http://localhost:2525";
+    ENV.contentSecurityPolicy['connect-src'] += " http://localhost:8888"
+  }
+
   if (environment === 'production') {
 
   }

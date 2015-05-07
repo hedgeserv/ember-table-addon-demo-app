@@ -15,7 +15,7 @@ ember test
 if [ $? -eq 0 ];then
   echo "${green}Ember test finished successfully.${reset}"
   echo "${green}Start ember server.${reset}"
-  ember server &
+  ember server -e ci &
   var=$!
   echo "${green}Ember server pid is $var${reset}"
   echo "${green}Run nosetests ...${reset}"
