@@ -50,6 +50,7 @@ You will need to install required Python package and download chrome driver
 * put chromedriver on system path
 * `pip install selenium`
 * `pip install nose`
+* `pip install unittest2`
 * change into `python-webdriver-tests` directory
 * run `nosetests`
 
