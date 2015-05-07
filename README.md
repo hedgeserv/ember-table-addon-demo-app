@@ -58,7 +58,7 @@ You will need to install required Python package and download chrome driver
 
 ### Continuous Integration
 #### Run ember tests and python tests
-* `./test-ci.sh`
+* `sh test-ci.sh`
 
 #### Travis and Jenkins
 * TBD: update .travis.yml to install ember-table-addon as npm link first
