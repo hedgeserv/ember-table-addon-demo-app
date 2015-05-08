@@ -1,3 +1,11 @@
+@height-100-rows: 3030px;
+
 .fully_loaded_table_container {
   height: 150000px;
+}
+
+.lazy-loaded-table-container {
+  &.height-100-rows {
+    height: @height-100-rows;
+  }
 }

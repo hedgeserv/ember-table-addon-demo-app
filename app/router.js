@@ -8,4 +8,5 @@ var Router = Ember.Router.extend({
 export default Router.map(function() {
   this.route('loans');
   this.route('fullyLoadedLoans', {path: '/fully-loaded-loans'});
+  this.route('lazyLoadedLoans', {path: '/lazy-loaded-loans'});
 });

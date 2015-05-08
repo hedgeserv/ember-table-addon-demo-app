@@ -39,9 +39,13 @@ module.exports = function(environment) {
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
   }
 
-  if (environment === 'test') {
+  if (environment === 'test' || environment === 'ci') {
     ENV.loansServerHost = "http://localhost:8888";
     ENV.mountebankServerHost = "http://localhost:2525";
+    ENV.contentSecurityPolicy['connect-src'] += " http://localhost:8888"
+  }
+
+  if (environment === 'test') {
 
     // Testem prefers this...
     ENV.baseURL = '/';
@@ -52,12 +56,6 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
     ENV.APP.rootElement = '#ember-testing';
-  }
-
-  if(environment === 'ci'){
-    ENV.loansServerHost = "http://localhost:8888";
-    ENV.mountebankServerHost = "http://localhost:2525";
-    ENV.contentSecurityPolicy['connect-src'] += " http://localhost:8888"
   }
 
   if (environment === 'production') {
