@@ -11,7 +11,7 @@ node mountebank-server/setup-imposters.js
 
 echo "${green}Run ember test ...${reset}"
 ember test
-
+result=1
 if [ $? -eq 0 ];then
   echo "${green}Ember test finished successfully.${reset}"
   echo "${green}Start ember server.${reset}"
@@ -22,11 +22,12 @@ if [ $? -eq 0 ];then
   nosetests
   echo "${green}Shutdown ember server at pid $var.${reset}"
   kill $var
-  exit 1
+  result=0
 else
   echo "${red}Ember test failed.${reset}"
-  exit 1
+  result=1
 fi
 
 echo "${green}Shutdown Mountebank ...${reset}"
 mb stop
+exist $result
