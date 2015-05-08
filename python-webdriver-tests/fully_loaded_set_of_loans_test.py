@@ -1,5 +1,5 @@
 from selenium import webdriver
-from unittest import TestCase
+from unittest2 import TestCase
 from prepare_loans import prepare_loans
 
 
