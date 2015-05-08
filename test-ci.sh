@@ -30,4 +30,4 @@ fi
 
 echo "${green}Shutdown Mountebank ...${reset}"
 mb stop
-exist $result
+exit $result
