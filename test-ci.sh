@@ -22,8 +22,10 @@ if [ $? -eq 0 ];then
   nosetests
   echo "${green}Shutdown ember server at pid $var.${reset}"
   kill $var
+  exit 1
 else
   echo "${red}Ember test failed.${reset}"
+  exit 1
 fi
 
 echo "${green}Shutdown Mountebank ...${reset}"
