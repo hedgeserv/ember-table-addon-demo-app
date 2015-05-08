@@ -1,22 +1,52 @@
----
-language: node_js
-node_js:
-  - "0.12"
+language: python
+python:
+  - "2.7"
 
-sudo: false
-
+sudo: required
+use_chrome: true
 cache:
   directories:
     - node_modules
 
 before_install:
-  - "npm config set spin false"
-  - "npm install -g npm@^2"
+
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+
+  - cd python-webdriver-tests
+  - wget http://chromedriver.storage.googleapis.com/2.10/chromedriver_linux64.zip
+  - unzip chromedriver_linux64.zip
+  - sudo mv chromedriver /usr/bin
+  - sudo chmod 777 /usr/bin/chromedriver
+  - cd ..
+
+  - pip install -r python-webdriver-tests/requirements.txt
+
+  - npm config set spin false
+  - npm install -g npm@^2
+  - npm install -g ember-cli
+  - npm install -g bower
+  - npm install -g mountebank --production
+
+  - git clone git://github.com/hedgeserv/ember-table-addon.git
+  - cd ember-table-addon
+  - npm link
+  - cd ..
 
 install:
-  - npm install -g bower
+
+  - npm link ember-table
   - npm install
   - bower install
 
+before_script:
+
+  - ember server -e ci &
+
 script:
-  - npm test
+
+  - ember test
+  - nosetests
+
+
+

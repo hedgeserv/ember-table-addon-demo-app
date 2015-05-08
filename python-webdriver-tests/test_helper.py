@@ -6,7 +6,11 @@ import os
 class ChromeTest(TestCase):
     def setUp(self):
         os.system('mb restart &')
-        self.driver = webdriver.Chrome()
+
+        driver_arguments = {'chrome_options': webdriver.ChromeOptions()}
+        driver_arguments['chrome_options'].add_argument('--no-sandbox')
+        self.driver = webdriver.Chrome(chrome_options= driver_arguments['chrome_options'])
+
         self.driver.implicitly_wait(10)
 
     def tearDown(self):
