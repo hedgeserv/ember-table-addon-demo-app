@@ -20,12 +20,14 @@ if [ $? -eq 0 ];then
   echo "${green}Ember server pid is $var${reset}"
   echo "${green}Run nosetests ...${reset}"
   nosetests
+
+  if [ $? -eq 0 ];then
+  result=0
+
   echo "${green}Shutdown ember server at pid $var.${reset}"
   kill $var
-  result=0
 else
   echo "${red}Ember test or selenium test failed.${reset}"
-  result=1
 fi
 
 echo "${green}Shutdown Mountebank ...${reset}"
