@@ -17,7 +17,7 @@ class TestFullLoadedSetOfLoans(_BaseTest):
     def test_homepage(self):
         prepare_loans(3500)
         self.driver.get('http://localhost:4200/fully-loaded-loans')
-        time.sleep(120)
+        # time.sleep(120)
         elements = self.driver.find_elements_by_css_selector(".ember-table-body-container .ember-table-table-row")
         print len(elements)
-        assert 3502 == len(elements)
+        assert 3501 == len(elements)
