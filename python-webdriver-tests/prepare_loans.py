@@ -6,9 +6,6 @@ class MountebankStub:
     def __init__(self):
         self.mb_url = 'http://localhost:2525/imposters/'
 
-    def delete_imposter(self, port=8888):
-        requests.delete(self.mb_url + str(port))
-
     def create_imposter(self, stubs):
         params = {
             "port": 8888,
@@ -82,7 +79,6 @@ def make_chunk_stubs(total):
 
 def _prepare(count, stub_maker=make_stubs):
     mb = MountebankStub()
-    mb.delete_imposter()
 
     stubs = stub_maker(count)
 
