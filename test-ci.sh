@@ -24,7 +24,7 @@ if [ $? -eq 0 ];then
   kill $var
   result=0
 else
-  echo "${red}Ember test failed.${reset}"
+  echo "${red}Ember test or selenium test failed.${reset}"
   result=1
 fi
 
