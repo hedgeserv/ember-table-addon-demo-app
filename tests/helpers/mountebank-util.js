@@ -50,6 +50,11 @@ export default {
         }),
         dataType: "json"
       });
+    }, function(error) {
+      if(error.status === 0) {
+        console.log("Failed to set up Mountebank, please make sure Mountebank is started with option --allowCORS " +
+          "and the version is no less than 1.2.122.");
+      }
     });
   }
 };
