@@ -68,8 +68,8 @@ You will need to install required Python package and download chrome driver
 
 All relies have been added requirements.txt
 
-* `lettuce`
-* if you want to generate report as .xml file, please use `lettuce --with-xunit`
+* `lettuce python-webdriver-tests/features`
+* if you want to generate report as .xml file, please use `lettuce python-webdriver-tests/features --with-xunit`
 
 ### Building
 

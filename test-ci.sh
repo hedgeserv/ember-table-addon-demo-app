@@ -26,7 +26,7 @@ if [ $? -eq 0 ];then
   fi
 
   echo "${green}Run lettuce ...${reset}"
-  lettuce --with-xunit
+  lettuce python-webdriver-tests/features --with-xunit
 
   if [ $? -eq 0 ];then
   result=0
