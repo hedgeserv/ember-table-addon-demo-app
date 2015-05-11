@@ -6,7 +6,13 @@ Demo app for our fork of Addepar's <code>ember-table-addon</code>.
 
 ### Build script 
 
-You can run `install-dependencies.sh` instead of manual installation
+You can run `install-dependencies.sh [Path]` instead of manual installation
+
+Parameter [Path]:
+
+* If you use it by local, path should equal your project parent path. Such as "~/GitHubProject/HedgeServ" (Note: ember-table-addon and ember-table-addon-demo-app should in same folder)
+         
+* If you use it by Jenkins, path should equal Jenkins project parent path. Such as "/Users/hedgebeijing/.jenkins/workspace"
 
 ### Build manual
 

@@ -19,11 +19,13 @@ echo "${green}[Setup Script]Install mountebank --production ...${reset}"
 npm install -g mountebank --production
 
 echo "${green}[Setup Script]Ready to link ember-table ...${reset}"
-cd /Users/hedgebeijing/.jenkins/workspace/ember-table-addon
+#cd /Users/hedgebeijing/.jenkins/workspace/ember-table-addon
+cd  ${1}/ember-table-addon
 npm link
 
 echo "${green}[Setup Script]Complete link to ember-table ...${reset}"
-cd /Users/hedgebeijing/.jenkins/workspace/ember-table-addon-demo-app
+#cd /Users/hedgebeijing/.jenkins/workspace/ember-table-addon-demo-app
+cd  ${1}/ember-table-addon-demo-app
 npm link ember-table
 
 echo "${green}[Setup Script]Install server-side modules locally ...${reset}"
