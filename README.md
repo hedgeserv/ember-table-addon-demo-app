@@ -64,6 +64,13 @@ You will need to install required Python package and download chrome driver
 * `pip install -r python-webdriver-tests/requirements.txt`
 * `nosetests`
 
+### Running Webdriver Tests with lettuce in BDD
+
+All relies have been added requirements.txt
+
+* `lettuce`
+* if you want to generate report as .xml file, please use `lettuce --with-xunit`
+
 ### Building
 
 * `ember build` (development)
