@@ -22,3 +22,7 @@ testem.log
 # Mountebank
 mb.log
 mb.pid
+
+# Demo
+demo.log
+demo.pid
