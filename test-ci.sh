@@ -25,6 +25,13 @@ if [ $? -eq 0 ];then
   result=0
   fi
 
+  echo "${green}Run lettuce ...${reset}"
+  lettuce --with-xunit
+
+  if [ $? -eq 0 ];then
+  result=0
+  fi
+
   echo "${green}Shutdown ember server at pid $var.${reset}"
   kill $var
 else
