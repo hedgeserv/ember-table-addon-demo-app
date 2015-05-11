@@ -4,6 +4,12 @@ Demo app for our fork of Addepar's <code>ember-table-addon</code>.
 
 ## Build Prerequisites
 
+### Build script 
+
+You can run `install-dependencies.sh` instead of manual installation
+
+### Build manual
+
 You will need the following things properly installed on your computer.
 
 * [Git](http://git-scm.com/) - `brew install git`
