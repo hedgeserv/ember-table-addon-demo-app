@@ -3,7 +3,7 @@ from selenium import webdriver
 
 @before.all
 def setup_browser():
-    world.browser = webdriver.Chrome()
+    world.browser = webdriver.Firefox()
 
 @after.all
 def teardown_browser(total):
