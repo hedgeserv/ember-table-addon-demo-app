@@ -6,7 +6,7 @@ Demo app for our fork of Addepar's <code>ember-table-addon</code>.
 
 ## Build Prerequisites
 
-### Build script  
+### Build script  (skip down to Running/Development if using this option)
 
 You can run `install-dependencies.sh [Path]` instead of manual installation
 
