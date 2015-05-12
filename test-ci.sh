@@ -11,8 +11,7 @@ node mountebank-server/setup-imposters.js
 
 echo "${green}Run ember test ...${reset}"
 ember test > temp.xml
-sed '1,4d' temp.xml >> test-result.xml
-rm temp.xml
+sed '1,4d' temp.xml > test-result.xml
 result=1
 if [ $? -eq 0 ];then
   echo "${green}Ember test finished successfully.${reset}"
@@ -35,4 +34,5 @@ fi
 
 echo "${green}Shutdown Mountebank ...${reset}"
 mb stop
+rm temp.xml
 exit $result
