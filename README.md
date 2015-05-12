@@ -53,7 +53,7 @@ Ensure you're cd'd to the cloned ember-table-addon-demo-app working-copy directo
 * `ember test` (runs tests with phantomjs and just reports a pass/fail)
 * `ember test --server` (runs tests with chrome and just reports a pass/fail)
 
-### Running Webdriver Tests
+### Running Webdriver Tests with lettuce in BDD
 
 You will need to install required Python package and download chrome driver
 
@@ -61,12 +61,6 @@ You will need to install required Python package and download chrome driver
 * put chromedriver on system path
 * `ember serve -e ci`
 * `pip install -r python-webdriver-tests/requirements.txt`
-* `nosetests`
-
-### Running Webdriver Tests with lettuce in BDD
-
-All relies have been added requirements.txt
-
 * `lettuce python-webdriver-tests/features`
 * if you want to generate report as .xml file, please use `lettuce python-webdriver-tests/features --with-xunit`
 
