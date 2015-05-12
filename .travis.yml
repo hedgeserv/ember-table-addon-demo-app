@@ -46,7 +46,7 @@ before_script:
 script:
 
   - ember test
-  - nosetests
+  - lettuce python-webdriver-tests/features
 
 
 

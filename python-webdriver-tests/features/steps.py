@@ -1,6 +1,12 @@
 from lettuce import *
 from lettuce_webdriver.util import AssertContextManager
 
+import os,sys,inspect
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0,parent_dir)
+from prepare_loans import prepare_loans
+
 
 def find_field_by_id(browser, attribute):
     elems = browser.find_elements_by_id(attribute)
@@ -19,8 +25,7 @@ def check_fields_counts_by_css(browser, css, num):
 @step('There are 3502 loans')
 def fill_in_textfield_by_class(step):
     with AssertContextManager(step):
-        # It doesn't need to implement with code
-        pass
+        prepare_loans(3500)
 
 
 @step('Presenting the list of loans')
