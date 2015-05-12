@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/hedgeserv/ember-table-addon-demo-app.svg?branch=master)](https://travis-ci.org/hedgeserv/ember-table-addon-demo-app)
 
-Demo app for our fork of Addepar's <code>ember-table-addon</code>. 
+Demo app for our fork of Addepar's [ember-table-addon](https://github.com/hedgeserv/ember-table-addon) 
 
 ## Build Prerequisites
 
