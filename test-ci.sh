@@ -18,13 +18,6 @@ if [ $? -eq 0 ];then
   ember server -e ci &
   var=$!
   echo "${green}Ember server pid is $var${reset}"
-  echo "${green}Run nosetests ...${reset}"
-  nosetests
-
-  if [ $? -eq 0 ];then
-  result=0
-  fi
-
   echo "${green}Run lettuce ...${reset}"
   lettuce python-webdriver-tests/features --with-xunit
 
