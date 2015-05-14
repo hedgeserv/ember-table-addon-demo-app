@@ -3,7 +3,7 @@ from lettuce import *
 from selenium.common.exceptions import (
     StaleElementReferenceException)
 from lettuce_webdriver.util import (assert_true,
-                                    AssertContextManager)
+                                    AssertContextManager, assert_false)
 import os, sys, inspect
 from selenium.webdriver import ActionChains
 import time
@@ -27,6 +27,11 @@ def get_url(browser, url):
 
 def find_elements_by_class(browser, className):
     elements = browser.find_elements_by_class_name(className)
+    return elements
+
+
+def find_elements_by_css(browser, css):
+    elements = browser.find_elements_by_css_selector(css)
     return elements
 
 
@@ -88,6 +93,22 @@ def drag_element_by_offset_class_name(browser, className, index, rightOrLeft, of
         action_chains.drag_and_drop_by_offset(elements[int(index) - 1], int(offset), 0).perform()
 
 
+def reorder_column_with_offset(browser, css, index, rightOrLeft, offset):
+    columnsHeader = find_elements_by_css(browser, css)
+    action_chains = ActionChains(browser)
+    if str(rightOrLeft) == "left":
+        action_chains.click_and_hold(columnsHeader[int(index) - 1]).move_by_offset(-int(offset), 0).move_by_offset(10,
+                                                                                                                   0).release().perform()
+    else:
+        action_chains.click_and_hold(columnsHeader[int(index) - 1]).move_by_offset(int(offset), 0).move_by_offset(-10,
+                                                                                                                  0).release().perform()
+
+
+def get_column_header_name(browser, css, index):
+    columnsHeader = find_elements_by_css(browser, css)
+    return columnsHeader[int(index) - 1].text
+
+
 @step('I visit "(.*?)"$')
 def visit(step, url):
     with AssertContextManager(step):
@@ -127,8 +148,16 @@ def drag_element_offset(step, className, index, rightOrLeft, offsetx):
         time.sleep(5)
         changedWidth = get_column_width_by_class_name(world.browser, "ember-table-header-cell", index)
 
-        print str(rightOrLeft)
         if str(rightOrLeft) == "left":
             assert_true(step, (int(changedWidth) - int(originalWidth)) == (-int(offsetx) - int(spanWidthPix)))
         else:
             assert_true(step, (int(changedWidth) - int(originalWidth)) == (int(offsetx) - int(spanWidthPix)))
+
+
+@step('I want to recorder by "(.*?)" for the (\d+) column to "(.*?)" with offset (\d+)$')
+def reorder_column_by_offset(step, css, index, rightOrLeft, offsetx):
+    with AssertContextManager(step):
+        originalHeaderName = get_column_header_name(world.browser, css, index)
+        reorder_column_with_offset(world.browser, css, index, rightOrLeft, offsetx)
+        changedHeaderName = get_column_header_name(world.browser, css, index)
+        assert_false(step, str(originalHeaderName) == str(changedHeaderName))
