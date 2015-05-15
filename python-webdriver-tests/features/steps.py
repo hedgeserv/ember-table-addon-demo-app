@@ -104,9 +104,28 @@ def reorder_column_with_offset(browser, css, index, rightOrLeft, offset):
                                                                                                                   0).release().perform()
 
 
+# the index starts from 1
 def get_column_header_name(browser, css, index):
     columnsHeader = find_elements_by_css(browser, css)
     return columnsHeader[int(index) - 1].text
+
+
+def sort_column_by_css(browser, css, index):
+    columnHeaders = find_elements_by_css(browser, css)
+    columnHeaders[int(index) - 1].click()
+
+
+# the index starts from 1
+def get_column_content(browser, css, index):
+    return find_elements_by_css(browser, "div.ember-table-table-block.lazy-list-container div div div:nth-child(" + str(
+        index) + ") span")
+
+
+def drag_scroll_by_css(browser, css, offsetx, offsety):
+    scroll = browser.find_element_by_css_selector(css)
+    action = ActionChains(browser)
+    action.click_and_hold(scroll).move_by_offset(int(offsetx), int(offsety)).release().perform()
+    time.sleep(10)
 
 
 @step('I visit "(.*?)"$')
@@ -161,3 +180,15 @@ def reorder_column_by_offset(step, css, index, rightOrLeft, offsetx):
         reorder_column_with_offset(world.browser, css, index, rightOrLeft, offsetx)
         changedHeaderName = get_column_header_name(world.browser, css, index)
         assert_false(step, str(originalHeaderName) == str(changedHeaderName))
+
+
+@step('I want to sort column with index (\d+) by css "(.*?)"')
+def sort_column(step, index, css):
+    with AssertContextManager(step):
+        sort_column_by_css(world.browser, css, index)
+
+
+@step('I want to drag scroll bar by "(.*?)" by offset (\d+) and (\d+)$')
+def drag_scroll_bar_with_offset(step, css, offsetx, offsety):
+    with AssertContextManager(step):
+        drag_scroll_by_css(world.browser, css, offsetx, offsety)
