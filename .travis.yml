@@ -48,5 +48,7 @@ script:
   - ember test
   - lettuce python-webdriver-tests/features
 
+notifications:
+  slack: hedgeserv:QQblFhv13dIPhqwoXI6qTDzA
 
 
