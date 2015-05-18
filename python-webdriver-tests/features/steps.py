@@ -134,22 +134,30 @@ def visit(step, url):
         world.browser.get(url)
 
 
-@step('There are 3502 loans')
-def fill_in_textfield_by_class(step):
+@step('There are (\d+) loans')
+def fill_in_textfield_by_class(step, num):
     with AssertContextManager(step):
-        prepare_loans(3500)
+        prepare_loans(int(num) - 2)
 
 
-@step('Presenting the list of loans')
-def list_all_loans(step):
+@step('Presenting "(.*?)"')
+def list_all_loans(step, url):
     with AssertContextManager(step):
-        get_url(world.browser, "http://localhost:4200/fully-loaded-loans")
+        options = {
+            "the list of loans": "http://localhost:4200/fully-loaded-loans",
+            "the paratiral": "http://localhost:4200/lazy",
+        }
+        get_url(world.browser, options.get(url))
 
 
-@step('All loans should be shown in a table, from the outset')
-def check_all_loans_shown(step):
+@step('"(.*?)" loans should be shown in a table, from the outset')
+def check_all_loans_shown(step, num):
     with AssertContextManager(step):
-        check_fields_counts_by_css(world.browser, ".ember-table-body-container .ember-table-table-row", 3502)
+        options = {
+            "All": 3502,
+        }
+        check_fields_counts_by_css(world.browser, ".ember-table-body-container .ember-table-table-row",
+                                   options.get(num))
 
 
 @step('The page load time should be longer than ten seconds')
