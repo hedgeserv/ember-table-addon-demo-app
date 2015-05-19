@@ -63,8 +63,8 @@ You will need to install required Python package and download chrome driver
 * put chromedriver on system path
 * `ember serve -e ci`
 * `pip install -r python-webdriver-tests/requirements.txt`
-* `lettuce python-webdriver-tests/features`
-* if you want to generate report as .xml file, please use `lettuce python-webdriver-tests/features --with-xunit`
+* `lettuce python-webdriver-tests/features --tag complete --with-xunit`
+* if you want to generate report as .xml file, please use `lettuce python-webdriver-tests/features --tag complete --with-xunit`
 
 ### Building
 
