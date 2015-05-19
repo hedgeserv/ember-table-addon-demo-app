@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import ColumnDefinition from 'ember-table/models/column-definition';
+import LazyArray from 'ember-table/models/lazy-array';
 
 export default Ember.Controller.extend({
 
@@ -13,7 +14,6 @@ export default Ember.Controller.extend({
         return row.get('id');
       }
     });
-
     activityColumn = ColumnDefinition.create({
       columnWidth: 150,
       textAlign: 'text-align-left',
@@ -31,5 +31,20 @@ export default Ember.Controller.extend({
     });
 
     return [idColumn, activityColumn, statusColumn];
+  }.property(),
+
+  model: function () {
+    var self = this;
+    var pageIndex = 0;
+    var totalCount = this.get('totalCount');
+    return LazyArray.create({
+      totalCount: totalCount,
+      callback: function () {
+        pageIndex ++;
+        return self.store.find('loan', {page: pageIndex}).then(function (data) {
+          return data.get('content');
+        });
+      }
+    });
   }.property()
 });

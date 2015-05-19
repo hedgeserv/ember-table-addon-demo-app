@@ -1,7 +1,12 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
-  model: function () {
-    return this.store.find('loan', {page: 1});
+
+  setupController: function(controller){
+    controller.set('totalCount',this.get('params').totalCount);
+  },
+
+  beforeModel: function(transition){
+    this.set('params', transition.queryParams);
   }
 });
