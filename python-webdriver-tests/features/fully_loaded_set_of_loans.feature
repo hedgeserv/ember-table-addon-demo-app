@@ -5,6 +5,6 @@ Feature: Fully Loaded Set of Loans
 
   Scenario: Fully Loaded Set of Loans
     Given There are 3502 loans
-    When Presenting the list of loans
-    Then All loans should be shown in a table, from the outset and
+    When Presenting "the list of loans"
+    Then "All" loans should be shown in a table, from the outset and
     And The page load time should be longer than ten seconds
