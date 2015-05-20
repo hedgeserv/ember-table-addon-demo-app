@@ -41,12 +41,12 @@ install:
 
 before_script:
 
-  - ember server -e ci & mb --allowCORS & 
+  - ember server -e ci & mb --allowCORS &
 
 script:
 
   - ember test
-  - lettuce python-webdriver-tests/features
+  - lettuce python-webdriver-tests/features --tag complete
 
 notifications:
   slack: hedgeserv:QQblFhv13dIPhqwoXI6qTDzA
