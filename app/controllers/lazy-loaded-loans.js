@@ -35,13 +35,12 @@ export default Ember.Controller.extend({
 
   model: function () {
     var self = this;
-    var pageIndex = 0;
     var totalCount = this.get('totalCount');
     return LazyArray.create({
+      chunkSize: 50,
       totalCount: totalCount,
-      callback: function () {
-        pageIndex ++;
-        return self.store.find('loan', {page: pageIndex}).then(function (data) {
+      callback: function (pageIndex) {
+        return self.store.find('loan', {page: pageIndex + 1}).then(function (data) {
           return data.get('content');
         });
       }
