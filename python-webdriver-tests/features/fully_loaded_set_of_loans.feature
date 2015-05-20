@@ -3,6 +3,7 @@ Feature: Fully Loaded Set of Loans
   As a customer
   The page should load data fully within certain number
 
+  @complete
   Scenario: Fully Loaded Set of Loans
     Given There are 3502 loans
     When Presenting "the list of loans"
