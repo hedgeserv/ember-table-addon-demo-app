@@ -22,6 +22,7 @@ export default Ember.Controller.extend({
         return row.get('activity');
       }
     });
+    
     statusColumn = ColumnDefinition.create({
       columnWidth: 100,
       headerCellName: 'status',
