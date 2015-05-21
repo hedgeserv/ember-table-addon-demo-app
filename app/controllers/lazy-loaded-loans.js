@@ -4,6 +4,9 @@ import LazyArray from 'ember-table/models/lazy-array';
 
 export default Ember.Controller.extend({
 
+  queryParams:['totalCount'],
+  totalCount:100,
+
   columns: function () {
     var idColumn, activityColumn, statusColumn;
     idColumn = ColumnDefinition.create({
@@ -45,5 +48,11 @@ export default Ember.Controller.extend({
         });
       }
     });
-  }.property()
+  }.property(),
+
+  actions: {
+    apply:function(){
+      window.location.reload(true);
+    }
+  }
 });
