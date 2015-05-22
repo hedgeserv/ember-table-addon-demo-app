@@ -12,6 +12,10 @@ current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfra
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 from prepare_loans import prepare_loans
+from prepare_loans import prepare_loans_in_chunk
+
+import requests
+import json
 
 spanWidthPix = 1
 
@@ -145,7 +149,8 @@ def list_all_loans(step, url):
     with AssertContextManager(step):
         options = {
             "the list of loans": "http://localhost:4200/fully-loaded-loans",
-            "the paratiral": "http://localhost:4200/lazy",
+            "the paratiral": "http://localhost:4200/lazy-loaded-loans",
+            "groups": "http://localhost:4200/groups",
         }
         get_url(world.browser, options.get(url))
 
@@ -200,3 +205,21 @@ def sort_column(step, index, css):
 def drag_scroll_bar_with_offset(step, css, offsetx, offsety):
     with AssertContextManager(step):
         drag_scroll_by_css(world.browser, css, offsetx, offsety)
+
+
+@step('Only chunk was loaded in total (\d+)$')
+def check_loaded_chunk(step, num):
+    with AssertContextManager(step):
+        prepare_loans_in_chunk(50)
+        get_url(world.browser, "http://localhost:4200/lazy-loaded-loans?totalCount=" + str(num))
+        text = requests.get("http://localhost:2525/imposters/8888").json()
+        dumpText = json.dumps(text)
+        toJson = json.loads(dumpText)['requests']
+
+        assert_true(step, len(toJson) == 2)
+        assert_true(step, toJson[0]['query']['page'] == str(int(num) / 50))
+        assert_true(step, toJson[1]['query']['page'] == "1")
+
+
+
+
