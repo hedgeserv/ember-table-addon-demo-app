@@ -3,11 +3,11 @@ import ColumnDefinition from 'ember-table/models/column-definition';
 import ColumnGroupDefinition from 'ember-table/models/column-group-definition';
 
 export default Ember.Controller.extend({
-   
+
     title: 'Group',
-   
+
     columns: function() {
- 
+
         var idColumn, activityColumn, statusColumn;
 
         idColumn = ColumnDefinition.create({
@@ -50,7 +50,6 @@ export default Ember.Controller.extend({
 
     actions: {
         test: function(){
-            // console.log(this.get('title').clear())
             this.get('content').clear();
         }
     }
