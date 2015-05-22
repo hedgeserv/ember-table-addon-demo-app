@@ -69,25 +69,28 @@ def make_stubs(count):
     ]
 
 
-def make_chunk_stubs(total):
+def make_chunk_stubs(total, chunk_size=100):
     all_loans = generate_loans(total)
-    chunk_size = 100
     chunks = [all_loans[i:i + chunk_size] for i in range(0, len(all_loans), chunk_size)]
     stubs = [make_stub(c, make_predicate(i + 1)) for i, c in enumerate(chunks)]
     return stubs
 
 
-def _prepare(count, stub_maker=make_stubs):
+def _prepare(count, chunk_size, stub_maker=make_stubs):
     mb = MountebankStub()
 
-    stubs = stub_maker(count)
+    stubs = stub_maker(count, chunk_size)
 
     mb.create_imposter(stubs)
 
 
 def prepare_loans(count):
-    _prepare(count)
+    mb = MountebankStub()
+
+    stubs = make_stubs(count)
+
+    mb.create_imposter(stubs)
 
 
-def prepare_loans_in_chunk(total):
-    _prepare(total, make_chunk_stubs)
+def prepare_loans_in_chunk(total, chunk_size=100):
+    _prepare(total, chunk_size, make_chunk_stubs)

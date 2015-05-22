@@ -177,12 +177,17 @@ def fill_in_textfield_by_class(step, num):
         prepare_loans(int(num) - 2)
 
 
+@step('There are (\d+) loans in chunk size (\d+)')
+def there_are_loans_in_chunk(step, totalCount, chunkSize):
+    with AssertContextManager(step):
+        prepare_loans_in_chunk(int(totalCount), chunkSize)
+
+
 @step('Presenting "(.*?)"')
 def list_all_loans(step, url):
     with AssertContextManager(step):
         options = {
             "the list of loans": "http://localhost:4200/fully-loaded-loans",
-            "the paratiral": "http://localhost:4200/lazy-loaded-loans",
             "groups": "http://localhost:4200/groups",
         }
         get_url(world.browser, options.get(url))
@@ -243,7 +248,7 @@ def drag_scroll_bar_with_offset(step, offsetx, offsety):
 @step('Only first and last chunk was loaded in total (\d+) in first time')
 def check_loaded_chunk(step, num):
     with AssertContextManager(step):
-        prepare_loans_in_chunk(50)
+        # prepare_loans_in_chunk(50)
         get_url(world.browser, "http://localhost:4200/lazy-loaded-loans?totalCount=" + str(num))
         text = requests.get("http://localhost:2525/imposters/8888").json()
         dumpText = json.dumps(text)
@@ -257,10 +262,10 @@ def check_loaded_chunk(step, num):
 @step(
     'Scroll bar by offset (\d+) with (\d+) times to load next chunks in total (\d+) and drag scroll bar to top without rerender')
 def check_next_chunk_loaded(step, offsety, times, num):
-    chunk = 50
+    # chunk = 50
     scroll_css = "div.antiscroll-scrollbar.antiscroll-scrollbar-vertical"
 
-    prepare_loans_in_chunk(chunk)
+    # prepare_loans_in_chunk(chunk)
     get_url(world.browser, "http://localhost:4200/lazy-loaded-loans?totalCount=" + str(num))
 
     # drag scroll bar by css with parameter times

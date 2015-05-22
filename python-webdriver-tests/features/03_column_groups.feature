@@ -5,5 +5,6 @@ Feature: Column groups
 
   @complete
   Scenario: styling for the entire group
+    Given There are 300 loans in chunk size 50
     When Presenting "groups"
     Then The page should style for entire group, each column, first column and last column
