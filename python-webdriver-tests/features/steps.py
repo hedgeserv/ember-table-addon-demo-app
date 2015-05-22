@@ -44,6 +44,10 @@ def check_fields_counts_by_css(browser, css, num):
     assert len(elements) == num
 
 
+def execute_js_script(browser, script):
+    return browser.execute_script(script)
+
+
 def contains_content(browser, content):
     # Search for an element that contains the whole of the text we're looking
     # for in it or its subelements, but whose children do NOT contain that
@@ -125,11 +129,40 @@ def get_column_content(browser, css, index):
         index) + ") span")
 
 
-def drag_scroll_by_css(browser, css, offsetx, offsety):
-    scroll = browser.find_element_by_css_selector(css)
+def drag_scroll_by_css(browser, offsetx, offsety):
+    scroll = browser.find_element_by_css_selector("div.antiscroll-scrollbar.antiscroll-scrollbar-vertical")
     action = ActionChains(browser)
     action.click_and_hold(scroll).move_by_offset(int(offsetx), int(offsety)).release().perform()
-    time.sleep(10)
+
+
+def drag_scroll_by_css_with_times(browser, scroll_css, offsety, times):
+    start = time.time()
+    while time.time() - start < 15:
+        drag_scroll_by_css(browser, 0, offsety)
+        eles = find_elements_by_css(world.browser, scroll_css)
+        value = int(eles[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
+        if value > int(offsety) * int(times):
+            break
+        time.sleep(1)
+
+
+def drag_scroll_to_top(browser, scroll_css, offsety):
+    start = time.time()
+    while time.time() - start < 15:
+        drag_scroll_by_css(browser, 0, offsety)
+        time.sleep(5)
+        eles = find_elements_by_css(world.browser, scroll_css)
+        value = int(eles[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
+        if value == 0:
+            break
+        time.sleep(1)
+
+
+def get_mb_request():
+    text = requests.get("http://localhost:2525/imposters/8888").json()
+    dumpText = json.dumps(text)
+    toJson = json.loads(dumpText)['requests']
+    return toJson
 
 
 @step('I visit "(.*?)"$')
@@ -201,13 +234,13 @@ def sort_column(step, index, css):
         sort_column_by_css(world.browser, css, index)
 
 
-@step('I want to drag scroll bar by "(.*?)" by offset (\d+) and (\d+)$')
-def drag_scroll_bar_with_offset(step, css, offsetx, offsety):
+@step('I want to drag scroll bar by offset (\d+) and (\d+)$')
+def drag_scroll_bar_with_offset(step, offsetx, offsety):
     with AssertContextManager(step):
-        drag_scroll_by_css(world.browser, css, offsetx, offsety)
+        drag_scroll_by_css(world.browser, offsetx, offsety)
 
 
-@step('Only chunk was loaded in total (\d+)$')
+@step('Only first and last chunk was loaded in total (\d+) in first time')
 def check_loaded_chunk(step, num):
     with AssertContextManager(step):
         prepare_loans_in_chunk(50)
@@ -221,5 +254,45 @@ def check_loaded_chunk(step, num):
         assert_true(step, toJson[1]['query']['page'] == "1")
 
 
+@step(
+    'Scroll bar by offset (\d+) with (\d+) times to load next chunks in total (\d+) and drag scroll bar to top without rerender')
+def check_next_chunk_loaded(step, offsety, times, num):
+    chunk = 50
+    scroll_css = "div.antiscroll-scrollbar.antiscroll-scrollbar-vertical"
+
+    prepare_loans_in_chunk(chunk)
+    get_url(world.browser, "http://localhost:4200/lazy-loaded-loans?totalCount=" + str(num))
+
+    # drag scroll bar by css with parameter times
+    drag_scroll_by_css_with_times(world.browser, scroll_css, offsety, times)
+
+    # check the chunk loaded time, it's related with how many times customer drag scroll bar with certain offset
+    assert len(get_mb_request()) == int(times) + 2
+    drag_scroll_to_top(world.browser, scroll_css, -int(offsety))
+
+    # check the chunck shouldn't be rendered when customer drag scroll bar back to top
+    assert len(get_mb_request()) == int(times) + 2
 
 
+@step('The page should style for entire group, each column, first column and last column')
+def check_fields_class_by_css(step):
+    with AssertContextManager(step):
+        group_element = execute_js_script(world.browser, 'return $("span.ember-table-content:eq(1)")')
+        assert_true(step, group_element[0].text == "Group1")
+        group_element = execute_js_script(world.browser, 'return $("span.ember-table-content:eq(1)").parent().parent()')
+        class_info = group_element[0].get_attribute("class")
+        assert_true(step, "text-red" in class_info)
+
+        first_column = execute_js_script(world.browser, 'return $("span.ember-table-content:eq(2)")')
+        assert_true(step, first_column[0].text == "Activity")
+        first_column = execute_js_script(world.browser, 'return $("span.ember-table-content:eq(2)").parent().parent()')
+        class_info = first_column[0].get_attribute("class")
+        assert_true(step, "text-blue" in class_info)
+        assert_true(step, "bg-gray" in class_info)
+
+        last_column = execute_js_script(world.browser, 'return $("span.ember-table-content:eq(3)")')
+        assert_true(step, last_column[0].text == "status")
+        last_column = execute_js_script(world.browser, 'return $("span.ember-table-content:eq(3)").parent().parent()')
+        class_info = last_column[0].get_attribute("class")
+        assert_true(step, "text-blue" in class_info)
+        assert_true(step, "bg-lightgray" in class_info)
