@@ -55,7 +55,6 @@ export default Ember.Controller.extend({
 
     actions: {
         test: function(){
-            // console.log(this.get('title').clear())
             this.get('content').clear();
         }
     }
