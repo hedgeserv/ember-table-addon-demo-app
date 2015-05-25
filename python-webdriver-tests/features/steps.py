@@ -150,12 +150,35 @@ def drag_scroll_to_top(browser, scroll_css, offsety):
     start = time.time()
     while time.time() - start < 15:
         drag_scroll_by_css(browser, 0, offsety)
-        time.sleep(5)
+        # time.sleep(5)
         eles = find_elements_by_css(world.browser, scroll_css)
         value = int(eles[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
         if value == 0:
             break
         time.sleep(1)
+
+
+def drag_scroll_to_bottom(browser, scroll_css, offsety):
+    start = time.time()
+    while time.time() - start < 15:
+        drag_scroll_by_css(browser, 0, offsety)
+        eles = find_elements_by_css(world.browser, scroll_css)
+        value = int(eles[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
+        if value > 240:
+            break
+        time.sleep(1)
+
+
+def check_resize_cursor(browser, separator):
+    cursor_css = "body.ember-application"
+    separators = find_elements_by_css(world.browser, "div.ui-resizable-handle.ui-resizable-e")
+    action_chains = ActionChains(world.browser)
+    action_chains.click_and_hold(separators[0]).perform()
+    time.sleep(5)
+    cursor = find_elements_by_css(world.browser, cursor_css)
+    style = cursor.get_attribute("style")
+    assert_true(step, ("resize" in style) or ("pointer" in style) or ())
+    action_chains.release()
 
 
 def get_mb_request():
@@ -189,6 +212,7 @@ def list_all_loans(step, url):
         options = {
             "the list of loans": "http://localhost:4200/fully-loaded-loans",
             "groups": "http://localhost:4200/groups",
+            "column sort": "http://localhost:4200/lazy-loaded-loans?totalCount=200",
         }
         get_url(world.browser, options.get(url))
 
@@ -301,3 +325,95 @@ def check_fields_class_by_css(step):
         class_info = last_column[0].get_attribute("class")
         assert_true(step, "text-blue" in class_info)
         assert_true(step, "bg-lightgray" in class_info)
+
+
+@step('Click to sort a column as "(.*?)"')
+def click_to_sort_column(step, asc_or_desc):
+    with AssertContextManager(step):
+        column_css = ".ember-table-header-cell"
+        find_elements_by_css(world.browser, column_css)[0].click()
+        # time.sleep(10)
+
+
+@step('The "(.*?)" record should be "(.*?)"$')
+def check_sort_column(step, record_index, record_content):
+    with AssertContextManager(step):
+        if record_index == "first":
+            result = world.browser.execute_script(
+                'return $($("div.ember-table-body-container div.ember-table-table-row")[' + str(
+                    0) + ']).find("div div:eq(0) span").text()')
+            assert_true(step, str(result).strip() == record_content)
+        else:
+            result = world.browser.execute_script(
+                'return $($("div.ember-table-body-container div.ember-table-table-row")[' + str(
+                    1) + ']).find("div div:eq(0) span").text()')
+            assert_true(step, str(result).strip() == record_content)
+
+
+@step('Drag scroll bar to "(.*?)"')
+def drag_scroll_bar(step, top_or_bottom):
+    with AssertContextManager(step):
+        scroll_css = "div.antiscroll-scrollbar.antiscroll-scrollbar-vertical"
+        offsety = 60
+        if top_or_bottom == "bottom":
+            drag_scroll_to_bottom(world.browser, scroll_css, offsety)
+        else:
+            drag_scroll_to_top(world.browser, scroll_css, -int(offsety))
+
+
+@step('The user should get the resize cursor in "(.*?)"')
+def check_resize_cursor(step, separator):
+    with AssertContextManager(step):
+        cursor_css = "body.ember-application"
+        separators = find_elements_by_css(world.browser, "div.ui-resizable-handle.ui-resizable-e")
+        if separator == "left column separator":
+            action_chains = ActionChains(world.browser)
+            action_chains.drag_and_drop_by_offset(separators[0], 1, 0).perform()
+            cursor = find_elements_by_css(world.browser, cursor_css)
+            style = cursor[0].get_attribute("style")
+            assert_true(step, ("auto" in style) or ("resize" in style) or ("pointer" in style))
+            action_chains.release()
+            world.browser.refresh()
+
+
+@step('User drags the "(.*?)" on a grouped column with (\d+) pixel to "(.*?)"')
+def drag_column_separator(step, separator, offsetx, left_or_rigt):
+    with AssertContextManager(step):
+        separators = find_elements_by_css(world.browser, "div.ui-resizable-handle.ui-resizable-e")
+        if separator == "left column separator":
+            grouped_column_original_width = \
+                find_elements_by_css(world.browser, ".ember-table-header-cell.text-red")[0].get_attribute(
+                    "style").split("px;")[
+                    0].split(
+                    "width:")[1].strip()
+            neighbor_original_width = \
+                find_elements_by_css(world.browser, ".ember-table-header-cell")[0].get_attribute("style").split("px;")[
+                    0].split(
+                    "width:")[1].strip()
+            action_chains = ActionChains(world.browser)
+            if left_or_rigt == "left":
+                action_chains.drag_and_drop_by_offset(separators[0], -int(offsetx), 0).release().perform()
+                grouped_column_changed_width = \
+                    find_elements_by_css(world.browser, ".ember-table-header-cell.text-red")[0].get_attribute(
+                        "style").split("px;")[
+                        0].split("width:")[1].strip()
+                neighbor_changed_width = \
+                    find_elements_by_css(world.browser, ".ember-table-header-cell")[0].get_attribute("style").split(
+                        "px;")[0].split(
+                        "width:")[1].strip()
+                assert_true(step, int(grouped_column_original_width) == int(grouped_column_changed_width))
+                assert_true(step, int(neighbor_original_width) - int(offsetx) == int(neighbor_changed_width) + int(
+                    spanWidthPix))
+            else:
+                action_chains.drag_and_drop_by_offset(separators[0], int(offsetx), 0).perform()
+                grouped_column_changed_width = \
+                    find_elements_by_css(world.browser, ".ember-table-header-cell.text-red")[0].get_attribute(
+                        "style").split("px;")[
+                        0].split("width:")[1].strip()
+                neighbor_changed_width = \
+                    find_elements_by_css(world.browser, ".ember-table-header-cell")[0].get_attribute("style").split(
+                        "px;")[0].split(
+                        "width:")[1].strip()
+                assert_true(step, int(grouped_column_original_width) == int(grouped_column_changed_width))
+                assert_true(step, int(neighbor_original_width) + int(offsetx) == int(
+                    neighbor_changed_width) + int(spanWidthPix))
