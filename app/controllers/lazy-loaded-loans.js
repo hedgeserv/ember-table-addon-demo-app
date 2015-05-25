@@ -13,6 +13,7 @@ export default Ember.Controller.extend({
       columnWidth: 20,
       textAlign: 'text-align-left',
       headerCellName: 'Id',
+      orderCallBack: function(prev, next){ return prev.id - next.id; },
       getCellContent: function(row) {
         return row.get('id');
       }
