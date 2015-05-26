@@ -13,7 +13,9 @@ export default Ember.Controller.extend({
       columnWidth: 20,
       textAlign: 'text-align-left',
       headerCellName: 'Id',
-      orderCallBack: function(prev, next){ return prev.id - next.id; },
+      sortBy: function(prev, next){ 
+        return prev.get('id') - next.get('id');
+      },
       getCellContent: function(row) {
         return row.get('id');
       }
@@ -29,6 +31,9 @@ export default Ember.Controller.extend({
     statusColumn = ColumnDefinition.create({
       columnWidth: 100,
       headerCellName: 'status',
+      sortBy: function(prev, next){ 
+        return prev.get('status').charCodeAt() - next.get('status').charCodeAt(); 
+      },
       getCellContent: function (row) {
         return row.get('status');
       }
