@@ -150,12 +150,11 @@ def drag_scroll_to_top(browser, scroll_css, offsety):
     start = time.time()
     while time.time() - start < 15:
         drag_scroll_by_css(browser, 0, offsety)
-        # time.sleep(5)
         eles = find_elements_by_css(world.browser, scroll_css)
         value = int(eles[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
         if value == 0:
             break
-        time.sleep(1)
+        time.sleep(0.5)
 
 
 def drag_scroll_to_bottom(browser, scroll_css, offsety):
@@ -164,21 +163,21 @@ def drag_scroll_to_bottom(browser, scroll_css, offsety):
         drag_scroll_by_css(browser, 0, offsety)
         eles = find_elements_by_css(world.browser, scroll_css)
         value = int(eles[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
-        if value > 240:
+        if value > 243:
             break
-        time.sleep(1)
+        time.sleep(0.5)
 
 
-def check_resize_cursor(browser, separator):
-    cursor_css = "body.ember-application"
-    separators = find_elements_by_css(world.browser, "div.ui-resizable-handle.ui-resizable-e")
+def check_resize_cursor_indicator(browser, separators, index, cursor_css):
     action_chains = ActionChains(world.browser)
-    action_chains.click_and_hold(separators[0]).perform()
-    time.sleep(5)
+    action_chains.drag_and_drop_by_offset(separators[int(index)], 50, 0).perform()
+    # time.sleep(5)
     cursor = find_elements_by_css(world.browser, cursor_css)
-    style = cursor.get_attribute("style")
-    assert_true(step, ("resize" in style) or ("pointer" in style) or ())
+    style = cursor[0].get_attribute("style")
+    assert_true(step, ("auto" in style) or ("resize" in style) or ("pointer" in style))
     action_chains.release()
+    world.browser.refresh()
+    # time.sleep(5)
 
 
 def get_mb_request():
@@ -186,6 +185,40 @@ def get_mb_request():
     dumpText = json.dumps(text)
     toJson = json.loads(dumpText)['requests']
     return toJson
+
+
+def get_grouped_column_width(browser):
+    grouped_column_width_css = ".ember-table-header-cell.text-red"
+
+    return find_elements_by_css(world.browser, grouped_column_width_css)[0].get_attribute(
+        "style").split("px;")[
+        0].split("width:")[1].strip()
+
+
+def get_neighbor_column_width(browser):
+    neighbor_column_width_css = ".ember-table-header-cell"
+
+    return find_elements_by_css(world.browser, neighbor_column_width_css)[0].get_attribute("style").split(
+        "px;")[0].split(
+        "width:")[1].strip()
+
+
+def get_first_inner_column_width(browser):
+    first_inner_column_width_css = ".ember-table-header-cell.text-blue"
+
+    return find_elements_by_css(world.browser, first_inner_column_width_css)[0].get_attribute(
+        "style").split("px;")[
+        0].split(
+        "width:")[1].strip()
+
+
+def get_last_inner_column_width(browser):
+    last_inner_column_width_css = ".ember-table-header-cell.text-blue"
+
+    return find_elements_by_css(world.browser, last_inner_column_width_css)[1].get_attribute(
+        "style").split("px;")[
+        0].split(
+        "width:")[1].strip()
 
 
 @step('I visit "(.*?)"$')
@@ -239,7 +272,7 @@ def drag_element_offset(step, className, index, rightOrLeft, offsetx):
     with AssertContextManager(step):
         originalWidth = get_column_width_by_class_name(world.browser, "ember-table-header-cell", index)
         drag_element_by_offset_class_name(world.browser, className, index, rightOrLeft, offsetx)
-        time.sleep(5)
+        # time.sleep(5)
         changedWidth = get_column_width_by_class_name(world.browser, "ember-table-header-cell", index)
 
         if str(rightOrLeft) == "left":
@@ -303,7 +336,7 @@ def check_next_chunk_loaded(step, offsety, times, num):
     assert len(get_mb_request()) == int(times) + 2
 
 
-@step('The page should style for entire group, each column, first column and last column')
+@step('The page should style for entire group, inner column, first column and last column')
 def check_fields_class_by_css(step):
     with AssertContextManager(step):
         group_element = execute_js_script(world.browser, 'return $("span.ember-table-content:eq(1)")')
@@ -332,7 +365,6 @@ def click_to_sort_column(step, asc_or_desc):
     with AssertContextManager(step):
         column_css = ".ember-table-header-cell"
         find_elements_by_css(world.browser, column_css)[0].click()
-        # time.sleep(10)
 
 
 @step('The "(.*?)" record should be "(.*?)"$')
@@ -367,13 +399,11 @@ def check_resize_cursor(step, separator):
         cursor_css = "body.ember-application"
         separators = find_elements_by_css(world.browser, "div.ui-resizable-handle.ui-resizable-e")
         if separator == "left column separator":
-            action_chains = ActionChains(world.browser)
-            action_chains.drag_and_drop_by_offset(separators[0], 1, 0).perform()
-            cursor = find_elements_by_css(world.browser, cursor_css)
-            style = cursor[0].get_attribute("style")
-            assert_true(step, ("auto" in style) or ("resize" in style) or ("pointer" in style))
-            action_chains.release()
-            world.browser.refresh()
+            check_resize_cursor_indicator(world.browser, separators, 0, cursor_css)
+        elif separator == "right column separator":
+            check_resize_cursor_indicator(world.browser, separators, 1, cursor_css)
+        else:
+            check_resize_cursor_indicator(world.browser, separators, 2, cursor_css)
 
 
 @step('User drags the "(.*?)" on a grouped column with (\d+) pixel to "(.*?)"')
@@ -381,39 +411,87 @@ def drag_column_separator(step, separator, offsetx, left_or_rigt):
     with AssertContextManager(step):
         separators = find_elements_by_css(world.browser, "div.ui-resizable-handle.ui-resizable-e")
         if separator == "left column separator":
-            grouped_column_original_width = \
-                find_elements_by_css(world.browser, ".ember-table-header-cell.text-red")[0].get_attribute(
-                    "style").split("px;")[
-                    0].split(
-                    "width:")[1].strip()
-            neighbor_original_width = \
-                find_elements_by_css(world.browser, ".ember-table-header-cell")[0].get_attribute("style").split("px;")[
-                    0].split(
-                    "width:")[1].strip()
+            grouped_column_original_width = get_grouped_column_width(world.browser)
+            neighbor_original_width = get_neighbor_column_width(world.browser)
             action_chains = ActionChains(world.browser)
             if left_or_rigt == "left":
                 action_chains.drag_and_drop_by_offset(separators[0], -int(offsetx), 0).release().perform()
-                grouped_column_changed_width = \
-                    find_elements_by_css(world.browser, ".ember-table-header-cell.text-red")[0].get_attribute(
-                        "style").split("px;")[
-                        0].split("width:")[1].strip()
-                neighbor_changed_width = \
-                    find_elements_by_css(world.browser, ".ember-table-header-cell")[0].get_attribute("style").split(
-                        "px;")[0].split(
-                        "width:")[1].strip()
+                grouped_column_changed_width = get_grouped_column_width(world.browser)
+                neighbor_changed_width = get_neighbor_column_width(world.browser)
                 assert_true(step, int(grouped_column_original_width) == int(grouped_column_changed_width))
                 assert_true(step, int(neighbor_original_width) - int(offsetx) == int(neighbor_changed_width) + int(
                     spanWidthPix))
             else:
                 action_chains.drag_and_drop_by_offset(separators[0], int(offsetx), 0).perform()
-                grouped_column_changed_width = \
-                    find_elements_by_css(world.browser, ".ember-table-header-cell.text-red")[0].get_attribute(
-                        "style").split("px;")[
-                        0].split("width:")[1].strip()
-                neighbor_changed_width = \
-                    find_elements_by_css(world.browser, ".ember-table-header-cell")[0].get_attribute("style").split(
-                        "px;")[0].split(
-                        "width:")[1].strip()
+                grouped_column_changed_width = get_grouped_column_width(world.browser)
+                neighbor_changed_width = get_neighbor_column_width(world.browser)
                 assert_true(step, int(grouped_column_original_width) == int(grouped_column_changed_width))
                 assert_true(step, int(neighbor_original_width) + int(offsetx) == int(
                     neighbor_changed_width) + int(spanWidthPix))
+        elif separator == "right column separator":
+            grouped_column_original_width = get_grouped_column_width(world.browser)
+            neighbor_original_width = get_neighbor_column_width(world.browser)
+            first_inner_original_width = get_first_inner_column_width(world.browser)
+            last_inner_original_width = get_last_inner_column_width(world.browser)
+            action_chains = ActionChains(world.browser)
+            if left_or_rigt == "left":
+                action_chains.drag_and_drop_by_offset(separators[1], -int(offsetx), 0).release().perform()
+                grouped_column_changed_width = get_grouped_column_width(world.browser)
+                neighbor_changed_width = get_neighbor_column_width(world.browser)
+                first_inner_changed_width = get_first_inner_column_width(world.browser)
+                last_inner_changed_width = get_last_inner_column_width(world.browser)
+
+                assert_true(step, int(grouped_column_original_width) - int(offsetx) - int(spanWidthPix) == int(
+                    grouped_column_changed_width))
+                assert_true(step, int(neighbor_original_width) == int(neighbor_changed_width))
+                assert_true(step, int(first_inner_original_width) == int(first_inner_changed_width))
+                assert_true(step, int(last_inner_original_width) - int(offsetx) - int(spanWidthPix) == int(
+                    last_inner_changed_width))
+            else:
+                action_chains.drag_and_drop_by_offset(separators[1], int(offsetx), 0).perform()
+                grouped_column_changed_width = get_grouped_column_width(world.browser)
+                neighbor_changed_width = get_neighbor_column_width(world.browser)
+                first_inner_changed_width = get_first_inner_column_width(world.browser)
+                last_inner_changed_width = get_last_inner_column_width(world.browser)
+
+                assert_true(step,
+                            int(grouped_column_original_width) + int(offsetx) - int(spanWidthPix) == int(
+                                grouped_column_changed_width))
+                assert_true(step, int(neighbor_original_width) == int(neighbor_changed_width))
+                assert_true(step, int(first_inner_original_width) == int(first_inner_changed_width))
+                assert_true(step, int(last_inner_original_width) + int(offsetx) - int(spanWidthPix) == int(
+                    last_inner_changed_width))
+        elif separator == "inner column separator":
+            grouped_column_original_width = get_grouped_column_width(world.browser)
+            neighbor_original_width = get_neighbor_column_width(world.browser)
+            first_inner_original_width = get_first_inner_column_width(world.browser)
+            last_inner_original_width = get_last_inner_column_width(world.browser)
+            action_chains = ActionChains(world.browser)
+            if left_or_rigt == "left":
+                action_chains.drag_and_drop_by_offset(separators[2], -int(offsetx), 0).release().perform()
+                grouped_column_changed_width = get_grouped_column_width(world.browser)
+                neighbor_changed_width = get_neighbor_column_width(world.browser)
+                first_inner_changed_width = get_first_inner_column_width(world.browser)
+                last_inner_changed_width = get_last_inner_column_width(world.browser)
+
+                assert_true(step,
+                            int(grouped_column_original_width) - int(offsetx) - int(spanWidthPix) == int(
+                                grouped_column_changed_width))
+                assert_true(step, int(neighbor_original_width) == int(neighbor_changed_width))
+                assert_true(step, int(first_inner_original_width) - int(offsetx) - int(spanWidthPix) == int(
+                    first_inner_changed_width))
+                assert_true(step, int(last_inner_original_width) == int(last_inner_changed_width))
+            else:
+                action_chains.drag_and_drop_by_offset(separators[2], int(offsetx), 0).perform()
+                grouped_column_changed_width = get_grouped_column_width(world.browser)
+                neighbor_changed_width = get_neighbor_column_width(world.browser)
+                first_inner_changed_width = get_first_inner_column_width(world.browser)
+                last_inner_changed_width = get_last_inner_column_width(world.browser)
+
+                assert_true(step,
+                            int(grouped_column_original_width) + int(offsetx) - int(spanWidthPix) == int(
+                                grouped_column_changed_width))
+                assert_true(step, int(neighbor_original_width) == int(neighbor_changed_width))
+                assert_true(step, int(first_inner_original_width) + int(offsetx) - int(spanWidthPix) == int(
+                    first_inner_changed_width))
+                assert_true(step, int(last_inner_original_width) == int(last_inner_changed_width))
