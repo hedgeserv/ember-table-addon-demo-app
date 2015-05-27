@@ -42,7 +42,7 @@ def make_predicate(page_index):
             "method": "GET",
             "path": "/loans",
             "query": {
-                "page": str(page_index)
+                "section": str(page_index)
             }
         }
     }

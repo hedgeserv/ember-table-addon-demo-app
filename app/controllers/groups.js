@@ -86,5 +86,6 @@ export default Ember.Controller.extend({
 
     return [idColumn, Group1, Group2];
 
-  }.property(),
+  }.property()
+
 });
