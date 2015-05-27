@@ -227,16 +227,16 @@ def visit(step, url):
         world.browser.get(url)
 
 
-@step('There are (\d+) loans')
+@step('There are (\d+) loans$')
 def fill_in_textfield_by_class(step, num):
     with AssertContextManager(step):
         prepare_loans(int(num) - 2)
 
 
-@step('There are (\d+) loans in chunk size (\d+)')
+@step('There are (\d+) loans in chunk size (\d+)$')
 def there_are_loans_in_chunk(step, totalCount, chunkSize):
     with AssertContextManager(step):
-        prepare_loans_in_chunk(int(totalCount), chunkSize)
+        prepare_loans_in_chunk(int(totalCount), int(chunkSize))
 
 
 @step('Presenting "(.*?)"')
@@ -296,10 +296,11 @@ def sort_column(step, index, css):
         sort_column_by_css(world.browser, css, index)
 
 
-@step('I want to drag scroll bar by offset (\d+) and (\d+)$')
-def drag_scroll_bar_with_offset(step, offsetx, offsety):
+@step('Customer drags scroll bar by offset (\d+) with (\d+) times$')
+def drag_scroll_bar_with_offset(step, offset, times):
     with AssertContextManager(step):
-        drag_scroll_by_css(world.browser, offsetx, offsety)
+        scroll_css = "div.antiscroll-scrollbar.antiscroll-scrollbar-vertical"
+        drag_scroll_by_css_with_times(world.browser, scroll_css, offset, times)
 
 
 @step('Only first and last chunk was loaded in total (\d+) in first time')
@@ -314,6 +315,13 @@ def check_loaded_chunk(step, num):
         assert_true(step, len(toJson) == 2)
         assert_true(step, toJson[0]['query']['page'] == str(int(num) / 50))
         assert_true(step, toJson[1]['query']['page'] == "1")
+
+
+@step('There should be (\d+) sections loaded')
+def get_loaded_section(step, num):
+    # print len(get_mb_request())
+    # print "****"
+    assert_true(step, len(get_mb_request()) == int(num))
 
 
 @step(
@@ -375,10 +383,15 @@ def check_sort_column(step, record_index, record_content):
                 'return $($("div.ember-table-body-container div.ember-table-table-row")[' + str(
                     0) + ']).find("div div:eq(0) span").text()')
             assert_true(step, str(result).strip() == record_content)
-        else:
+        elif record_index == "last":
             result = world.browser.execute_script(
                 'return $($("div.ember-table-body-container div.ember-table-table-row")[' + str(
                     1) + ']).find("div div:eq(0) span").text()')
+            assert_true(step, str(result).strip() == record_content)
+        else:
+            result = world.browser.execute_script(
+                'return $($("div.ember-table-body-container div.ember-table-table-row")[' + str(
+                    3) + ']).find("div div:eq(0) span").text()')
             assert_true(step, str(result).strip() == record_content)
 
 

@@ -1,4 +1,6 @@
 #!/bin/sh
+result=1
+
 red=`tput setaf 1`
 green=`tput setaf 2`
 reset=`tput sgr0`
@@ -11,9 +13,9 @@ node mountebank-server/setup-imposters.js
 
 echo "${green}Run ember test ...${reset}"
 ember test -c ./testem-ci.json > temp.xml
-sed '1,4d' temp.xml > test-result.xml
-result=1
 if [ $? -eq 0 ];then
+  sed '1,4d' temp.xml > test-result.xml
+  mb stop
   echo "${green}Ember test finished successfully.${reset}"
   echo "${green}Start ember server.${reset}"
   ember server -e ci &
@@ -33,6 +35,5 @@ else
 fi
 
 echo "${green}Shutdown Mountebank ...${reset}"
-mb stop
 rm temp.xml
 exit $result
