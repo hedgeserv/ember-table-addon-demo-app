@@ -6,6 +6,8 @@ export default Ember.Controller.extend({
 
   queryParams:['totalCount'],
   totalCount:100,
+  sortName: null,
+  sortDirect: null,
 
   columns: function () {
     var idColumn, activityColumn, statusColumn;
@@ -49,7 +51,13 @@ export default Ember.Controller.extend({
       chunkSize: 50,
       totalCount: totalCount,
       callback: function (pageIndex) {
-        return self.store.find('loan', {page: pageIndex + 1}).then(function (data) {
+        var params = {section: pageIndex + 1};
+        var sortName = self.get('sortName');
+        if(sortName){
+          params.sortDirect = self.get('sortDirect');
+          params.sortName = sortName;
+        }
+        return self.store.find('loan', params).then(function (data) {
           return data.get('content');
         });
       }
@@ -59,6 +67,12 @@ export default Ember.Controller.extend({
   actions: {
     apply:function(){
       window.location.reload(true);
+    },
+
+    setSortConditions: function (column) {
+      var columnName = column.get('headerCellName').toLowerCase();
+      this.set('sortName', columnName);
+      this.set('sortDirect', column.get('currentDirect'));
     }
   }
 });

@@ -312,8 +312,8 @@ def check_loaded_chunk(step, num):
         toJson = json.loads(dumpText)['requests']
 
         assert_true(step, len(toJson) == 2)
-        assert_true(step, toJson[0]['query']['page'] == str(int(num) / 50))
-        assert_true(step, toJson[1]['query']['page'] == "1")
+        assert_true(step, toJson[0]['query']['section'] == str(int(num) / 50))
+        assert_true(step, toJson[1]['query']['section'] == "1")
 
 
 @step(

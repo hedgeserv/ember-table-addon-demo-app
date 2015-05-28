@@ -39,6 +39,10 @@ function makeStubs(allLoans) {
   var pageSize = 50;
   var pageIndex = 1;
   while ((pageIndex - 1) * pageSize < allLoans.length) {
+    ['id', 'activity', 'status'].forEach(function(columnName){
+      stubs.push(makeSortedLoans(allLoans, pageIndex, pageSize, columnName, 'asc'));
+      stubs.push(makeSortedLoans(allLoans, pageIndex, pageSize, columnName, 'desc'));
+    })
     stubs.push(makePerPageStub(allLoans, pageIndex, pageSize));
     pageIndex++;
   }
@@ -74,7 +78,7 @@ function makePerPageStub(allLoans, pageIndex, pageSize) {
         "method": "GET",
         "path": "/loans",
         "query": {
-          "page": pageIndex.toString()
+          "section": pageIndex.toString()
         }
       }
     }
@@ -109,6 +113,45 @@ function makeAllLoansStub(allLoans) {
     ]};
 }
 
+function makeSortedLoans(allLoans, pageIndex, pageSize, sortName, sortDirect){
+  var directMap = {asc: 1, desc: -1};
+  var startRow = (pageIndex-1) * pageSize;
+  var loans = allLoans.sort(function(prev, next){
+    return directMap[sortDirect] * (prev[sortName] - next[sortName]);
+  }).slice(startRow, startRow + pageSize);
+  return {
+    "responses": [
+    {
+      "is": {
+        "headers": {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "body": JSON.stringify({
+          "header": {
+            "total": allLoans.length,
+            "page": pageIndex,
+            "page_size": pageSize,
+            "date": new Date()
+          },
+          "loans": loans
+        })
+      }
+    }],
+    "predicates": [
+    {
+      "equals": {
+        "method": "GET",
+        "path": "/loans",
+        "query": {
+          "section": pageIndex.toString(),
+          "sortDirect": sortDirect,
+          "sortName": sortName
+        }
+      }
+    }
+  ]};
+}
 
 
 
