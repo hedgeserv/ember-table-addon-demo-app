@@ -20,11 +20,6 @@ import json
 spanWidthPix = 1
 
 
-def find_field_by_id(browser, attribute):
-    elems = browser.find_elements_by_id(attribute)
-    return elems[0] if elems else False
-
-
 def get_url(browser, url):
     browser.get(url)
 
@@ -48,43 +43,15 @@ def execute_js_script(browser, script):
     return browser.execute_script(script)
 
 
-def contains_content(browser, content):
-    # Search for an element that contains the whole of the text we're looking
-    # for in it or its subelements, but whose children do NOT contain that
-    # text - otherwise matches <body> or <html> or other similarly useless
-    # things.
-    for elem in browser.find_elements_by_xpath(str(
-            '//*[contains(normalize-space(.),"{content}") '
-            'and not(./*[contains(normalize-space(.),"{content}")])]'
-                    .format(content=content))):
-
-        try:
-            if elem.is_displayed():
-                return True
-        except StaleElementReferenceException:
-            pass
-
-    return False
-
-
-def wait_for_elem(browser, xpath, timeout=20):
+def wait_for_elem(browser, script, timeout=20):
     start = time.time()
     elems = []
     while time.time() - start < timeout:
-        elems = browser.find_elements_by_xpath(str(xpath))
+        elems = browser.execute_script(str(script))
         if elems:
             return elems
         time.sleep(0.2)
     return elems
-
-
-def wait_for_content(step, browser, content, timeout=15):
-    start = time.time()
-    while time.time() - start < timeout:
-        if contains_content(world.browser, content):
-            return
-        time.sleep(0.2)
-    assert_true(step, contains_content(world.browser, content))
 
 
 def get_column_width_by_class_name(browser, className, index):
@@ -99,17 +66,6 @@ def drag_element_by_offset_class_name(browser, className, index, rightOrLeft, of
         action_chains.drag_and_drop_by_offset(elements[int(index) - 1], -int(offset), 0).perform()
     else:
         action_chains.drag_and_drop_by_offset(elements[int(index) - 1], int(offset), 0).perform()
-
-
-def reorder_column_with_offset(browser, css, index, rightOrLeft, offset):
-    columnsHeader = find_elements_by_css(browser, css)
-    action_chains = ActionChains(browser)
-    if str(rightOrLeft) == "left":
-        action_chains.click_and_hold(columnsHeader[int(index) - 1]).move_by_offset(-int(offset), 0).move_by_offset(10,
-                                                                                                                   0).release().perform()
-    else:
-        action_chains.click_and_hold(columnsHeader[int(index) - 1]).move_by_offset(int(offset), 0).move_by_offset(-10,
-                                                                                                                  0).release().perform()
 
 
 # the index starts from 1
@@ -168,58 +124,12 @@ def drag_scroll_to_bottom(browser, scroll_css, offsety):
         time.sleep(0.5)
 
 
-def check_resize_cursor_indicator(browser, separators, index, cursor_css):
-    action_chains = ActionChains(world.browser)
-    action_chains.drag_and_drop_by_offset(separators[int(index)], 50, 0).perform()
-    # time.sleep(5)
-    cursor = find_elements_by_css(world.browser, cursor_css)
-    style = cursor[0].get_attribute("style")
-    assert_true(step, ("auto" in style) or ("resize" in style) or ("pointer" in style))
-    action_chains.release()
-    world.browser.refresh()
-    # time.sleep(5)
-
-
 def get_mb_request():
     text = requests.get("http://localhost:2525/imposters/8888").json()
     dumpText = json.dumps(text)
     toJson = json.loads(dumpText)['requests']
 
     return toJson
-
-
-def get_grouped_column_width(browser):
-    grouped_column_width_css = ".ember-table-header-cell.text-red"
-
-    return find_elements_by_css(world.browser, grouped_column_width_css)[0].get_attribute(
-        "style").split("px;")[
-        0].split("width:")[1].strip()
-
-
-def get_neighbor_column_width(browser):
-    neighbor_column_width_css = ".ember-table-header-cell"
-
-    return find_elements_by_css(world.browser, neighbor_column_width_css)[0].get_attribute("style").split(
-        "px;")[0].split(
-        "width:")[1].strip()
-
-
-def get_first_inner_column_width(browser):
-    first_inner_column_width_css = ".ember-table-header-cell.text-blue"
-
-    return find_elements_by_css(world.browser, first_inner_column_width_css)[0].get_attribute(
-        "style").split("px;")[
-        0].split(
-        "width:")[1].strip()
-
-
-def get_last_inner_column_width(browser):
-    last_inner_column_width_css = ".ember-table-header-cell.text-blue"
-
-    return find_elements_by_css(world.browser, last_inner_column_width_css)[1].get_attribute(
-        "style").split("px;")[
-        0].split(
-        "width:")[1].strip()
 
 
 @step('I visit "(.*?)"$')
@@ -253,6 +163,7 @@ def list_all_loans(step, url):
             "the list of loans": "http://localhost:4200/fully-loaded-loans",
             "groups": "http://localhost:4200/groups",
             "column sort": "http://localhost:4200/lazy-loaded-loans?totalCount=200",
+            "column reorder": "http://localhost:4200/groups-reorder",
         }
         get_url(world.browser, options.get(url))
 
@@ -286,15 +197,6 @@ def drag_element_offset(step, className, index, rightOrLeft, offsetx):
             assert_true(step, (int(changedWidth) - int(originalWidth)) == (-int(offsetx) - int(spanWidthPix)))
         else:
             assert_true(step, (int(changedWidth) - int(originalWidth)) == (int(offsetx) - int(spanWidthPix)))
-
-
-@step('I want to recorder by "(.*?)" for the (\d+) column to "(.*?)" with offset (\d+)$')
-def reorder_column_by_offset(step, css, index, rightOrLeft, offsetx):
-    with AssertContextManager(step):
-        originalHeaderName = get_column_header_name(world.browser, css, index)
-        reorder_column_with_offset(world.browser, css, index, rightOrLeft, offsetx)
-        changedHeaderName = get_column_header_name(world.browser, css, index)
-        assert_false(step, str(originalHeaderName) == str(changedHeaderName))
 
 
 @step('I want to sort column with index (\d+) by css "(.*?)"')
@@ -440,6 +342,19 @@ def drag_column_with_pixel(step, column_name, left_or_right, offsetx):
             action_chains.drag_and_drop_by_offset(element, int(offsetx), 0).release().perform()
 
 
+@step('Reorder an inner column "(.*?)" header to "(.*?)" with (\d+) pixel')
+def reorder_column_with_pixel(step, column_name, left_or_right, offsetx):
+    with AssertContextManager(step):
+        chains = ActionChains(world.browser)
+        wait_for_elem(world.browser, "return $('.ember-table-content-container')")
+        element = world.browser.execute_script(
+            "return $('.ember-table-content-container .ember-table-content:contains(" + column_name + ")')")
+        if left_or_right == "left":
+            chains.click_and_hold(element[0]).move_by_offset(-int(offsetx), 0).move_by_offset(-1, 0).release().perform()
+        else:
+            chains.click_and_hold(element[0]).move_by_offset(int(offsetx), 0).move_by_offset(-1, 0).release().perform()
+
+
 @step('The "(.*?)" column width should be (\d+) pixel')
 def check_column_width(step, column_name, pixel):
     with AssertContextManager(step):
@@ -447,3 +362,27 @@ def check_column_width(step, column_name, pixel):
             "return $('.ember-table-header-container .ember-table-content:contains(" + column_name + ")').parent().width()")
         assert_true(step, int(width) == int(pixel))
 
+
+@step('The index (\d+) should be "(.*?)" column$')
+def check_reorder_column(step, index, name):
+    with AssertContextManager(step):
+        elements = world.browser.execute_script("return $('.ember-table-content-container')")
+        list = []
+        for i in range(0, len(elements)):
+            column = world.browser.execute_script(
+                "return $('.ember-table-content-container .ember-table-content:eq(" + str(i) + ")').text()")
+            list.append(str(column).strip())
+        assert_true(step, list[int(index)] == name)
+
+
+@step('The "(.*?)" column sort indicator should be "(.*?)"$')
+def check_sort_indicator(step, column_name, sort):
+    with AssertContextManager(step):
+        class_content = world.browser.execute_script(
+            "return $('.ember-table-header-container .ember-table-content:contains(" + column_name + ")').parent().parent().attr(\'class\')")
+        options = {"none": "",
+                   "asc": "sort-indicator-icon sort-indicator-icon-up",
+                   "desc": "sort-indicator-icon sort-indicator-icon-down", }
+        if options.get(sort) == "none":
+            assert_true(step, "sort-indicator-icon" not in class_content)
+        assert_true(step, options.get(sort) in class_content)

@@ -1,7 +1,7 @@
-Feature: Column groups
+Feature: Column groups resize
   In order to summary related information of applying grids to finance concepts
   As a customer
-  The columns should be grouped
+  The columns should be grouped and resizable
 
   @complete
   Scenario: styling for the entire group
