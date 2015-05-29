@@ -15,15 +15,16 @@ Feature: Column sort
     Then Drag scroll bar to "top"
     And The "first" record should be "199"
 
-  @wip
+  @complete
   Scenario: sort individual column with partial loaded data
-    Given There are 200 loans in chunk size 50
+    Given There are 200 sortable loans in chunk size 50
     When Presenting "column sort"
-    Then Customer drags scroll bar by offset 60 with 1 times
-    And There should be 3 sections loaded
+    Then There should be 2 sections loaded
+    When Customer drags scroll bar by offset 60 with 1 times
+    Then There should be 3 sections loaded
     And The "current" record should be "47"
     When Click to sort a column as "ASC"
-    Then There should be 3 sections loaded
+    Then There should be 6 sections loaded
     When Click to sort a column as "DESC"
-    Then The "current" record should be "152"
-    And There should be 3 sections loaded
+    Then There should be 9 sections loaded
+    And The "current" record should be "152"

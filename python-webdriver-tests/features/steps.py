@@ -13,7 +13,7 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 from prepare_loans import prepare_loans
 from prepare_loans import prepare_loans_in_chunk
-
+from prepare_loans import prepare_sort_in_chunk
 import requests
 import json
 
@@ -184,6 +184,7 @@ def get_mb_request():
     text = requests.get("http://localhost:2525/imposters/8888").json()
     dumpText = json.dumps(text)
     toJson = json.loads(dumpText)['requests']
+
     return toJson
 
 
@@ -237,6 +238,12 @@ def fill_in_textfield_by_class(step, num):
 def there_are_loans_in_chunk(step, totalCount, chunkSize):
     with AssertContextManager(step):
         prepare_loans_in_chunk(int(totalCount), int(chunkSize))
+
+
+@step('There are (\d+) sortable loans in chunk size (\d+)$')
+def prepare_loans_as_asc(step, totalCount, chunkSize):
+    with AssertContextManager(step):
+        prepare_sort_in_chunk(int(totalCount), int(chunkSize))
 
 
 @step('Presenting "(.*?)"')
@@ -319,8 +326,6 @@ def check_loaded_chunk(step, num):
 
 @step('There should be (\d+) sections loaded')
 def get_loaded_section(step, num):
-    # print len(get_mb_request())
-    # print "****"
     assert_true(step, len(get_mb_request()) == int(num))
 
 

@@ -36,14 +36,16 @@ def make_response(loans):
     }
 
 
-def make_predicate(page_index):
+def make_predicate(page_index, query={}):
+    current_query = query.copy()
+    current_query.update({
+        "section": str(page_index)
+    })
     predicate = {
         "equals": {
             "method": "GET",
             "path": "/loans",
-            "query": {
-                "section": str(page_index)
-            }
+            "query": current_query
         }
     }
     return predicate
@@ -94,3 +96,30 @@ def prepare_loans(count):
 
 def prepare_loans_in_chunk(total, chunk_size=100):
     _prepare(total, chunk_size, make_chunk_stubs)
+
+
+def prepare_asc_stubs_in_chunk(total, chunk_size):
+    all_loans = sorted(generate_loans(total))
+    all_loans.sort(key=lambda x: int(x['id']))
+    chunks = [all_loans[i:i + chunk_size] for i in range(0, len(all_loans), chunk_size)]
+    return [make_stub(c, make_predicate(i + 1, {'sortName': 'id', 'sortDirect': 'asc'})) for i, c in enumerate(chunks)]
+
+def prepare_desc_stubs_in_chunk(total, chunk_size):
+    all_loans = generate_loans(total)
+    all_loans.sort(reverse=True, key=lambda x: int(x['id']))
+    chunks = [all_loans[i:i + chunk_size] for i in range(0, len(all_loans), chunk_size)]
+    return [make_stub(c, make_predicate(i + 1, {'sortName': 'id', 'sortDirect': 'desc'})) for i, c in enumerate(chunks)]
+
+
+
+def prepare_sort_in_chunk(total, chunk_size=100):
+    mb = MountebankStub()
+    stubs = []
+    asc_stubs = prepare_asc_stubs_in_chunk(total, chunk_size)
+    desc_stubs = prepare_desc_stubs_in_chunk(total, chunk_size)
+    default_stubs = make_chunk_stubs(total, chunk_size)
+    stubs.extend(asc_stubs)
+    stubs.extend(desc_stubs)
+    stubs.extend(default_stubs)
+
+    mb.create_imposter(stubs)
