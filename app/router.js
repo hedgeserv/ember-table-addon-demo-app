@@ -10,4 +10,5 @@ export default Router.map(function() {
   this.route('lazyLoadedLoans', {path: '/lazy-loaded-loans'});
   this.route('groups');
   this.route('groupsReorder',{path: '/groups-reorder'});
+  this.route('groupsSort',{path: '/groups-sort'});
 });
