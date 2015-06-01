@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/hedgeserv/ember-table-addon-demo-app.svg?branch=master)](https://travis-ci.org/hedgeserv/ember-table-addon-demo-app)
 
-Demo app for [our fork](https://github.com/hedgeserv/ember-table-addon) of [Addepar's](https://github.com/Addepar/ember-table-addon) `ember-table-addon` 
+Demo app for [our fork](https://github.com/hedgeserv/ember-table) of [Addepar's](https://github.com/Addepar/ember-table) `ember-table` 
 
 ## Build Prerequisites
 
@@ -12,7 +12,7 @@ You can run `install-dependencies.sh [Path]` instead of manual installation
 
 Parameter [Path]:
 
-* If you use it by local, path should equal your project parent path. Such as "~/GitHubProject/HedgeServ" (Note: ember-table-addon and ember-table-addon-demo-app should in same folder)
+* If you use it by local, path should equal your project parent path. Such as "~/GitHubProject/HedgeServ" (Note: ember-table and ember-table-addon-demo-app should in same folder)
          
 * If you use it by Jenkins, path should equal Jenkins project parent path. Such as "/Users/hedgebeijing/.jenkins/workspace"
 
@@ -25,17 +25,17 @@ You will need the following things properly installed on your computer.
 * [Bower](http://bower.io/) - `npm install -g bower`
 * [Ember CLI](http://www.ember-cli.com/) - `npm install -g ember-cli`
 * [PhantomJS](http://phantomjs.org/) - `npm install -g phantomjs`
-* [ember-table-addon](https://github.com/hedgeserv/ember-table-addon) - see below
+* [ember-table](https://github.com/hedgeserv/ember-table) - see below
 * [Python](https://www.python.org/) (2.7) - `brew install python`
 * [Mountebank](http://www.mbtest.org/)(^1.2.122) - `npm install -g mountebank --production`
 
 ### Npm link for ember-table-addon (for reuse later)
 
-Your will need to make [our fork of](https://github.com/hedgeserv/ember-table-addon) ember-table-addon locally available. Clone that project too, to an adjacent directory.
+Your will need to make [our fork of](https://github.com/hedgeserv/ember-table) ember-table locally available. Clone that project too, to an adjacent directory.
 
-Change into the ember-table-addon directory, and link it:
+Change into the ember-table directory, and link it:
 
-* `cd ../ember-table-addon && npm link`
+* `cd ../ember-table && npm link`
 
 ## Installation (and using the link above)
 Ensure you're cd'd to the cloned ember-table-addon-demo-app working-copy directory

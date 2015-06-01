@@ -28,8 +28,8 @@ before_install:
   - npm install -g bower
   - npm install -g mountebank@1.2.122 --production
 
-  - git clone git://github.com/hedgeserv/ember-table-addon.git
-  - cd ember-table-addon
+  - git clone git://github.com/hedgeserv/ember-table.git
+  - cd ember-table
   - npm link
   - cd ..
 
