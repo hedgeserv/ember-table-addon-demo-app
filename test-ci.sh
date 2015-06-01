@@ -8,9 +8,6 @@ reset=`tput sgr0`
 echo "${green}Start Mountebank ...${reset}"
 mb --allowCORS &
 
-echo "${green}Setup Mountebank ...${reset}"
-node mountebank-server/setup-imposters.js
-
 echo "${green}Run ember test ...${reset}"
 ember test -c ./testem-ci.json > temp.xml
 if [ $? -eq 0 ];then
