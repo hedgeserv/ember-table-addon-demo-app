@@ -28,8 +28,8 @@ before_install:
   - npm install -g bower
   - npm install -g mountebank@1.2.122 --production
 
-  - git clone git://github.com/hedgeserv/ember-table-addon.git
-  - cd ember-table-addon
+  - git clone git://github.com/hedgeserv/ember-table.git
+  - cd ember-table
   - npm link
   - cd ..
 
@@ -41,12 +41,7 @@ install:
 
 before_script:
 
-  - ember server -e ci & mb --allowCORS &
-
-script:
-
-  - ember test
-  - lettuce python-webdriver-tests/features --tag complete
+script: ./test-ci.sh
 
 notifications:
   slack: hedgeserv:QQblFhv13dIPhqwoXI6qTDzA

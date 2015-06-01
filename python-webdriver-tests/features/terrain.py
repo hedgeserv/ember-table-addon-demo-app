@@ -4,7 +4,6 @@ import os
 import time
 @before.each_scenario
 def setup_browser(scenario):
-    os.system('mb restart &')
     time.sleep(1)
     driver_arguments = {'chrome_options': webdriver.ChromeOptions()}
     driver_arguments['chrome_options'].add_argument('--no-sandbox')
@@ -14,4 +13,3 @@ def setup_browser(scenario):
 @after.each_scenario
 def teardown_browser(scenario):
     world.browser.quit()
-    os.system('mb stop')

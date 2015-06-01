@@ -1,7 +1,5 @@
 from lettuce import *
 
-from selenium.common.exceptions import (
-    StaleElementReferenceException)
 from lettuce_webdriver.util import (assert_true,
                                     AssertContextManager, assert_false)
 import os, sys, inspect
@@ -36,7 +34,7 @@ def find_elements_by_css(browser, css):
 
 def check_fields_counts_by_css(browser, css, num):
     elements = browser.find_elements_by_css_selector(css)
-    assert len(elements) == num
+    assert len(elements) == int(num)
 
 
 def execute_js_script(browser, script):
@@ -168,14 +166,11 @@ def list_all_loans(step, url):
         get_url(world.browser, options.get(url))
 
 
-@step('"(.*?)" loans should be shown in a table, from the outset')
+@step('(\d+) loans should be shown in a table, from the outset')
 def check_all_loans_shown(step, num):
     with AssertContextManager(step):
-        options = {
-            "All": 3502,
-        }
         check_fields_counts_by_css(world.browser, ".ember-table-body-container .ember-table-table-row",
-                                   options.get(num))
+                                   num)
 
 
 @step('The page load time should be longer than ten seconds')
@@ -222,8 +217,8 @@ def check_loaded_chunk(step, num):
         toJson = json.loads(dumpText)['requests']
 
         assert_true(step, len(toJson) == 2)
-        assert_true(step, toJson[0]['query']['section'] == str(int(num) / 50))
-        assert_true(step, toJson[1]['query']['section'] == "1")
+        assert_true(step, toJson[0]['query']['section'] == "1")
+        assert_true(step, toJson[1]['query']['section'] == str(int(num) / 50))
 
 
 @step('There should be (\d+) sections loaded')

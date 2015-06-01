@@ -7,8 +7,10 @@ class MountebankStub:
         self.mb_url = 'http://localhost:2525/imposters/'
 
     def create_imposter(self, stubs):
+        stub_port = 8888
+        requests.delete(self.mb_url + str(stub_port))
         params = {
-            "port": 8888,
+            "port": stub_port,
             "protocol": "http",
             "name": "test",
             "stubs": stubs

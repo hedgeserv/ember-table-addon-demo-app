@@ -7,19 +7,18 @@ reset=`tput sgr0`
 
 echo "${green}Start Mountebank ...${reset}"
 mb --allowCORS &
-
-echo "${green}Setup Mountebank ...${reset}"
-node mountebank-server/setup-imposters.js
+sleep 1
 
 echo "${green}Run ember test ...${reset}"
-ember test -c ./testem-ci.json > temp.xml
+ember test -c ./testem-ci.json | tee temp.xml
 if [ $? -eq 0 ];then
   sed '1,4d' temp.xml > test-result.xml
-  mb stop
+
   echo "${green}Ember test finished successfully.${reset}"
   echo "${green}Start ember server.${reset}"
   ember server -e ci &
   var=$!
+  sleep 7
   echo "${green}Ember server pid is $var${reset}"
   echo "${green}Run lettuce ...${reset}"
   lettuce python-webdriver-tests/features --tag complete --with-xunit
@@ -35,5 +34,6 @@ else
 fi
 
 echo "${green}Shutdown Mountebank ...${reset}"
+mb stop
 rm temp.xml
 exit $result
