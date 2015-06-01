@@ -9,7 +9,7 @@ echo "${green}Start Mountebank ...${reset}"
 mb --allowCORS &
 
 echo "${green}Run ember test ...${reset}"
-ember test -c ./testem-ci.json > temp.xml
+ember test -c ./testem-ci.json | tee temp.xml
 if [ $? -eq 0 ];then
   sed '1,4d' temp.xml > test-result.xml
   mb stop

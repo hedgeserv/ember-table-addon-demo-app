@@ -16,13 +16,13 @@ module('Fully loaded set of loans', {
 
 
 test("Should show all loans in a table", function (assert) {
-  prepareLoans(3500);
+  prepareLoans(1000);
 
   assert.expect(1);
 
   visit('/fully-loaded-loans');
 
   andThen(function () {
-    assert.equal(find('.ember-table-body-container .ember-table-table-row').length, 3502, "Page contains list of models 3502");
+    assert.equal(find('.ember-table-body-container .ember-table-table-row').length, 1002, "Page contains list of models 3502");
   });
 });
