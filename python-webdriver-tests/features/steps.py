@@ -162,6 +162,7 @@ def list_all_loans(step, url):
             "groups": "http://localhost:4200/groups",
             "column sort": "http://localhost:4200/lazy-loaded-loans?totalCount=200",
             "column reorder": "http://localhost:4200/groups-reorder",
+            "inner column sort": "http://localhost:4200/groups-sort",
         }
         get_url(world.browser, options.get(url))
 
@@ -270,11 +271,12 @@ def check_fields_class_by_css(step):
         assert_true(step, "bg-lightgray" in class_info)
 
 
-@step('Click to sort a column as "(.*?)"')
-def click_to_sort_column(step, asc_or_desc):
+@step('Click to sort as "(.*?)" for column "(.*?)"$')
+def click_to_sort_column(step, asc_or_desc, column_name="Id"):
     with AssertContextManager(step):
-        column_css = ".ember-table-header-cell"
-        find_elements_by_css(world.browser, column_css)[0].click()
+        element = world.browser.execute_script(
+            "return $('.ember-table-header-container .ember-table-content:contains(" + column_name + ")').parent().parent()")
+        element[0].click()
 
 
 @step('The "(.*?)" record should be "(.*?)"$')
