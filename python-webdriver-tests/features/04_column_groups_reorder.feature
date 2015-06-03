@@ -17,7 +17,7 @@ Feature: Column groups reorder
     Given There are 200 sortable loans in chunk size 50
     When Presenting "inner column sort"
     Then The index 1 should be "Group1" column
-    And Reorder an inner column "Group1" header to "right" with 600 pixel
+    And Reorder an inner column "Group1" header to "right" with 450 pixel
     Then The index 5 should be "Group1" column
 
   @complete
@@ -25,6 +25,6 @@ Feature: Column groups reorder
     Given There are 200 sortable loans in chunk size 50
     When Presenting "inner column sort"
     Then The index 1 should be "Group1" column
-    And Reorder an inner column "Group1" header to "right" with 400 pixel
+    And Reorder an inner column "Group1" header to "right" with 300 pixel
     Then The index 1 should be "Sector" column
     Then The index 2 should be "Group1" column

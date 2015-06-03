@@ -186,7 +186,6 @@ def drag_element_offset(step, className, index, rightOrLeft, offsetx):
     with AssertContextManager(step):
         originalWidth = get_column_width_by_class_name(world.browser, "ember-table-header-cell", index)
         drag_element_by_offset_class_name(world.browser, className, index, rightOrLeft, offsetx)
-        # time.sleep(5)
         changedWidth = get_column_width_by_class_name(world.browser, "ember-table-header-cell", index)
 
         if str(rightOrLeft) == "left":
@@ -347,9 +346,9 @@ def reorder_column_with_pixel(step, column_name, left_or_right, offsetx):
         element = world.browser.execute_script(
             "return $('.ember-table-content-container .ember-table-content:contains(" + column_name + ")')")
         if left_or_right == "left":
-            chains.click_and_hold(element[0]).move_by_offset(-int(offsetx), 0).move_by_offset(-1, 0).release().perform()
+            chains.click_and_hold(element[0]).move_by_offset(-int(offsetx), 0).release().perform()
         else:
-            chains.click_and_hold(element[0]).move_by_offset(int(offsetx), 0).move_by_offset(-1, 0).release().perform()
+            chains.click_and_hold(element[0]).move_by_offset(int(offsetx), 0).release().perform()
 
 
 @step('The "(.*?)" column width should be (\d+) pixel')
