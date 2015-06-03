@@ -13,3 +13,11 @@ Feature: Lazily Loaded Set of Loans
   Scenario: Scroll bar to load other sections of loans
     Given There are 200 loans in chunk size 50
     Then Scroll bar by offset 60 with 2 times to load next chunks in total 200 and drag scroll bar to top without rerender
+
+  @wip
+  Scenario: Scroll horizontal scroll bar for to check column header
+    Given There are 200 loans in chunk size 50
+    And Presenting "lazy load page"
+    When The user drags the "status" on column to "right" with 1000 pixel
+    Then The column header block should has "scroll left" with certain value
+
