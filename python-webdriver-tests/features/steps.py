@@ -163,6 +163,7 @@ def list_all_loans(step, url):
             "column sort": "http://localhost:4200/lazy-loaded-loans?totalCount=200",
             "column reorder": "http://localhost:4200/groups-reorder",
             "inner column sort": "http://localhost:4200/groups-sort",
+            "lazy load page": "http://localhost:4200/lazy-loaded-loans?totalCount=200",
         }
         get_url(world.browser, options.get(url))
 
@@ -309,6 +310,22 @@ def drag_scroll_bar(step, top_or_bottom):
             drag_scroll_to_top(world.browser, scroll_css, -int(offsety))
 
 
+@step('Drag horizontal scroll bar with "(.*?)" pixel$')
+def drag_horizontal_scroll_bar(step, offsetx):
+    with AssertContextManager(step):
+        horizontal_css = "antiscroll-scrollbar antiscroll-scrollbar-horizontal"
+        action = ActionChains(world.browser)
+        action.click_and_hold(horizontal_css).move_by_offset(int(offsetx), 0).release().perform()
+
+
+@step('The column header block should has "(.*?)" with certain value')
+def check_header_scroll_left(step, pixel):
+    with AssertContextManager(step):
+        scroll_left = world.browser.execute_script(
+            "return $('.ember-table-table-block.ember-table-header-block').scrollLeft()")
+        assert_true(step, int(pixel) == int(scroll_left))
+
+
 @step('The user get the resize cursor in "(.*?)" column')
 def get_column_cursor(step, column_name):
     with AssertContextManager(step):
@@ -336,6 +353,7 @@ def drag_column_with_pixel(step, column_name, left_or_right, offsetx):
             action_chains.drag_and_drop_by_offset(element, -int(offsetx), 0).release().perform()
         else:
             action_chains.drag_and_drop_by_offset(element, int(offsetx), 0).release().perform()
+        time.sleep(5)
 
 
 @step('Reorder an inner column "(.*?)" header to "(.*?)" with (\d+) pixel')
