@@ -11,4 +11,5 @@ export default Router.map(function() {
   this.route('groups');
   this.route('groupsReorder',{path: '/groups-reorder'});
   this.route('groupsSort',{path: '/groups-sort'});
+  this.route('fixed-columns');
 });
