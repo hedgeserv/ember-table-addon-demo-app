@@ -211,7 +211,6 @@ def drag_scroll_bar_with_offset(step, offset, times):
 @step('Only first and last chunk was loaded in total (\d+) in first time')
 def check_loaded_chunk(step, num):
     with AssertContextManager(step):
-        # prepare_loans_in_chunk(50)
         get_url(world.browser, "http://localhost:4200/lazy-loaded-loans?totalCount=" + str(num))
         text = requests.get("http://localhost:2525/imposters/8888").json()
         dumpText = json.dumps(text)
@@ -230,20 +229,13 @@ def get_loaded_section(step, num):
 @step(
     'Scroll bar by offset (\d+) with (\d+) times to load next chunks in total (\d+) and drag scroll bar to top without rerender')
 def check_next_chunk_loaded(step, offsety, times, num):
-    # chunk = 50
     scroll_css = "div.antiscroll-scrollbar.antiscroll-scrollbar-vertical"
-
-    # prepare_loans_in_chunk(chunk)
     get_url(world.browser, "http://localhost:4200/lazy-loaded-loans?totalCount=" + str(num))
 
-    # drag scroll bar by css with parameter times
     drag_scroll_by_css_with_times(world.browser, scroll_css, offsety, times)
-
-    # check the chunk loaded time, it's related with how many times customer drag scroll bar with certain offset
     assert len(get_mb_request()) == int(times) + 2
-    drag_scroll_to_top(world.browser, scroll_css, -int(offsety))
 
-    # check the chunck shouldn't be rendered when customer drag scroll bar back to top
+    drag_scroll_to_top(world.browser, scroll_css, -int(offsety))
     assert len(get_mb_request()) == int(times) + 2
 
 
@@ -310,20 +302,29 @@ def drag_scroll_bar(step, top_or_bottom):
             drag_scroll_to_top(world.browser, scroll_css, -int(offsety))
 
 
-@step('Drag horizontal scroll bar with "(.*?)" pixel$')
+@step('Drag horizontal scroll bar with (\d+) pixel$')
 def drag_horizontal_scroll_bar(step, offsetx):
     with AssertContextManager(step):
-        horizontal_css = "antiscroll-scrollbar antiscroll-scrollbar-horizontal"
+        horizontal_css = ".antiscroll-scrollbar.antiscroll-scrollbar-horizontal"
+        elements = find_elements_by_css(world.browser, horizontal_css)
+
         action = ActionChains(world.browser)
-        action.click_and_hold(horizontal_css).move_by_offset(int(offsetx), 0).release().perform()
+        action.click_and_hold(elements[0]).move_by_offset(int(offsetx), 0).release().perform()
 
 
-@step('The column header block should has "(.*?)" with certain value')
-def check_header_scroll_left(step, pixel):
+@step('The column header block should has "(.*?)" with (\d+) pixel')
+def check_header_scroll_left(step, name, pixel):
     with AssertContextManager(step):
-        scroll_left = world.browser.execute_script(
-            "return $('.ember-table-table-block.ember-table-header-block').scrollLeft()")
-        assert_true(step, int(pixel) == int(scroll_left))
+        start = time.time()
+        flag = False
+        while time.time() - start < 20:
+            block_scroll_left = world.browser.execute_script(
+                "return $('.ember-table-table-block.ember-table-header-block').scrollLeft()")
+            if int(block_scroll_left) == int(pixel):
+                flag = flag or True
+                break
+            time.sleep(0.2)
+        assert_true(step, flag)
 
 
 @step('The user get the resize cursor in "(.*?)" column')
@@ -353,7 +354,6 @@ def drag_column_with_pixel(step, column_name, left_or_right, offsetx):
             action_chains.drag_and_drop_by_offset(element, -int(offsetx), 0).release().perform()
         else:
             action_chains.drag_and_drop_by_offset(element, int(offsetx), 0).release().perform()
-        time.sleep(5)
 
 
 @step('Reorder an inner column "(.*?)" header to "(.*?)" with (\d+) pixel')
@@ -367,6 +367,29 @@ def reorder_column_with_pixel(step, column_name, left_or_right, offsetx):
             chains.click_and_hold(element[0]).move_by_offset(-int(offsetx), 0).release().perform()
         else:
             chains.click_and_hold(element[0]).move_by_offset(int(offsetx), 0).release().perform()
+
+
+@step('The reorder indicator line should be (\d+) from left$')
+def get_reorder_indicator(step, pixel):
+    with AssertContextManager(step):
+        style = world.browser.execute_script(
+            "return $('.ember-table-column-sortable-indicator.active').attr(\"style\")")
+        indicator = str(style).split("left:")[1].split("px")[0].strip()
+
+        assert_true(step, int(indicator) == int(pixel))
+
+
+@step('Drag and hold column "(.*?)" to "(.*?)" with (\d+) pixel$')
+def drag_hold_column(step, column_name, left_or_right, offsetx):
+    with AssertContextManager(step):
+        chains = ActionChains(world.browser)
+        wait_for_elem(world.browser, "return $('.ember-table-content-container')")
+        element = world.browser.execute_script(
+            "return $('.ember-table-content-container .ember-table-content:contains(" + column_name + ")')")
+        if left_or_right == "left":
+            chains.click_and_hold(element[0]).move_by_offset(-int(offsetx), 0).perform()
+        else:
+            chains.click_and_hold(element[0]).move_by_offset(int(offsetx), 0).perform()
 
 
 @step('The "(.*?)" column width should be (\d+) pixel')
@@ -400,3 +423,50 @@ def check_sort_indicator(step, column_name, sort):
         if options.get(sort) == "none":
             assert_true(step, "sort-indicator-icon" not in class_content)
         assert_true(step, options.get(sort) in class_content)
+
+
+@step('I have the following grouped loans in MounteBank:')
+def prepare_grouped_loans_in_mb(step):
+    with AssertContextManager(step):
+        for loan in step.hashes:
+            print loan['first'], loan['second'], loan['group_name']
+            print "********"
+
+
+@step('^I see grouped rows:$')
+def verify_grouped_rows(step):
+    for index, row in step.hashes:
+        verify_grouped_row(index, row)
+
+
+def verify_grouped_row(index, row):
+    indicator = row['indicator']
+    verify_group_row_indicator(index, indicator)
+    for name, value in row:
+        if name != 'indicator':
+            verify_cell_content(index, name, value)
+
+
+def verify_group_row_indicator(index, indicator):
+    col_index = find_col_index("indicator")
+    col_value = world.browser.execute_script("return +/-")
+    assert_true(step, str(col_value) == str(indicator))
+
+
+def verify_cell_content(row_index, name, value):
+    col_index = find_col_index(name)
+    col_value = world.browser.execute_script(
+        "return $('.ember-table-body-container .ember-table-table-block > div:nth-child(" + str(
+            row_index + 1) + ") .ember-view > div:nth-child(" + str(col_index + 1) + ") span').text().trim()")
+    assert_true(step, str(col_value) == str(value))
+
+
+def find_col_index(name):
+    col_count = world.browser.execute_script(
+        "return $('.ember-table-header-container .ember-table-table-row .ember-table-table-cell').length")
+    for i in range(0, col_count):
+        headerName = world.browser.execute_script(
+            "return $('.ember-table-header-container "
+            ".ember-table-table-row > div .ember-table-table-cell:nth-child(" + str(i + 1) + ") span').text().trim()")
+        if headerName == name:
+            return i

@@ -28,3 +28,18 @@ Feature: Column groups reorder
     And Reorder an inner column "Group1" header to "right" with 300 pixel
     Then The index 1 should be "Sector" column
     Then The index 2 should be "Group1" column
+
+  @complete
+  Scenario: Check reorder column indicator line before reorder
+    Given There are 200 sortable loans in chunk size 50
+    When Presenting "inner column sort"
+    And Drag and hold column "Sector" to "right" with 1 pixel
+    Then The reorder indicator line should be 598 from left
+
+  @complete
+  Scenario: Check reorder column indicator line after reorder
+    Given There are 200 sortable loans in chunk size 50
+    When Presenting "inner column sort"
+    And Drag and hold column "Sector" to "right" with 300 pixel
+    Then The reorder indicator line should be 898 from left
+
