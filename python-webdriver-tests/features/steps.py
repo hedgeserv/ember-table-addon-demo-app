@@ -312,15 +312,18 @@ def drag_horizontal_scroll_bar(step, offsetx):
         action.click_and_hold(elements[0]).move_by_offset(int(offsetx), 0).release().perform()
 
 
-@step('The column header block should has "(.*?)" with (\d+) pixel')
-def check_header_scroll_left(step, name, pixel):
+@step('The column header block should has "(.*?)" and same as body scroll left$')
+def check_header_scroll_left(step, name):
     with AssertContextManager(step):
         start = time.time()
         flag = False
         while time.time() - start < 20:
             block_scroll_left = world.browser.execute_script(
                 "return $('.ember-table-table-block.ember-table-header-block').scrollLeft()")
-            if int(block_scroll_left) == int(pixel):
+            body_scroll_left = world.browser.execute_script(
+                "return $('.lazy-list-container').scrollLeft()"
+            )
+            if int(block_scroll_left) == int(body_scroll_left):
                 flag = flag or True
                 break
             time.sleep(0.2)

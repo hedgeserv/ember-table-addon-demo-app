@@ -20,5 +20,5 @@ Feature: Lazily Loaded Set of Loans
     And Presenting "lazy load page"
     When The user drags the "status" on column to "right" with 1000 pixel
     And Drag horizontal scroll bar with 1000 pixel
-    Then The column header block should has "scroll left" with 444 pixel
+    Then The column header block should has "scroll left" and same as body scroll left
 
