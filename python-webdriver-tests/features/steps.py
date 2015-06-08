@@ -320,6 +320,9 @@ def check_header_scroll_left(step, name, pixel):
         while time.time() - start < 20:
             block_scroll_left = world.browser.execute_script(
                 "return $('.ember-table-table-block.ember-table-header-block').scrollLeft()")
+            print world.browser.get_window_size()
+            print block_scroll_left
+            print "*************"
             if int(block_scroll_left) == int(pixel):
                 flag = flag or True
                 break
