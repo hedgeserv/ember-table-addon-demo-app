@@ -3,13 +3,15 @@ Feature: Indicators for expanding and collapsing grouped rows
   As a user presented with a grid
   I need an intuitive set of controls
 
-  @wip
+  @complete
   Scenario: Grouping column is presented as first column
-    Given I have grouped loans
+    Given There are 200 loans in chunk size 50
     When Presenting "grouping column"
-    Then There are 3 columns
-    And The 2 column is "First"
-    And The 3 column is "Second"
+    Then There are 4 columns
+    And The index 1 should be "Id" column
+    And The index 2 should be "Activity" column
+    And The index 3 should be "status" column
+    And The index 0 should be "GroupingColumn" column
 
   @wip
   Scenario: Grouped rows are presented
@@ -270,3 +272,74 @@ Feature: Indicators for expanding and collapsing grouped rows
     Then The "grouping" column width should be 150 pixel
     When Reorder an inner column "grouping" header to "right" with 300 pixel
     Then The index 0 should be "grouping" column
+
+  @wip
+  Scenario: The children rows should be sorted by single column
+    Given I have the following grouped loans in MounteBank:
+      | group_name | first | second |
+      | group1     | f1    | s1     |
+      | group2     | f2    | s2     |
+      | group3     | f3    | s3     |
+      | group4     | f4    | s4     |
+      | group5     | f5    | s5     |
+    When Presenting "grouping column present grouped loans"
+    Then I see grouped rows:
+      | indicator | group_name | first | second |
+      | +         | group1     | f1    | s1     |
+      | +         | group2     | f2    | s2     |
+      | +         | group3     | f3    | s3     |
+      | +         | group4     | f4    | s4     |
+      | +         | group5     | f5    | s5     |
+    When Click "expand" for row "row_parent"
+    Then I see grouped rows:
+      | indicator | group_name  | first | second |
+      | -         | group1      | f1    | s1     |
+      | +         | group1-chd1 | f1-1  | s1-1   |
+      | +         | group1-chd2 | f1-2  | s1-2   |
+      | +         | group2      | f2    | s2     |
+      | +         | group3      | f3    | s3     |
+      | +         | group4      | f4    | s4     |
+      | +         | group5      | f5    | s5     |
+    When Click "expand" for row "group1-chd1"
+    When Click "expand" for row "group1-chd2"
+    Then I see grouped rows:
+      | indicator | group_name       | first  | second |
+      | -         | group1           | f1     | s1     |
+      | -         | group1-chd1      | f1-1   | s1-1   |
+      |           | group1-chd1-chd1 | f1-1-1 | s1-1-1 |
+      |           | group1-chd1-chd2 | f1-1-2 | s1-1-2 |
+      | -         | group1-chd2      | f1-2   | s1-2   |
+      |           | group1-chd2-chd1 | f1-2-1 | s1-2-1 |
+      |           | group1-chd2-chd2 | f1-2-2 | s1-2-2 |
+      | +         | group2           | f2     | s2     |
+      | +         | group3           | f3     | s3     |
+      | +         | group4           | f4     | s4     |
+      | +         | group5           | f5     | s5     |
+    When Click to sort as "ASC" for column "first"
+    Then I see grouped rows:
+      | indicator | group_name       | first  | second |
+      | -         | group1           | f1     | s1     |
+      | -         | group1-chd1      | f1-1   | s1-1   |
+      |           | group1-chd1-chd1 | f1-1-1 | s1-1-1 |
+      |           | group1-chd1-chd2 | f1-1-2 | s1-1-2 |
+      | -         | group1-chd2      | f1-2   | s1-2   |
+      |           | group1-chd2-chd1 | f1-2-1 | s1-2-1 |
+      |           | group1-chd2-chd2 | f1-2-2 | s1-2-2 |
+      | +         | group2           | f2     | s2     |
+      | +         | group3           | f3     | s3     |
+      | +         | group4           | f4     | s4     |
+      | +         | group5           | f5     | s5     |
+    When Click to sort as "DESC" for column "first"
+    Then I see grouped rows:
+      | indicator | group_name       | first  | second |
+      | -         | group1           | f1     | s1     |
+      | -         | group1-chd1      | f1-1   | s1-1   |
+      |           | group1-chd1-chd2 | f1-1-2 | s1-1-2 |
+      |           | group1-chd1-chd1 | f1-1-1 | s1-1-1 |
+      | -         | group1-chd2      | f1-2   | s1-2   |
+      |           | group1-chd2-chd1 | f1-2-2 | s1-2-2 |
+      |           | group1-chd2-chd2 | f1-2-1 | s1-2-1 |
+      | +         | group2           | f2     | s2     |
+      | +         | group3           | f3     | s3     |
+      | +         | group4           | f4     | s4     |
+      | +         | group5           | f5     | s5     |

@@ -164,6 +164,7 @@ def list_all_loans(step, url):
             "column reorder": "http://localhost:4200/groups-reorder",
             "inner column sort": "http://localhost:4200/groups-sort",
             "lazy load page": "http://localhost:4200/lazy-loaded-loans?totalCount=200",
+            "grouping column": "http://localhost:4200/fixed-columns",
         }
         get_url(world.browser, options.get(url))
 
@@ -473,3 +474,34 @@ def find_col_index(name):
             ".ember-table-table-row > div .ember-table-table-cell:nth-child(" + str(i + 1) + ") span').text().trim()")
         if headerName == name:
             return i
+
+
+@step('There are (\d+) columns')
+def check_columns_numbers(step, num):
+    with AssertContextManager(step):
+        col_count = world.browser.execute_script(
+            "return $('.ember-table-content-container .ember-table-content').length")
+        assert_true(step, int(col_count) == int(num))
+
+
+@step('Click "(.*?)" for row "(.*?)"$')
+def expand_collapse_row(step, expand_collapse, row_name):
+    with AssertContextManager(step):
+        row = world.browser.execute_script(
+            "return $('.ember-table-content:contains(" + str(row_name) + ")').siblings()")
+        row[0].click()
+
+
+@step('Collapse all expanded rows')
+def collapse_expanded_rows(steps):
+    with AssertContextManager(step):
+        row = find_elements_by_css(world.browser, ".ember-table-toggle.ember-table-collapse")
+        array = []
+        for i in range(0, len(row)):
+            row_name = world.driver.execute_script(
+                "return $('.ember-table-toggle.ember-table-collapse:eq(" + str(i) + ")').siblings().text().trim()")
+            array.append(row_name)
+        for i in range(2, array.__len__())[::-1]:
+            element = world.driver.execute_script(
+                "return $('.ember-table-content:contains(" + str(array[i - 1]) + ")').siblings()")
+            element[0].click()
