@@ -5,7 +5,9 @@ let Loan = DS.Model.extend({
   status: DS.attr(),
   sector: DS.attr(),
   name: DS.attr(),
-  use: DS.attr()
+  use: DS.attr(),
+  groupName: DS.attr(),
+  isGroupRow: DS.attr()
 });
 
 export default Loan;
