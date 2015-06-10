@@ -37,8 +37,8 @@ function stubLoans(allLoans) {
 function makeStubs(allLoans) {
   var stubs = [];
   var pageSize = 50;
+  stubs.push(makeGroupDataStubs());
   makeSortedLoans(allLoans.slice(0, 1000), pageSize, stubs);
-
   var pageIndex = 1;
   while ((pageIndex - 1) * pageSize < allLoans.slice(0, 1000).length) {
     stubs.push(makePerPageStub(allLoans, pageIndex, pageSize));
@@ -178,6 +178,42 @@ function makeSortedPageLoans(sortedLoans, pageIndex, pageSize, sortName, sortDir
     }
   ]};
 }
+
+function makeGroupDataStubs() {
+  var loans = allLoans.slice(0, 5).map(function(group, index) {
+    // third loans is not grouped data
+    group.isGroupRow = index !== 2;
+    group.groupName = 'Group ' + index;
+    return group;
+  });
+  return {
+    "responses": [{
+      "is": {
+        "headers": {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "body": JSON.stringify({
+          "header": {
+            "total": loans.length,
+            "date": new Date()
+          },
+          "loans": loans
+        })
+      }
+    }],
+    "predicates": [{
+      "equals": {
+        "method": "GET",
+        "path": "/loans",
+        "query": {
+          "group": "true"
+        }
+      }
+    }]
+  };
+}
+
 
 
 

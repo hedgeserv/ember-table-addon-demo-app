@@ -12,6 +12,7 @@ sys.path.insert(0, parent_dir)
 from prepare_loans import prepare_loans
 from prepare_loans import prepare_loans_in_chunk
 from prepare_loans import prepare_sort_in_chunk
+from prepare_loans import prepare_grouping_data
 import requests
 import json
 
@@ -164,7 +165,7 @@ def list_all_loans(step, url):
             "column reorder": "http://localhost:4200/groups-reorder",
             "inner column sort": "http://localhost:4200/groups-sort",
             "lazy load page": "http://localhost:4200/lazy-loaded-loans?totalCount=200",
-            "grouping column": "http://localhost:4200/fixed-columns",
+            "grouping column": "http://localhost:4200/grouping-column",
         }
         get_url(world.browser, options.get(url))
 
@@ -512,3 +513,10 @@ def check_row_indicator(step, row_name, indicator):
         row = world.browser.execute_script(
             "return $('.ember-table-content:contains(" + str(row_name) + ")').siblings()")
         assert_true(step, str(indicator), row[0].get_attribute("class"))
+
+
+@step('There are (\d+) grouped loans$')
+def prepare_grouping_loans(step, count):
+    with AssertContextManager(step):
+        prepare_grouping_data(count)
+

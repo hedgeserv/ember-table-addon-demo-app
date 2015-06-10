@@ -5,7 +5,7 @@ Feature: Indicators for expanding and collapsing grouped rows
 
   @complete
   Scenario: Grouping column is presented as first column
-    Given There are 200 loans in chunk size 50
+    Given There are 5 grouped loans
     When Presenting "grouping column"
     Then There are 4 columns
     And The index 1 should be "Id" column

@@ -125,3 +125,20 @@ def prepare_sort_in_chunk(total, chunk_size=100):
     stubs.extend(default_stubs)
 
     mb.create_imposter(stubs)
+
+def prepare_grouping_data(count):
+    mb = MountebankStub()
+    loans = generate_loans(int(count))
+    for index, loan in enumerate(loans):
+        loan['isGroupRow'] = True
+        loan['groupName'] = 'Group ' + str(index)
+    stub = make_stub(loans,  {
+        "equals": {
+            "method": "GET",
+            "path": "/loans",
+            "query": {
+                "group": 'true'
+            }
+        }
+    })
+    mb.create_imposter([stub])
