@@ -433,14 +433,13 @@ def check_sort_indicator(step, column_name, sort):
 def prepare_grouped_loans_in_mb(step):
     with AssertContextManager(step):
         for loan in step.hashes:
-            print loan['first'], loan['second'], loan['group_name']
-            print "********"
+            print loan['group_name'], loan['first'], loan['second']
 
 
-@step('^I see grouped rows:$')
+@step('I see grouped rows:$')
 def verify_grouped_rows(step):
-    for index, row in step.hashes:
-        verify_grouped_row(index, row)
+    for index in range(0, len(step.hashes)):
+        verify_grouped_row(index, step.hashes[index])
 
 
 def verify_grouped_row(index, row):
@@ -493,7 +492,7 @@ def expand_collapse_row(step, expand_collapse, row_name):
 
 
 @step('Collapse all expanded rows')
-def collapse_expanded_rows(steps):
+def collapse_expanded_rows(step):
     with AssertContextManager(step):
         row = find_elements_by_css(world.browser, ".ember-table-toggle.ember-table-collapse")
         array = []
@@ -505,3 +504,11 @@ def collapse_expanded_rows(steps):
             element = world.driver.execute_script(
                 "return $('.ember-table-content:contains(" + str(array[i - 1]) + ")').siblings()")
             element[0].click()
+
+
+@step('The row "(.*?)" indicator should be "(.*?)"$')
+def check_row_indicator(step, row_name, indicator):
+    with AssertContextManager(step):
+        row = world.browser.execute_script(
+            "return $('.ember-table-content:contains(" + str(row_name) + ")').siblings()")
+        assert_true(step, str(indicator), row[0].get_attribute("class"))
