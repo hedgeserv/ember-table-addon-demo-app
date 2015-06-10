@@ -512,7 +512,10 @@ def check_row_indicator(step, row_name, indicator):
     with AssertContextManager(step):
         row = world.browser.execute_script(
             "return $('.ember-table-content:contains(" + str(row_name) + ")').siblings()")
-        assert_true(step, str(indicator), row[0].get_attribute("class"))
+        if indicator == "expand":
+            assert_true(step, "unfold" not in row[0].get_attribute("class"))
+        else:
+            assert_true(step, "unfold" in row[0].get_attribute("class"))
 
 
 @step('There are (\d+) grouped loans$')
@@ -520,3 +523,17 @@ def prepare_grouping_loans(step, count):
     with AssertContextManager(step):
         prepare_grouping_data(count)
 
+
+@step('The "(.*?)" should not be scrolled$')
+def check_grouping_column_should_not_scroll(step, column_name):
+    with AssertContextManager(step):
+        columns = world.browser.execute_script(
+            "return $('.ember-table-header-container .ember-table-content').parent().parent()")
+        for index, col in enumerate(columns):
+            name = world.browser.execute_script(
+                "return $('.ember-table-header-container .ember-table-content:eq(" + str(index) + ")').text().trim()")
+            if name == column_name:
+                num = index
+        grouping_column_scroll_left = world.browser.execute_script(
+            "return $('.lazy-list-container:eq(" + str(num) + ")').scrollLeft()")
+        assert_true(step, int(grouping_column_scroll_left) == 0)
