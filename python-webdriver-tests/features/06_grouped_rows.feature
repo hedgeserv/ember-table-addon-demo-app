@@ -31,13 +31,28 @@ Feature: Indicators for expanding and collapsing grouped rows
       | +         | group4     | f4    | s4     |
       | +         | group5     | f5    | s5     |
 
-  @wip
+  @complete
   Scenario: Default expansion indicator with fully loaded data
-    Given There are 50 grouped loans
+    Given There are 5 grouped loans
     When Presenting "grouping column"
-    Then The row "row_parent" indicator should be "expand"
-    When Click "expand" for row "row_parent"
-    Then The row "row_parent" indicator should be "collapse"
+    Then The row "Group 0" indicator should be "expand"
+    Then The row "Group 1" indicator should be "expand"
+    Then The row "Group 2" indicator should be "expand"
+    Then The row "Group 3" indicator should be "expand"
+    Then The row "Group 4" indicator should be "expand"
+    When Click "expand" for row "Group 1"
+    Then The row "Group 1" indicator should be "collapse"
+    When Click "collapse" for row "Group 1"
+    Then The row "Group 1" indicator should be "expand"
+
+  @complete
+  Scenario: The grouping column should not be scrolled
+    Given There are 5 grouped loans
+    When Presenting "grouping column"
+    When The user drags the "status" on column to "right" with 1000 pixel
+    And Drag horizontal scroll bar with 1000 pixel
+    Then The column header block should has "scroll left" and same as body scroll left
+    And The "GroupingColumn" should not be scrolled
 
 
   @wip
