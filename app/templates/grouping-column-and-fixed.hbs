@@ -1,0 +1,12 @@
+<h3 class="inline-header">Grouping Column And Fixed Columns</h3>
+<p>Id and Activity columns are fixed</p>
+<div class="lazy-loaded-table-container height-100-rows">
+  {{ember-table
+	  hasFooter=false
+	  enableContentSelection=true
+	  content=model
+	  hasGroupingColumn=true
+	  columns=columns
+    numFixedColumns=2
+  }}
+</div>
