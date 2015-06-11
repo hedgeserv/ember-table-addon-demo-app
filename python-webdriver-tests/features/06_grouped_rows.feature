@@ -49,7 +49,7 @@ Feature: Indicators for expanding and collapsing grouped rows
   Scenario: The grouping column should not be scrolled
     Given There are 5 grouped loans
     When Presenting "grouping column"
-    When The user drags the "status" on column to "right" with 1000 pixel
+    And The user drags the "status" on column to "right" with 1000 pixel
     And Drag horizontal scroll bar with 1000 pixel
     Then The column header block should has "scroll left" and same as body scroll left
     And The "GroupingColumn" should not be scrolled
@@ -277,16 +277,31 @@ Feature: Indicators for expanding and collapsing grouped rows
     When Customer drags scroll bar by offset 60 with 1 times
     Then The "custom" loading indicator should display
 
-  @wip
-  Scenario: The grouping column should be fixed
-    Given I have grouped loans
+  @complete
+  Scenario: The grouping column should not be resizable and draggable
+    Given There are 5 grouped loans
     When Presenting "grouping column"
-    Then The "grouping" column width should be 150 pixel
-    Then The index 0 should be "grouping" column
-    When The user drags the "grouping" on column to "right" with 100 pixel
-    Then The "grouping" column width should be 150 pixel
-    When Reorder an inner column "grouping" header to "right" with 300 pixel
-    Then The index 0 should be "grouping" column
+    Then The "GroupingColumn" column width should be 149 pixel
+    Then The index 0 should be "GroupingColumn" column
+    When The user drags the "GroupingColumn" on column to "right" with 100 pixel
+    Then The "GroupingColumn" column width should be 149 pixel
+    When Reorder an inner column "GroupingColumn" header to "right" with 300 pixel
+    Then The index 0 should be "GroupingColumn" column
+
+
+  @complete
+  Scenario: The grouping column with two fixed column
+    Given There are 5 grouped loans
+    When Presenting "grouping column with fixed columns"
+    And The user drags the "Activity" on column to "right" with 800 pixel
+    And Drag horizontal scroll bar with 800 pixel
+    Then The column header block should has "scroll left" and same as body scroll left
+    And There are 3 grouping and fixed columns
+    And The column "GroupingColumn" should be fixed
+    And The column "Id" should be fixed
+    And The column "Activity" should be fixed
+    And The grouping and fixed columns should not be scrolled
+
 
   @wip
   Scenario: The children rows should be sorted by single column

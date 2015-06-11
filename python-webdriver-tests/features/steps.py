@@ -166,6 +166,7 @@ def list_all_loans(step, url):
             "inner column sort": "http://localhost:4200/groups-sort",
             "lazy load page": "http://localhost:4200/lazy-loaded-loans?totalCount=200",
             "grouping column": "http://localhost:4200/grouping-column",
+            "grouping column with fixed columns": "http://localhost:4200/grouping-column-and-fixed",
         }
         get_url(world.browser, options.get(url))
 
@@ -476,7 +477,7 @@ def find_col_index(name):
             return i
 
 
-@step('There are (\d+) columns')
+@step('There are (\d+) columns$')
 def check_columns_numbers(step, num):
     with AssertContextManager(step):
         col_count = world.browser.execute_script(
@@ -536,4 +537,29 @@ def check_grouping_column_should_not_scroll(step, column_name):
                 num = index
         grouping_column_scroll_left = world.browser.execute_script(
             "return $('.lazy-list-container:eq(" + str(num) + ")').scrollLeft()")
+
         assert_true(step, int(grouping_column_scroll_left) == 0)
+
+
+@step('The grouping and fixed columns should not be scrolled$')
+def check_grouping_fixed_should_not_scroll(step):
+    with AssertContextManager(step):
+        grouping_fixed_scroll_left = world.browser.execute_script(
+            "return $('.lazy-list-container:eq(0)').scrollLeft()")
+        assert_true(step, int(grouping_fixed_scroll_left) == 0)
+
+
+@step('There are (\d+) grouping and fixed columns$')
+def check_grouping_fixed_num(step, num):
+    with AssertContextManager(step):
+        grouping_fixed_col_num = world.browser.execute_script(
+            "return $('.ember-table-table-fixed-wrapper > div:eq(0) span').length")
+        assert_true(step, int(num) == int(grouping_fixed_col_num))
+
+
+@step('The column "(.*?)" should be fixed$')
+def check_column_is_fixed(step, col_name):
+    with AssertContextManager(step):
+        col_names = world.browser.execute_script(
+            "return $('.ember-table-table-fixed-wrapper > div:eq(0) span').text()")
+        assert_true(step, str(col_name) in str(col_names))
