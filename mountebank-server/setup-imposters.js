@@ -13,7 +13,7 @@ function stubLoans(allLoans) {
   var options = {
     host: 'localhost',
     port: 2525,
-    path: '/imposters',
+    path: '/imposters'  ,
     method: 'POST',
     header: {
       'Accept': 'application/json',
@@ -184,6 +184,9 @@ function makeGroupDataStubs() {
     // third loans is not grouped data
     group.isGroupRow = index !== 2;
     group.groupName = 'Group ' + index;
+    if (index%2 === 1) {
+      group['children'] = allLoans.slice(index*100, index*120);
+    }
     return group;
   });
   return {
