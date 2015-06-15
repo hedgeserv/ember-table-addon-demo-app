@@ -1,6 +1,5 @@
 from lettuce import before, after, world
 from selenium import webdriver
-import os
 import time
 @before.each_scenario
 def setup_browser(scenario):

@@ -47,8 +47,20 @@ class MountebankStub:
         stubs.extend(default_stubs)
         self.create_imposter(stubs)
 
-    def stub_grouped_loans(self, count):
+    def stub_grouped_loans_by_count(self, count):
         loans = generate_grouped_loans(int(count))
+        stubs = [make_the_stub(loans, query={"group": 'true'})]
+        self.create_imposter(stubs)
+
+    def stub_grouped_loans(self, data):
+        loans = []
+        for item in data:
+            loan = {}
+            for key in item:
+                loan[key] = item[key]
+            loan['isGroupRow'] = True
+            loans.append(loan)
+
         stubs = [make_the_stub(loans, query={"group": 'true'})]
         self.create_imposter(stubs)
 
@@ -136,4 +148,9 @@ def prepare_sort_in_chunk(total, chunk_size=100):
 
 def prepare_grouping_data(count):
     mb = MountebankStub()
-    mb.stub_grouped_loans(count)
+    mb.stub_grouped_loans_by_count(count)
+
+
+def prepare_grouped_loans(data):
+    mb = MountebankStub()
+    mb.stub_grouped_loans(data)

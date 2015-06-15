@@ -16,6 +16,8 @@ from prepare_loans import prepare_loans
 from prepare_loans import prepare_loans_in_chunk
 from prepare_loans import prepare_sort_in_chunk
 from prepare_loans import prepare_grouping_data
+from prepare_loans import prepare_grouped_loans
+
 import requests
 import json
 import basic_opr_module as bo
@@ -333,8 +335,7 @@ def check_sort_indicator(step, column_name, sort):
 @step('I have the following grouped loans in MounteBank:')
 def prepare_grouped_loans_in_mb(step):
     with AssertContextManager(step):
-        for loan in step.hashes:
-            print loan['group_name'], loan['first'], loan['second']
+        prepare_grouped_loans(step.hashes)
 
 
 @step('I see grouped rows:$')
@@ -345,33 +346,59 @@ def verify_grouped_rows(step):
 
 def verify_grouped_row(index, row):
     indicator = row['indicator']
-    verify_group_row_indicator(index, indicator)
-    for name, value in row:
-        if name != 'indicator':
-            verify_cell_content(index, name, value)
+    if indicator == '-':
+        assert_true(step, is_the_row_expanded(index))
+    elif indicator == '+':
+        assert_true(step, not is_the_row_expanded(index))
+
+    for field in row:
+        if field != 'indicator':
+            verify_cell_content(index, field, row[field])
 
 
-def verify_group_row_indicator(index, indicator):
-    col_index = find_col_index("indicator")
-    col_value = world.browser.execute_script("return +/-")
-    assert_true(step, str(col_value) == str(indicator))
+def is_the_row_expanded(index):
+    return world.browser.execute_script(
+        "return $('.ember-table-body-container "
+        ".ember-table-left-table-block "
+        ".ember-table-table-row:eq(" + str(index) + ") "
+        ".ember-table-table-cell:eq(0) "
+        ".grouping-column-indicator').hasClass('unfold')")
 
 
 def verify_cell_content(row_index, name, value):
-    col_index = find_col_index(name)
+    col_index, is_fixed = find_col_index(name)
+    block_selector = '.ember-table-right-table-block'
+    if is_fixed:
+        block_selector = '.ember-table-left-table-block'
+
     col_value = world.browser.execute_script(
-        "return $('.ember-table-body-container .ember-table-table-block > div:nth-child(" + str(
-            row_index + 1) + ") .ember-view > div:nth-child(" + str(col_index + 1) + ") span').text().trim()")
+        "return $('.ember-table-body-container " + block_selector + " .ember-table-table-row:eq(" + str(row_index) +
+        ") .ember-table-cell:eq(" + str(col_index) + ") span').text().trim()")
     assert_true(step, str(col_value) == str(value))
 
 
 def find_col_index(name):
+    if name == 'groupName':
+        return 0, True
+
+    col_index = do_find_col_index(name, True)
+    if col_index:
+        return col_index, True
+    else:
+        return do_find_col_index(name, False), False
+
+
+def do_find_col_index(name, in_fixed_block):
+    block_selector = '.ember-table-right-table-block'
+    if in_fixed_block:
+        block_selector = '.ember-table-left-table-block'
+
     col_count = world.browser.execute_script(
-        "return $('.ember-table-header-container .ember-table-table-row .ember-table-table-cell').length")
+        "return $('.ember-table-header-container " + block_selector + " .ember-table-header-cell').length")
     for i in range(0, col_count):
         headerName = world.browser.execute_script(
-            "return $('.ember-table-header-container "
-            ".ember-table-table-row > div .ember-table-table-cell:nth-child(" + str(i + 1) + ") span').text().trim()")
+            " return $('.ember-table-header-container " + block_selector +
+            " .ember-table-table-row > div .ember-table-header-cell:eq(" + str(i) + ") span').text().trim()")
         if headerName == name:
             return i
 
