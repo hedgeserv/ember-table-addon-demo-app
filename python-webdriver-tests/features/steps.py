@@ -1,9 +1,12 @@
-from lettuce import *
+import os
+import inspect
 
+from lettuce import *
 from lettuce_webdriver.util import (assert_true,
-                                    AssertContextManager, assert_false)
-import os, sys, inspect
+                                    AssertContextManager)
 from selenium.webdriver import ActionChains
+
+import sys
 import time
 
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -15,6 +18,7 @@ from prepare_loans import prepare_sort_in_chunk
 from prepare_loans import prepare_grouping_data
 import requests
 import json
+import basic_opr_module as bo
 
 spanWidthPix = 1
 
@@ -53,11 +57,6 @@ def wait_for_elem(browser, script, timeout=20):
     return elems
 
 
-def get_column_width_by_class_name(browser, className, index):
-    columns = find_elements_by_class(browser, className)
-    return columns[int(index) - 1].get_attribute("style").split(";")[0].split(":")[1].split("px")[0].strip()
-
-
 def drag_element_by_offset_class_name(browser, className, index, rightOrLeft, offset):
     elements = find_elements_by_class(browser, className)
     action_chains = ActionChains(browser)
@@ -76,51 +75,6 @@ def get_column_header_name(browser, css, index):
 def sort_column_by_css(browser, css, index):
     columnHeaders = find_elements_by_css(browser, css)
     columnHeaders[int(index) - 1].click()
-
-
-# the index starts from 1
-def get_column_content(browser, css, index):
-    return find_elements_by_css(browser, "div.ember-table-table-block.lazy-list-container div div div:nth-child(" + str(
-        index) + ") span")
-
-
-def drag_scroll_by_css(browser, offsetx, offsety):
-    scroll = browser.find_element_by_css_selector("div.antiscroll-scrollbar.antiscroll-scrollbar-vertical")
-    action = ActionChains(browser)
-    action.click_and_hold(scroll).move_by_offset(int(offsetx), int(offsety)).release().perform()
-
-
-def drag_scroll_by_css_with_times(browser, scroll_css, offsety, times):
-    start = time.time()
-    while time.time() - start < 15:
-        drag_scroll_by_css(browser, 0, offsety)
-        eles = find_elements_by_css(world.browser, scroll_css)
-        value = int(eles[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
-        if value > int(offsety) * int(times):
-            break
-        time.sleep(1)
-
-
-def drag_scroll_to_top(browser, scroll_css, offsety):
-    start = time.time()
-    while time.time() - start < 15:
-        drag_scroll_by_css(browser, 0, offsety)
-        eles = find_elements_by_css(world.browser, scroll_css)
-        value = int(eles[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
-        if value == 0:
-            break
-        time.sleep(0.5)
-
-
-def drag_scroll_to_bottom(browser, scroll_css, offsety):
-    start = time.time()
-    while time.time() - start < 15:
-        drag_scroll_by_css(browser, 0, offsety)
-        eles = find_elements_by_css(world.browser, scroll_css)
-        value = int(eles[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
-        if value > 243:
-            break
-        time.sleep(0.5)
 
 
 def get_mb_request():
@@ -188,9 +142,9 @@ def wait_page_load(step):
 @step('I want to drag element by class "(.*?)" and the (\d+) column to "(.*?)" with (-?\d+)$')
 def drag_element_offset(step, className, index, rightOrLeft, offsetx):
     with AssertContextManager(step):
-        originalWidth = get_column_width_by_class_name(world.browser, "ember-table-header-cell", index)
+        originalWidth = bo.get_column_width_by_class_name(world.browser, index)
         drag_element_by_offset_class_name(world.browser, className, index, rightOrLeft, offsetx)
-        changedWidth = get_column_width_by_class_name(world.browser, "ember-table-header-cell", index)
+        changedWidth = bo.get_column_width_by_class_name(world.browser, index)
 
         if str(rightOrLeft) == "left":
             assert_true(step, (int(changedWidth) - int(originalWidth)) == (-int(offsetx) - int(spanWidthPix)))
@@ -207,8 +161,7 @@ def sort_column(step, index, css):
 @step('Customer drags scroll bar by offset (\d+) with (\d+) times$')
 def drag_scroll_bar_with_offset(step, offset, times):
     with AssertContextManager(step):
-        scroll_css = "div.antiscroll-scrollbar.antiscroll-scrollbar-vertical"
-        drag_scroll_by_css_with_times(world.browser, scroll_css, offset, times)
+        bo.drag_scroll_by_css_with_times(world.browser, offset, times)
 
 
 @step('Only first and last chunk was loaded in total (\d+) in first time')
@@ -232,87 +185,59 @@ def get_loaded_section(step, num):
 @step(
     'Scroll bar by offset (\d+) with (\d+) times to load next chunks in total (\d+) and drag scroll bar to top without rerender')
 def check_next_chunk_loaded(step, offsety, times, num):
-    scroll_css = "div.antiscroll-scrollbar.antiscroll-scrollbar-vertical"
     get_url(world.browser, "http://localhost:4200/lazy-loaded-loans?totalCount=" + str(num))
 
-    drag_scroll_by_css_with_times(world.browser, scroll_css, offsety, times)
+    bo.drag_scroll_by_css_with_times(world.browser, offsety, times)
     assert len(get_mb_request()) == int(times) + 2
 
-    drag_scroll_to_top(world.browser, scroll_css, -int(offsety))
+    bo.drag_scroll_to_top(world.browser, -int(offsety))
     assert len(get_mb_request()) == int(times) + 2
 
 
 @step('The page should style for entire group, inner column, first column and last column')
 def check_fields_class_by_css(step):
     with AssertContextManager(step):
-        group_element = execute_js_script(world.browser, 'return $("span.ember-table-content:eq(1)")')
-        assert_true(step, group_element[0].text == "Group1")
-        group_element = execute_js_script(world.browser, 'return $("span.ember-table-content:eq(1)").parent().parent()')
-        class_info = group_element[0].get_attribute("class")
-        assert_true(step, "text-red" in class_info)
-
-        first_column = execute_js_script(world.browser, 'return $("span.ember-table-content:eq(2)")')
-        assert_true(step, first_column[0].text == "Activity")
-        first_column = execute_js_script(world.browser, 'return $("span.ember-table-content:eq(2)").parent().parent()')
-        class_info = first_column[0].get_attribute("class")
-        assert_true(step, "text-blue" in class_info)
-        assert_true(step, "bg-gray" in class_info)
-
-        last_column = execute_js_script(world.browser, 'return $("span.ember-table-content:eq(3)")')
-        assert_true(step, last_column[0].text == "status")
-        last_column = execute_js_script(world.browser, 'return $("span.ember-table-content:eq(3)").parent().parent()')
-        class_info = last_column[0].get_attribute("class")
-        assert_true(step, "text-blue" in class_info)
-        assert_true(step, "bg-lightgray" in class_info)
+        assert_true(step, "text-red" in bo.get_grouped_column_css(world.browser, "Group1"))
+        assert_true(step, "text-blue" in bo.get_grouped_column_css(world.browser, "Activity"))
+        assert_true(step, "bg-gray" in bo.get_grouped_column_css(world.browser, "Activity"))
+        assert_true(step, "text-blue" in bo.get_grouped_column_css(world.browser, "status"))
+        assert_true(step, "bg-lightgray" in bo.get_grouped_column_css(world.browser, "status"))
 
 
 @step('Click to sort as "(.*?)" for column "(.*?)"$')
 def click_to_sort_column(step, asc_or_desc, column_name="Id"):
     with AssertContextManager(step):
-        element = world.browser.execute_script(
-            "return $('.ember-table-header-container .ember-table-content:contains(" + column_name + ")').parent().parent()")
-        element[0].click()
+        bo.sort_column(world.browser, column_name)
 
 
 @step('The "(.*?)" record should be "(.*?)"$')
 def check_sort_column(step, record_index, record_content):
     with AssertContextManager(step):
         if record_index == "first":
-            result = world.browser.execute_script(
-                'return $($("div.ember-table-body-container div.ember-table-table-row")[' + str(
-                    0) + ']).find("div div:eq(0) span").text()')
-            assert_true(step, str(result).strip() == record_content)
+            result = bo.get_record_content(world.browser, 0)
+            assert_true(step, str(result) == record_content)
         elif record_index == "last":
-            result = world.browser.execute_script(
-                'return $($("div.ember-table-body-container div.ember-table-table-row")[' + str(
-                    1) + ']).find("div div:eq(0) span").text()')
-            assert_true(step, str(result).strip() == record_content)
+            result = bo.get_record_content(world.browser, 1)
+            assert_true(step, str(result) == record_content)
         else:
-            result = world.browser.execute_script(
-                'return $($("div.ember-table-body-container div.ember-table-table-row")[' + str(
-                    3) + ']).find("div div:eq(0) span").text()')
-            assert_true(step, str(result).strip() == record_content)
+            result = bo.get_record_content(world.browser, 3)
+            assert_true(step, str(result) == record_content)
 
 
 @step('Drag scroll bar to "(.*?)"')
 def drag_scroll_bar(step, top_or_bottom):
     with AssertContextManager(step):
-        scroll_css = "div.antiscroll-scrollbar.antiscroll-scrollbar-vertical"
         offsety = 60
         if top_or_bottom == "bottom":
-            drag_scroll_to_bottom(world.browser, scroll_css, offsety)
+            bo.drag_scroll_to_bottom(world.browser, offsety)
         else:
-            drag_scroll_to_top(world.browser, scroll_css, -int(offsety))
+            bo.drag_scroll_to_top(world.browser, -int(offsety))
 
 
 @step('Drag horizontal scroll bar with (\d+) pixel$')
 def drag_horizontal_scroll_bar(step, offsetx):
     with AssertContextManager(step):
-        horizontal_css = ".antiscroll-scrollbar.antiscroll-scrollbar-horizontal"
-        elements = find_elements_by_css(world.browser, horizontal_css)
-
-        action = ActionChains(world.browser)
-        action.click_and_hold(elements[0]).move_by_offset(int(offsetx), 0).release().perform()
+        bo.drag_horizontal_offset(world.browser, offsetx)
 
 
 @step('The column header block should has "(.*?)" and same as body scroll left$')
@@ -321,12 +246,7 @@ def check_header_scroll_left(step, name):
         start = time.time()
         flag = False
         while time.time() - start < 20:
-            block_scroll_left = world.browser.execute_script(
-                "return $('.ember-table-table-block.ember-table-header-block').scrollLeft()")
-            body_scroll_left = world.browser.execute_script(
-                "return $('.lazy-list-container').scrollLeft()"
-            )
-            if int(block_scroll_left) == int(body_scroll_left):
+            if int(bo.get_head_block_scroll_left(world.browser)) == int(bo.get_body_scroll_left(world.browser)):
                 flag = flag or True
                 break
             time.sleep(0.2)
@@ -353,26 +273,13 @@ def get_column_cursor(step, column_name):
 @step('The user drags the "(.*?)" on column to "(.*?)" with (\d+) pixel')
 def drag_column_with_pixel(step, column_name, left_or_right, offsetx):
     with AssertContextManager(step):
-        action_chains = ActionChains(world.browser)
-        element = world.browser.execute_script(
-            "return $('.ember-table-header-container .ember-table-content:contains(" + column_name + ")').parent().parent().children()[1]")
-        if left_or_right == "left":
-            action_chains.drag_and_drop_by_offset(element, -int(offsetx), 0).release().perform()
-        else:
-            action_chains.drag_and_drop_by_offset(element, int(offsetx), 0).release().perform()
+        bo.resize_column(world.browser, column_name, left_or_right, offsetx)
 
 
 @step('Reorder an inner column "(.*?)" header to "(.*?)" with (\d+) pixel')
 def reorder_column_with_pixel(step, column_name, left_or_right, offsetx):
     with AssertContextManager(step):
-        chains = ActionChains(world.browser)
-        wait_for_elem(world.browser, "return $('.ember-table-content-container')")
-        element = world.browser.execute_script(
-            "return $('.ember-table-content-container .ember-table-content:contains(" + column_name + ")')")
-        if left_or_right == "left":
-            chains.click_and_hold(element[0]).move_by_offset(-int(offsetx), 0).release().perform()
-        else:
-            chains.click_and_hold(element[0]).move_by_offset(int(offsetx), 0).release().perform()
+        bo.reorder_column(world.browser, column_name, left_or_right, offsetx)
 
 
 @step('The reorder indicator line should be (\d+) from left$')
@@ -401,21 +308,13 @@ def drag_hold_column(step, column_name, left_or_right, offsetx):
 @step('The "(.*?)" column width should be (\d+) pixel')
 def check_column_width(step, column_name, pixel):
     with AssertContextManager(step):
-        width = world.browser.execute_script(
-            "return $('.ember-table-header-container .ember-table-content:contains(" + column_name + ")').parent().width()")
-        assert_true(step, int(width) == int(pixel))
+        assert_true(step, int(bo.get_col_width(world.browser, column_name)) == int(pixel))
 
 
 @step('The index (\d+) should be "(.*?)" column$')
 def check_reorder_column(step, index, name):
     with AssertContextManager(step):
-        elements = world.browser.execute_script("return $('.ember-table-content-container')")
-        list = []
-        for i in range(0, len(elements)):
-            column = world.browser.execute_script(
-                "return $('.ember-table-content-container .ember-table-content:eq(" + str(i) + ")').text()")
-            list.append(str(column).strip())
-        assert_true(step, list[int(index)] == name)
+        assert_true(step, bo.get_col_name_by_index(world.browser, index) == name)
 
 
 @step('The "(.*?)" column sort indicator should be "(.*?)"$')
@@ -488,9 +387,7 @@ def check_columns_numbers(step, num):
 @step('Click "(.*?)" for row "(.*?)"$')
 def expand_collapse_row(step, expand_collapse, row_name):
     with AssertContextManager(step):
-        row = world.browser.execute_script(
-            "return $('.ember-table-content:contains(" + str(row_name) + ")').siblings()")
-        row[0].click()
+        bo.expand_collapse_row(world.browser, row_name)
 
 
 @step('Collapse all expanded rows')
