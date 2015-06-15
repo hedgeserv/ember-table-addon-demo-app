@@ -35,11 +35,9 @@ Feature: Indicators for expanding and collapsing grouped rows
   Scenario: Default expansion indicator with fully loaded data
     Given There are 5 grouped loans
     When Presenting "grouping column"
-    Then The row "Group 0" indicator should be "expand"
     Then The row "Group 1" indicator should be "expand"
     Then The row "Group 2" indicator should be "expand"
     Then The row "Group 3" indicator should be "expand"
-    Then The row "Group 4" indicator should be "expand"
     When Click "expand" for row "Group 1"
     Then The row "Group 1" indicator should be "collapse"
     When Click "collapse" for row "Group 1"

@@ -7,6 +7,7 @@ let Loan = DS.Model.extend({
   name: DS.attr(),
   use: DS.attr(),
   groupName: DS.attr(),
+  children: DS.attr(),
   isGroupRow: DS.attr()
 });
 
