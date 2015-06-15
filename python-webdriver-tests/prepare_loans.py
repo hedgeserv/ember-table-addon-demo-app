@@ -58,11 +58,28 @@ class MountebankStub:
             loan = {}
             for key in item:
                 loan[key] = item[key]
-            loan['isGroupRow'] = True
-            loans.append(loan)
+
+            path = loan['groupName'].split('-')
+            if len(path) == 1:
+                loans.append(loan)
+            else:
+                parent_loan = self.find_parent(loans, path)
+                if not parent_loan.has_key('children'):
+                    parent_loan['children'] = []
+                parent_loan['children'].append(loan)
 
         stubs = [make_the_stub(loans, query={"group": 'true'})]
         self.create_imposter(stubs)
+
+    def find_parent(self, loans, path):
+        loan = self.find_by_group_name(loans, path[0:1])
+        for depth in range(2, len(path)):
+            loan = self.find_by_group_name(loan['children'], path[0:depth])
+        return loan
+
+    def find_by_group_name(self, loans, path):
+        group_name = '-'.join(path)
+        return filter(lambda x: x['groupName'] == group_name, loans)[0]
 
 
 def generate_loans(count):

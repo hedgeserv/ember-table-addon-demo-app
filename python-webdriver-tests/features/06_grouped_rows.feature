@@ -16,12 +16,12 @@ Feature: Indicators for expanding and collapsing grouped rows
   @complete
   Scenario: Grouped rows are presented
     Given I have the following grouped loans in MounteBank:
-      | groupName  | id    | activity |
-      | group1     | f1    | s1       |
-      | group2     | f2    | s2       |
-      | group3     | f3    | s3       |
-      | group4     | f4    | s4       |
-      | group5     | f5    | s5       |
+      | groupName  | id    | activity | isGroupRow |
+      | group1     | f1    | s1       | True       |
+      | group2     | f2    | s2       | True       |
+      | group3     | f3    | s3       | True       |
+      | group4     | f4    | s4       | True       |
+      | group5     | f5    | s5       | True       |
     When Presenting "grouping column"
     Then I see grouped rows:
       | indicator | groupName  | Id    | Activity |
@@ -56,14 +56,14 @@ Feature: Indicators for expanding and collapsing grouped rows
   @wip
   Scenario: check grouped rows with collapse indicator
     Given I have the following grouped loans in MounteBank:
-      | groupName  | first | second  |
-      | group1      | f1    | s1     |
-      | group1-chd1 | f1-1  | s1-1   |
-      | group1-chd2 | f1-2  | s1-2   |
-      | group2      | f2    | s2     |
-      | group3      | f3    | s3     |
-      | group4      | f4    | s4     |
-      | group5      | f5    | s5     |
+      | groupName  | first | second  | isGroupRow |
+      | group1      | f1    | s1     | True       |
+      | group1-chd1 | f1-1  | s1-1   | False      |
+      | group1-chd2 | f1-2  | s1-2   | False      |
+      | group2      | f2    | s2     | True       |
+      | group3      | f3    | s3     | True       |
+      | group4      | f4    | s4     | True       |
+      | group5      | f5    | s5     | True       |
     When Presenting "grouping column present grouped loans"
     And The row "group1" indicator should be "expand"
     Then I see grouped rows:
@@ -95,81 +95,81 @@ Feature: Indicators for expanding and collapsing grouped rows
   @wip
   Scenario: Expand all grouped rows with unlimited level
     Given I have the following grouped loans in MounteBank:
-      | groupName       | first  | second |
-      | group1           | f1     | s1     |
-      | group1-chd1      | f1-1   | s1-1   |
-      | group1-chd1-chd1 | f1-1-1 | s1-1-1 |
-      | group1-chd1-chd2 | f1-1-2 | s1-1-2 |
-      | group1-chd2      | f1-2   | s1-2   |
-      | group1-chd2-chd1 | f1-2-1 | s1-2-1 |
-      | group1-chd2-chd2 | f1-2-2 | s1-2-2 |
-      | group2           | f2     | s2     |
-      | group2-chd1      | f2-1   | s2-1   |
-      | group2-chd1-chd1 | f2-1-1 | s2-1-1 |
-      | group2-chd1-chd2 | f2-1-2 | s2-1-2 |
-      | group2-chd2      | f2-2   | s2-2   |
-      | group2-chd2-chd1 | f2-2-1 | s2-2-1 |
-      | group2-chd2-chd2 | f2-2-2 | s2-2-2 |
-      | group3           | f3     | s3     |
-      | group3-chd1      | f3-1   | s3-1   |
-      | group3-chd1-chd1 | f3-1-1 | s3-1-1 |
-      | group3-chd1-chd2 | f3-1-2 | s3-1-2 |
-      | group3-chd2      | f3-2   | s3-2   |
-      | group3-chd2-chd1 | f3-2-1 | s3-2-1 |
-      | group3-chd2-chd2 | f3-2-2 | s3-2-2 |
-      | group4           | f4     | s4     |
-      | group4-chd1      | f4-1   | s4-1   |
-      | group4-chd1-chd1 | f4-1-1 | s4-1-1 |
-      | group4-chd1-chd2 | f4-1-2 | s4-1-2 |
-      | group4-chd2      | f4-2   | s4-2   |
-      | group4-chd2-chd1 | f4-2-1 | s4-2-1 |
-      | group4-chd2-chd2 | f4-2-2 | s4-2-2 |
-      | group5           | f5     | s5     |
-      | group5-chd1      | f5-1   | s5-1   |
-      | group5-chd1-chd1 | f5-1-1 | s5-1-1 |
-      | group5-chd1-chd2 | f5-1-2 | s5-1-2 |
-      | group5-chd2      | f5-2   | s5-2   |
-      | group5-chd-chd1  | f5-2-1 | s5-2-1 |
-      | group5-chd2-chd2 | f5-2-2 | s5-2-2 |
-    When Presenting "grouping column present grouped loans"
+      | groupName        | id     | activity | isGroupRow |
+      | group1           | f1     | s1       | True      |
+      | group1-chd1      | f1-1   | s1-1     | True      |
+      | group1-chd1-chd1 | f1-1-1 | s1-1-1   | False     |
+      | group1-chd1-chd2 | f1-1-2 | s1-1-2   | False     |
+      | group1-chd2      | f1-2   | s1-2     | True      |
+      | group1-chd2-chd1 | f1-2-1 | s1-2-1   | False     |
+      | group1-chd2-chd2 | f1-2-2 | s1-2-2   | False     |
+      | group2           | f2     | s2       | True      |
+      | group2-chd1      | f2-1   | s2-1     | True      |
+      | group2-chd1-chd1 | f2-1-1 | s2-1-1   | False     |
+      | group2-chd1-chd2 | f2-1-2 | s2-1-2   | False     |
+      | group2-chd2      | f2-2   | s2-2     | True      |
+      | group2-chd2-chd1 | f2-2-1 | s2-2-1   | False     |
+      | group2-chd2-chd2 | f2-2-2 | s2-2-2   | False     |
+      | group3           | f3     | s3       | True      |
+      | group3-chd1      | f3-1   | s3-1     | True      |
+      | group3-chd1-chd1 | f3-1-1 | s3-1-1   | False     |
+      | group3-chd1-chd2 | f3-1-2 | s3-1-2   | False     |
+      | group3-chd2      | f3-2   | s3-2     | True      |
+      | group3-chd2-chd1 | f3-2-1 | s3-2-1   | False     |
+      | group3-chd2-chd2 | f3-2-2 | s3-2-2   | False     |
+      | group4           | f4     | s4       | True      |
+      | group4-chd1      | f4-1   | s4-1     | True      |
+      | group4-chd1-chd1 | f4-1-1 | s4-1-1   | False     |
+      | group4-chd1-chd2 | f4-1-2 | s4-1-2   | False     |
+      | group4-chd2      | f4-2   | s4-2     | True      |
+      | group4-chd2-chd1 | f4-2-1 | s4-2-1   | False     |
+      | group4-chd2-chd2 | f4-2-2 | s4-2-2   | False     |
+      | group5           | f5     | s5       | True      |
+      | group5-chd1      | f5-1   | s5-1     | True      |
+      | group5-chd1-chd1 | f5-1-1 | s5-1-1   | False     |
+      | group5-chd1-chd2 | f5-1-2 | s5-1-2   | False     |
+      | group5-chd2      | f5-2   | s5-2     | True      |
+      | group5-chd2-chd1 | f5-2-1 | s5-2-1   | False     |
+      | group5-chd2-chd2 | f5-2-2 | s5-2-2   | False     |
+    When Presenting "grouping column"
     And Expand all contraction rows
     Then I see grouped rows:
-      | indicator | groupName       | first  | second |
-      | -         | group1           | f1     | s1     |
-      | -         | group1-chd1      | f1-1   | s1-1   |
-      |           | group1-chd1-chd1 | f1-1-1 | s1-1-1 |
-      |           | group1-chd1-chd2 | f1-1-2 | s1-1-2 |
-      | -         | group1-chd2      | f1-2   | s1-2   |
-      |           | group1-chd2-chd1 | f1-2-1 | s1-2-1 |
-      |           | group1-chd2-chd2 | f1-2-2 | s1-2-2 |
-      | -         | group2           | f2     | s2     |
-      | -         | group2-chd1      | f2-1   | s2-1   |
-      |           | group2-chd1-chd1 | f2-1-1 | s2-1-1 |
-      |           | group2-chd1-chd2 | f2-1-2 | s2-1-2 |
-      | -         | group2-chd2      | f2-2   | s2-2   |
-      |           | group2-chd2-chd1 | f2-2-1 | s2-2-1 |
-      |           | group2-chd2-chd2 | f2-2-2 | s2-2-2 |
-      | -         | group3           | f3     | s3     |
-      | -         | group3-chd1      | f3-1   | s3-1   |
-      |           | group3-chd1-chd1 | f3-1-1 | s3-1-1 |
-      |           | group3-chd1-chd2 | f3-1-2 | s3-1-2 |
-      | -         | group3-chd2      | f3-2   | s3-2   |
-      |           | group3-chd2-chd1 | f3-2-1 | s3-2-1 |
-      |           | group3-chd2-chd2 | f3-2-2 | s3-2-2 |
-      | -         | group4           | f4     | s4     |
-      | -         | group4-chd1      | f4-1   | s4-1   |
-      |           | group4-chd1-chd1 | f4-1-1 | s4-1-1 |
-      |           | group4-chd1-chd2 | f4-1-2 | s4-1-2 |
-      | -         | group4-chd2      | f4-2   | s4-2   |
-      |           | group4-chd2-chd1 | f4-2-1 | s4-2-1 |
-      |           | group4-chd2-chd2 | f4-2-2 | s4-2-2 |
-      | -         | group5           | f5     | s5     |
-      | -         | group5-chd1      | f5-1   | s5-1   |
-      |           | group5-chd1-chd1 | f5-1-1 | s5-1-1 |
-      |           | group5-chd1-chd2 | f5-1-2 | s5-1-2 |
-      | -         | group5-chd2      | f5-2   | s5-2   |
-      |           | group5-chd-chd1  | f5-2-1 | s5-2-1 |
-      |           | group5-chd2-chd2 | f5-2-2 | s5-2-2 |
+      | indicator | groupName        | Id     | Activity |
+      | -         | group1           | f1     | s1       |
+      | -         | group1-chd1      | f1-1   | s1-1     |
+      |           | group1-chd1-chd1 | f1-1-1 | s1-1-1   |
+      |           | group1-chd1-chd2 | f1-1-2 | s1-1-2   |
+      | -         | group1-chd2      | f1-2   | s1-2     |
+      |           | group1-chd2-chd1 | f1-2-1 | s1-2-1   |
+      |           | group1-chd2-chd2 | f1-2-2 | s1-2-2   |
+      | -         | group2           | f2     | s2       |
+      | -         | group2-chd1      | f2-1   | s2-1     |
+      |           | group2-chd1-chd1 | f2-1-1 | s2-1-1   |
+      |           | group2-chd1-chd2 | f2-1-2 | s2-1-2   |
+      | -         | group2-chd2      | f2-2   | s2-2     |
+      |           | group2-chd2-chd1 | f2-2-1 | s2-2-1   |
+      |           | group2-chd2-chd2 | f2-2-2 | s2-2-2   |
+      | -         | group3           | f3     | s3       |
+      | -         | group3-chd1      | f3-1   | s3-1     |
+      |           | group3-chd1-chd1 | f3-1-1 | s3-1-1   |
+      |           | group3-chd1-chd2 | f3-1-2 | s3-1-2   |
+      | -         | group3-chd2      | f3-2   | s3-2     |
+      |           | group3-chd2-chd1 | f3-2-1 | s3-2-1   |
+      |           | group3-chd2-chd2 | f3-2-2 | s3-2-2   |
+      | -         | group4           | f4     | s4       |
+      | -         | group4-chd1      | f4-1   | s4-1     |
+      |           | group4-chd1-chd1 | f4-1-1 | s4-1-1   |
+      |           | group4-chd1-chd2 | f4-1-2 | s4-1-2   |
+      | -         | group4-chd2      | f4-2   | s4-2     |
+      |           | group4-chd2-chd1 | f4-2-1 | s4-2-1   |
+      |           | group4-chd2-chd2 | f4-2-2 | s4-2-2   |
+      | -         | group5           | f5     | s5       |
+      | -         | group5-chd1      | f5-1   | s5-1     |
+      |           | group5-chd1-chd1 | f5-1-1 | s5-1-1   |
+      |           | group5-chd1-chd2 | f5-1-2 | s5-1-2   |
+      | -         | group5-chd2      | f5-2   | s5-2     |
+      |           | group5-chd-chd1  | f5-2-1 | s5-2-1   |
+      |           | group5-chd2-chd2 | f5-2-2 | s5-2-2   |
 
   @wip
   Scenario: The expand indicator should be pluggable
