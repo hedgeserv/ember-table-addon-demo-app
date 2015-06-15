@@ -13,7 +13,7 @@ Feature: Indicators for expanding and collapsing grouped rows
     And The index 3 should be "status" column
     And The index 0 should be "GroupingColumn" column
 
-  @test
+  @complete
   Scenario: Grouped rows are presented
     Given I have the following grouped loans in MounteBank:
       | groupName  | id    | activity |
