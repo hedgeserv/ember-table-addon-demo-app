@@ -17,9 +17,52 @@ class MountebankStub:
         }
         requests.post(self.mb_url, data=json.dumps(params))
 
+    def stub_loans(self, count, path="/loans"):
+        loans = generate_loans(count)
+        stubs = [make_the_stub(loans, path=path)]
+        self.create_imposter(stubs)
+
+    def stub_loans_in_chunk(self, total_count, chunk_size, path="/loans"):
+        loans = generate_loans(total_count)
+        stubs = make_the_chunk_stubs(loans, chunk_size, path=path)
+        self.create_imposter(stubs)
+
+    def stub_loans_in_chunk_and_sortable(self, total_count, chunk_size, path="/loans"):
+        loans_in_asc = generate_loans(total_count)
+        loans_in_asc.sort(key=lambda x: int(x['id']))
+        asc_stubs = make_the_chunk_stubs(loans_in_asc, chunk_size,
+                                         query={'sortName': 'id', 'sortDirect': 'asc'}, path=path)
+
+        loans_in_desc = generate_loans(total_count)
+        loans_in_desc.sort(reverse=True, key=lambda x: int(x['id']))
+        desc_stubs = make_the_chunk_stubs(loans_in_desc, chunk_size,
+                                          query={'sortName': 'id', 'sortDirect': 'desc'}, path=path)
+
+        default_loans = generate_loans(total_count)
+        default_stubs = make_the_chunk_stubs(default_loans, chunk_size, path=path)
+
+        stubs = []
+        stubs.extend(asc_stubs)
+        stubs.extend(desc_stubs)
+        stubs.extend(default_stubs)
+        self.create_imposter(stubs)
+
+    def stub_grouped_loans(self, count):
+        loans = generate_grouped_loans(int(count))
+        stubs = [make_the_stub(loans, query={"group": 'true'})]
+        self.create_imposter(stubs)
+
 
 def generate_loans(count):
     return [{"id": i, "activity": "activity-" + str(i), "status": "status" + str(i)} for i in range(count)]
+
+
+def generate_grouped_loans(count):
+    loans = generate_loans(int(count))
+    for index, loan in enumerate(loans):
+        loan['isGroupRow'] = True
+        loan['groupName'] = 'Group ' + str(index)
+    return loans
 
 
 def make_response(loans):
@@ -38,107 +81,59 @@ def make_response(loans):
     }
 
 
-def make_predicate(page_index, query={}):
-    current_query = query.copy()
-    current_query.update({
-        "section": str(page_index)
-    })
+def make_the_predicate(query=None, path="/loans"):
     predicate = {
         "equals": {
             "method": "GET",
-            "path": "/loans",
-            "query": current_query
+            "path": path
         }
     }
+    if query and len(query):
+        predicate["equals"].update({"query": query})
+
     return predicate
 
 
-def make_stub(loans, predicate):
+def make_the_stub(loans, query=None, path="/loans"):
     response = make_response(loans)
+    predicate = make_the_predicate(query, path)
     return {
         "responses": [response],
         "predicates": [predicate]
     }
 
 
-def make_stubs(count):
-    loans = generate_loans(count)
-    return [
-        make_stub(loans, {
-            "equals": {
-                "method": "GET",
-                "path": "/loans",
-            }
-        })
-    ]
-
-
-def make_chunk_stubs(total, chunk_size=100):
-    all_loans = generate_loans(total)
-    chunks = [all_loans[i:i + chunk_size] for i in range(0, len(all_loans), chunk_size)]
-    stubs = [make_stub(c, make_predicate(i + 1)) for i, c in enumerate(chunks)]
+def make_the_chunk_stubs(all_loans, chunk_size=100, query=None, path="/loans"):
+    total = len(all_loans)
+    chunks = [all_loans[i:i + chunk_size] for i in range(0, total, chunk_size)]
+    stubs = [make_the_stub(c, merge_query(query, {"section": str(i + 1)}), path) for i, c in enumerate(chunks)]
     return stubs
 
 
-def _prepare(count, chunk_size, stub_maker=make_stubs):
-    mb = MountebankStub()
-
-    stubs = stub_maker(count, chunk_size)
-
-    mb.create_imposter(stubs)
+def merge_query(query, more):
+    if query:
+        result = query.copy()
+    else:
+        result = {}
+    result.update(more)
+    return result
 
 
 def prepare_loans(count):
     mb = MountebankStub()
-
-    stubs = make_stubs(count)
-
-    mb.create_imposter(stubs)
+    mb.stub_loans(count)
 
 
 def prepare_loans_in_chunk(total, chunk_size=100):
-    _prepare(total, chunk_size, make_chunk_stubs)
-
-
-def prepare_asc_stubs_in_chunk(total, chunk_size):
-    all_loans = sorted(generate_loans(total))
-    all_loans.sort(key=lambda x: int(x['id']))
-    chunks = [all_loans[i:i + chunk_size] for i in range(0, len(all_loans), chunk_size)]
-    return [make_stub(c, make_predicate(i + 1, {'sortName': 'id', 'sortDirect': 'asc'})) for i, c in enumerate(chunks)]
-
-def prepare_desc_stubs_in_chunk(total, chunk_size):
-    all_loans = generate_loans(total)
-    all_loans.sort(reverse=True, key=lambda x: int(x['id']))
-    chunks = [all_loans[i:i + chunk_size] for i in range(0, len(all_loans), chunk_size)]
-    return [make_stub(c, make_predicate(i + 1, {'sortName': 'id', 'sortDirect': 'desc'})) for i, c in enumerate(chunks)]
-
+    mb = MountebankStub()
+    mb.stub_loans_in_chunk(total, chunk_size)
 
 
 def prepare_sort_in_chunk(total, chunk_size=100):
     mb = MountebankStub()
-    stubs = []
-    asc_stubs = prepare_asc_stubs_in_chunk(total, chunk_size)
-    desc_stubs = prepare_desc_stubs_in_chunk(total, chunk_size)
-    default_stubs = make_chunk_stubs(total, chunk_size)
-    stubs.extend(asc_stubs)
-    stubs.extend(desc_stubs)
-    stubs.extend(default_stubs)
+    mb.stub_loans_in_chunk_and_sortable(total, chunk_size)
 
-    mb.create_imposter(stubs)
 
 def prepare_grouping_data(count):
     mb = MountebankStub()
-    loans = generate_loans(int(count))
-    for index, loan in enumerate(loans):
-        loan['isGroupRow'] = True
-        loan['groupName'] = 'Group ' + str(index)
-    stub = make_stub(loans,  {
-        "equals": {
-            "method": "GET",
-            "path": "/loans",
-            "query": {
-                "group": 'true'
-            }
-        }
-    })
-    mb.create_imposter([stub])
+    mb.stub_grouped_loans(count)
