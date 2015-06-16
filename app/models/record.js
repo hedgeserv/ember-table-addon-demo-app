@@ -15,7 +15,7 @@ let Record = DS.Model.extend({
   endingDr: DS.attr('number'),
   endingCr: DS.attr('number'),
   netEnding: DS.attr('number'),
-  children: DS.hasMany('record'),
+  children: DS.hasMany('record', {inverse: null}),
   isGroupRow: Ember.computed(function () {
     var children = this.get('children');
     return children && children.length > 0;

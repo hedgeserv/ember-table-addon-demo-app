@@ -2,7 +2,7 @@ import DS from 'ember-data';
 
 export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
   attrs: {
-    children: {embedded: 'always'}
+    children: { deserialize: 'records' }
   },
   keyForAttribute: function(attr, method) {
     if(method === 'deserialize') {
@@ -27,4 +27,5 @@ export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
 
     return attr;
   }
+
 });

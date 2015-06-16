@@ -5,6 +5,7 @@ export default Ember.Controller.extend({
 
   columns: function () {
     var columnTitleAndNames = [
+      ["Id", "id"],
       ["GL Account Section", "glAccountSection"],
       ["GL Account Type", "glAccountType"],
       ["GL Account Code", "glAccountCode"],
