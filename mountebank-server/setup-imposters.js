@@ -152,13 +152,13 @@ function makeGroupDataStubs(allLoans) {
 function makeGroupedRecordStubs() {
   var records = loadJsonFile('three-levels-of-grouping.json');
   generateRecordId(records, 0);
-  return makeStub({records: records}, '/records');
+  return makeStub({records: records}, '/records/1');
 }
 
 function generateRecordId(records, parentId) {
   for (var i=0; i < records.length; i++) {
     var record = records[i];
-    record.id = i + parentId * 10;
+    record.id = (i + 1) + parentId * 100 ;
     if (record.children) {
       generateRecordId(record.children, record.id);
     }
