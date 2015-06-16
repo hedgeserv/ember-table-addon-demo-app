@@ -16,20 +16,20 @@ Feature: Indicators for expanding and collapsing grouped rows
   @complete
   Scenario: Grouped rows are presented
     Given I have the following grouped loans in MounteBank:
-      | groupName  | id    | activity | isGroupRow |
-      | group1     | f1    | s1       | True       |
-      | group2     | f2    | s2       | True       |
-      | group3     | f3    | s3       | True       |
-      | group4     | f4    | s4       | True       |
-      | group5     | f5    | s5       | True       |
+      | groupName | id | activity | isGroupRow |
+      | group1    | f1 | s1       | True       |
+      | group2    | f2 | s2       | True       |
+      | group3    | f3 | s3       | True       |
+      | group4    | f4 | s4       | True       |
+      | group5    | f5 | s5       | True       |
     When Presenting "grouping column"
     Then I see grouped rows:
-      | indicator | groupName  | Id    | Activity |
-      | +         | group1     | f1    | s1       |
-      | +         | group2     | f2    | s2       |
-      | +         | group3     | f3    | s3       |
-      | +         | group4     | f4    | s4       |
-      | +         | group5     | f5    | s5       |
+      | indicator | groupName | Id | Activity |
+      | +         | group1    | f1 | s1       |
+      | +         | group2    | f2 | s2       |
+      | +         | group3    | f3 | s3       |
+      | +         | group4    | f4 | s4       |
+      | +         | group5    | f5 | s5       |
 
   @complete
   Scenario: Default expansion indicator with fully loaded data
@@ -53,39 +53,54 @@ Feature: Indicators for expanding and collapsing grouped rows
     And The "GroupingColumn" should not be scrolled
 
 
-  @wip
+  @complete
   Scenario: check grouped rows with collapse indicator
     Given I have the following grouped loans in MounteBank:
-      | groupName  | first | second  | isGroupRow |
-      | group1      | f1    | s1     | True       |
-      | group1-chd1 | f1-1  | s1-1   | False      |
-      | group1-chd2 | f1-2  | s1-2   | False      |
-      | group2      | f2    | s2     | True       |
-      | group3      | f3    | s3     | True       |
-      | group4      | f4    | s4     | True       |
-      | group5      | f5    | s5     | True       |
-    When Presenting "grouping column present grouped loans"
-    And The row "group1" indicator should be "expand"
+      | groupName   | id   | activity | isGroupRow |
+      | group1      | f1   | s1       | True       |
+      | group1-chd1 | f1-1 | s1-1     | False      |
+      | group1-chd2 | f1-2 | s1-2     | False      |
+      | group2      | f2   | s2       | True       |
+      | group3      | f3   | s3       | True       |
+      | group3-chd1 | f3-1 | s3-1     | False      |
+      | group3-chd2 | f3-2 | s3-2     | False      |
+      | group4      | f4   | s4       | True       |
+      | group5      | f5   | s5       | True       |
+    When Presenting "grouping column"
+    And Click "expand" for row "group1"
+    And Click "expand" for row "group3"
     Then I see grouped rows:
-      | indicator | groupName  | first | second |
-      | -         | group1      | f1    | s1     |
-      | +         | group1-chd1 | f1-1  | s1-1   |
-      | +         | group1-chd2 | f1-2  | s1-2   |
-      | +         | group2      | f2    | s2     |
-      | +         | group3      | f3    | s3     |
-      | +         | group4      | f4    | s4     |
-      | +         | group5      | f5    | s5     |
+      | indicator | groupName   | Id   | Activity |
+      | -         | group1      | f1   | s1       |
+      | +         | group1-chd1 | f1-1 | s1-1     |
+      | +         | group1-chd2 | f1-2 | s1-2     |
+      | +         | group2      | f2   | s2       |
+      | -         | group3      | f3   | s3       |
+      | +         | group3-chd1 | f3-1 | s3-1     |
+      | +         | group3-chd2 | f3-2 | s3-2     |
+      | +         | group4      | f4   | s4       |
+      | +         | group5      | f5   | s5       |
+    When Click "collapse" for row "group1"
+    Then I see grouped rows:
+      | indicator | groupName   | Id   | Activity |
+      | +         | group1      | f1   | s1       |
+      | +         | group2      | f2   | s2       |
+      | -         | group3      | f3   | s3       |
+      | +         | group3-chd1 | f3-1 | s3-1     |
+      | +         | group3-chd2 | f3-2 | s3-2     |
+      | +         | group4      | f4   | s4       |
+      | +         | group5      | f5   | s5       |
 
 
   @wip
   Scenario: Expand grouped row with partial loaded children loans
     Given I have the following grouped loans in MounteBank:
       | groupName | first | second |
-      | group1     | f1    | s1     |
-      | group2     | f2    | s2     |
-      | group3     | f3    | s3     |
-      | group4     | f4    | s4     |
-      | group5     | f5    | s5     |
+      | group1    | f1    | s1     |
+      | group2    | f2    | s2     |
+      | group3    | f3    | s3     |
+      | group4    | f4    | s4     |
+      | group5    | f5    | s5     |
     When Presenting "grouping column present partial loaded children"
     And The row "group1" indicator should be "expand"
     Then There should be 2 sections loaded
@@ -96,41 +111,41 @@ Feature: Indicators for expanding and collapsing grouped rows
   Scenario: Expand all grouped rows with unlimited level
     Given I have the following grouped loans in MounteBank:
       | groupName        | id     | activity | isGroupRow |
-      | group1           | f1     | s1       | True      |
-      | group1-chd1      | f1-1   | s1-1     | True      |
-      | group1-chd1-chd1 | f1-1-1 | s1-1-1   | False     |
-      | group1-chd1-chd2 | f1-1-2 | s1-1-2   | False     |
-      | group1-chd2      | f1-2   | s1-2     | True      |
-      | group1-chd2-chd1 | f1-2-1 | s1-2-1   | False     |
-      | group1-chd2-chd2 | f1-2-2 | s1-2-2   | False     |
-      | group2           | f2     | s2       | True      |
-      | group2-chd1      | f2-1   | s2-1     | True      |
-      | group2-chd1-chd1 | f2-1-1 | s2-1-1   | False     |
-      | group2-chd1-chd2 | f2-1-2 | s2-1-2   | False     |
-      | group2-chd2      | f2-2   | s2-2     | True      |
-      | group2-chd2-chd1 | f2-2-1 | s2-2-1   | False     |
-      | group2-chd2-chd2 | f2-2-2 | s2-2-2   | False     |
-      | group3           | f3     | s3       | True      |
-      | group3-chd1      | f3-1   | s3-1     | True      |
-      | group3-chd1-chd1 | f3-1-1 | s3-1-1   | False     |
-      | group3-chd1-chd2 | f3-1-2 | s3-1-2   | False     |
-      | group3-chd2      | f3-2   | s3-2     | True      |
-      | group3-chd2-chd1 | f3-2-1 | s3-2-1   | False     |
-      | group3-chd2-chd2 | f3-2-2 | s3-2-2   | False     |
-      | group4           | f4     | s4       | True      |
-      | group4-chd1      | f4-1   | s4-1     | True      |
-      | group4-chd1-chd1 | f4-1-1 | s4-1-1   | False     |
-      | group4-chd1-chd2 | f4-1-2 | s4-1-2   | False     |
-      | group4-chd2      | f4-2   | s4-2     | True      |
-      | group4-chd2-chd1 | f4-2-1 | s4-2-1   | False     |
-      | group4-chd2-chd2 | f4-2-2 | s4-2-2   | False     |
-      | group5           | f5     | s5       | True      |
-      | group5-chd1      | f5-1   | s5-1     | True      |
-      | group5-chd1-chd1 | f5-1-1 | s5-1-1   | False     |
-      | group5-chd1-chd2 | f5-1-2 | s5-1-2   | False     |
-      | group5-chd2      | f5-2   | s5-2     | True      |
-      | group5-chd2-chd1 | f5-2-1 | s5-2-1   | False     |
-      | group5-chd2-chd2 | f5-2-2 | s5-2-2   | False     |
+      | group1           | f1     | s1       | True       |
+      | group1-chd1      | f1-1   | s1-1     | True       |
+      | group1-chd1-chd1 | f1-1-1 | s1-1-1   | False      |
+      | group1-chd1-chd2 | f1-1-2 | s1-1-2   | False      |
+      | group1-chd2      | f1-2   | s1-2     | True       |
+      | group1-chd2-chd1 | f1-2-1 | s1-2-1   | False      |
+      | group1-chd2-chd2 | f1-2-2 | s1-2-2   | False      |
+      | group2           | f2     | s2       | True       |
+      | group2-chd1      | f2-1   | s2-1     | True       |
+      | group2-chd1-chd1 | f2-1-1 | s2-1-1   | False      |
+      | group2-chd1-chd2 | f2-1-2 | s2-1-2   | False      |
+      | group2-chd2      | f2-2   | s2-2     | True       |
+      | group2-chd2-chd1 | f2-2-1 | s2-2-1   | False      |
+      | group2-chd2-chd2 | f2-2-2 | s2-2-2   | False      |
+      | group3           | f3     | s3       | True       |
+      | group3-chd1      | f3-1   | s3-1     | True       |
+      | group3-chd1-chd1 | f3-1-1 | s3-1-1   | False      |
+      | group3-chd1-chd2 | f3-1-2 | s3-1-2   | False      |
+      | group3-chd2      | f3-2   | s3-2     | True       |
+      | group3-chd2-chd1 | f3-2-1 | s3-2-1   | False      |
+      | group3-chd2-chd2 | f3-2-2 | s3-2-2   | False      |
+      | group4           | f4     | s4       | True       |
+      | group4-chd1      | f4-1   | s4-1     | True       |
+      | group4-chd1-chd1 | f4-1-1 | s4-1-1   | False      |
+      | group4-chd1-chd2 | f4-1-2 | s4-1-2   | False      |
+      | group4-chd2      | f4-2   | s4-2     | True       |
+      | group4-chd2-chd1 | f4-2-1 | s4-2-1   | False      |
+      | group4-chd2-chd2 | f4-2-2 | s4-2-2   | False      |
+      | group5           | f5     | s5       | True       |
+      | group5-chd1      | f5-1   | s5-1     | True       |
+      | group5-chd1-chd1 | f5-1-1 | s5-1-1   | False      |
+      | group5-chd1-chd2 | f5-1-2 | s5-1-2   | False      |
+      | group5-chd2      | f5-2   | s5-2     | True       |
+      | group5-chd2-chd1 | f5-2-1 | s5-2-1   | False      |
+      | group5-chd2-chd2 | f5-2-2 | s5-2-2   | False      |
     When Presenting "grouping column"
     And Expand all contraction rows
     Then I see grouped rows:
@@ -175,24 +190,24 @@ Feature: Indicators for expanding and collapsing grouped rows
   Scenario: The expand indicator should be pluggable
     Given I have the following grouped loans in MounteBank:
       | groupName | first | second |
-      | group1     | f1    | s1     |
-      | group2     | f2    | s2     |
-      | group3     | f3    | s3     |
-      | group4     | f4    | s4     |
-      | group5     | f5    | s5     |
+      | group1    | f1    | s1     |
+      | group2    | f2    | s2     |
+      | group3    | f3    | s3     |
+      | group4    | f4    | s4     |
+      | group5    | f5    | s5     |
     When Presenting "grouping column with pluggable indicator"
     Then I see grouped rows:
       | indicator | groupName | first | second |
-      | >         | group1     | f1    | s1     |
-      | >         | group2     | f2    | s2     |
-      | >         | group3     | f3    | s3     |
-      | >         | group4     | f4    | s4     |
-      | >         | group5     | f5    | s5     |
+      | >         | group1    | f1    | s1     |
+      | >         | group2    | f2    | s2     |
+      | >         | group3    | f3    | s3     |
+      | >         | group4    | f4    | s4     |
+      | >         | group5    | f5    | s5     |
 
   @wip
   Scenario: The collapse indicator should be pluggable
     Given I have the following grouped loans in MounteBank:
-      | groupName  | first | second |
+      | groupName   | first | second |
       | group1      | f1    | s1     |
       | group1-chd1 | f1-1  | s1-1   |
       | group1-chd2 | f1-2  | s1-2   |
@@ -202,7 +217,7 @@ Feature: Indicators for expanding and collapsing grouped rows
       | group5      | f5    | s5     |
     When Presenting "grouping column with pluggable indicator"
     Then I see grouped rows:
-      | indicator | groupName  | first | second |
+      | indicator | groupName   | first | second |
       | *         | group1      | f1    | s1     |
       | >         | group1-chd1 | f1-1  | s1-1   |
       | >         | group1-chd2 | f1-2  | s1-2   |
@@ -214,18 +229,26 @@ Feature: Indicators for expanding and collapsing grouped rows
   @wip
   Scenario: The grouping column should be auto resize
     Given I have the following grouped loans in MounteBank:
-      | groupName | first | second |
-      | group1     | f1    | s1     |
-      | group2     | f2    | s2     |
-      | group3     | f3    | s3     |
-      | group4     | f4    | s4     |
-      | group5     | f5    | s5     |
-    When Presenting "grouping column present grouped loans"
-    Then The "groupName" column width should be 20 pixel
-    When Expand all contraction rows
-    Then The "groupName" column width should be 70 pixel
-    When Collapse all expanded rows
-    Then The "groupName" column width should be 20 pixel
+      | groupName        | id     | activity | isGroupRow |
+      | group1           | f1     | s1       | True       |
+      | group1-chd1      | f1-1   | s1-1     | True       |
+      | group1-chd1-chd1 | f1-1-1 | s1-1-1   | False      |
+      | group1-chd1-chd2 | f1-1-2 | s1-1-2   | False      |
+      | group1-chd2      | f1-2   | s1-2     | True       |
+      | group1-chd2-chd1 | f1-2-1 | s1-2-1   | False      |
+      | group1-chd2-chd2 | f1-2-2 | s1-2-2   | False      |
+      | group2           | f2     | s2       | True       |
+      | group3           | f3     | s3       | True       |
+      | group3-chd1      | f3-1   | s3-1     | False      |
+      | group3-chd2      | f3-2   | s3-2     | False      |
+      | group4           | f4     | s4       | True       |
+      | group5           | f5     | s5       | True       |
+    When Presenting "grouping column"
+    Then The "GroupingColumn" column width should be 150 pixel
+    When Click "expand" for row "group1"
+    Then The "GroupingColumn" column width should be 170 pixel
+    When Click "expand" for row "group-chd1"
+    Then The "GroupingColumn" column width should be 190 pixel
 
 
   @wip
@@ -245,11 +268,11 @@ Feature: Indicators for expanding and collapsing grouped rows
   Scenario: The default loading indicator should display when partial load children loans
     Given I have the following grouped loans in MounteBank:
       | groupName | first | second |
-      | group1     | f1    | s1     |
-      | group2     | f2    | s2     |
-      | group3     | f3    | s3     |
-      | group4     | f4    | s4     |
-      | group5     | f5    | s5     |
+      | group1    | f1    | s1     |
+      | group2    | f2    | s2     |
+      | group3    | f3    | s3     |
+      | group4    | f4    | s4     |
+      | group5    | f5    | s5     |
     When Presenting "grouping column present partial loaded children"
     And The row "group1" indicator should be "expand"
     When Customer drags scroll bar by offset 60 with 1 times
@@ -265,11 +288,11 @@ Feature: Indicators for expanding and collapsing grouped rows
   Scenario: The default loading indicator should display when partial load children loans
     Given I have the following grouped loans in MounteBank:
       | groupName | first | second |
-      | group1     | f1    | s1     |
-      | group2     | f2    | s2     |
-      | group3     | f3    | s3     |
-      | group4     | f4    | s4     |
-      | group5     | f5    | s5     |
+      | group1    | f1    | s1     |
+      | group2    | f2    | s2     |
+      | group3    | f3    | s3     |
+      | group4    | f4    | s4     |
+      | group5    | f5    | s5     |
     When Presenting "grouping column present partial loaded children"
     And The row "group1" indicator should be "expand"
     When Customer drags scroll bar by offset 60 with 1 times
@@ -305,22 +328,22 @@ Feature: Indicators for expanding and collapsing grouped rows
   Scenario: The children rows should be sorted by single column
     Given I have the following grouped loans in MounteBank:
       | groupName | first | second |
-      | group1     | f1    | s1     |
-      | group2     | f2    | s2     |
-      | group3     | f3    | s3     |
-      | group4     | f4    | s4     |
-      | group5     | f5    | s5     |
+      | group1    | f1    | s1     |
+      | group2    | f2    | s2     |
+      | group3    | f3    | s3     |
+      | group4    | f4    | s4     |
+      | group5    | f5    | s5     |
     When Presenting "grouping column present grouped loans"
     Then I see grouped rows:
       | indicator | groupName | first | second |
-      | +         | group1     | f1    | s1     |
-      | +         | group2     | f2    | s2     |
-      | +         | group3     | f3    | s3     |
-      | +         | group4     | f4    | s4     |
-      | +         | group5     | f5    | s5     |
+      | +         | group1    | f1    | s1     |
+      | +         | group2    | f2    | s2     |
+      | +         | group3    | f3    | s3     |
+      | +         | group4    | f4    | s4     |
+      | +         | group5    | f5    | s5     |
     When Click "expand" for row "row_parent"
     Then I see grouped rows:
-      | indicator | groupName  | first | second |
+      | indicator | groupName   | first | second |
       | -         | group1      | f1    | s1     |
       | +         | group1-chd1 | f1-1  | s1-1   |
       | +         | group1-chd2 | f1-2  | s1-2   |
@@ -331,7 +354,7 @@ Feature: Indicators for expanding and collapsing grouped rows
     When Click "expand" for row "group1-chd1"
     When Click "expand" for row "group1-chd2"
     Then I see grouped rows:
-      | indicator | groupName       | first  | second |
+      | indicator | groupName        | first  | second |
       | -         | group1           | f1     | s1     |
       | -         | group1-chd1      | f1-1   | s1-1   |
       |           | group1-chd1-chd1 | f1-1-1 | s1-1-1 |
@@ -345,7 +368,7 @@ Feature: Indicators for expanding and collapsing grouped rows
       | +         | group5           | f5     | s5     |
     When Click to sort as "ASC" for column "first"
     Then I see grouped rows:
-      | indicator | groupName       | first  | second |
+      | indicator | groupName        | first  | second |
       | -         | group1           | f1     | s1     |
       | -         | group1-chd1      | f1-1   | s1-1   |
       |           | group1-chd1-chd1 | f1-1-1 | s1-1-1 |
@@ -359,7 +382,7 @@ Feature: Indicators for expanding and collapsing grouped rows
       | +         | group5           | f5     | s5     |
     When Click to sort as "DESC" for column "first"
     Then I see grouped rows:
-      | indicator | groupName       | first  | second |
+      | indicator | groupName        | first  | second |
       | -         | group1           | f1     | s1     |
       | -         | group1-chd1      | f1-1   | s1-1   |
       |           | group1-chd1-chd2 | f1-1-2 | s1-1-2 |

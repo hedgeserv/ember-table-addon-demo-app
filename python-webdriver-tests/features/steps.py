@@ -361,7 +361,7 @@ def is_the_row_expanded(index):
         "return $('.ember-table-body-container "
         ".ember-table-left-table-block "
         ".ember-table-table-row:eq(" + str(index) + ") "
-        ".ember-table-table-cell:eq(0) "
+        ".ember-table-cell:eq(0) "
         ".grouping-column-indicator').hasClass('unfold')")
 
 
