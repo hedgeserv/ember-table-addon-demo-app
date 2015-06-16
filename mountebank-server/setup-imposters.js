@@ -40,7 +40,7 @@ function stubLoans(allLoans) {
 function makeStubs(allLoans) {
   var stubs = [];
   var pageSize = 50;
-  stubs.push(makeGroupDataStubs(allLoans));
+  stubs.push(makeGroupDataStub(allLoans));
   makeSortedLoans(allLoans.slice(0, 1000), pageSize, stubs);
   var pageIndex = 1;
   while ((pageIndex - 1) * pageSize < allLoans.slice(0, 1000).length) {
@@ -49,7 +49,8 @@ function makeStubs(allLoans) {
   }
 
   stubs.push(makeAllLoansStub(allLoans));
-  stubs.push(makeGroupedRecordStubs());
+  stubs.push(makeGroupedRecordStub());
+  stubs = stubs.concat(makeChunkedGroupingStubs());
   return stubs;
 }
 
@@ -130,7 +131,7 @@ function makeSortedPageLoans(sortedLoans, pageIndex, pageSize, sortName, sortDir
   );
 }
 
-function makeGroupDataStubs(allLoans) {
+function makeGroupDataStub(allLoans) {
   var loans = allLoans.slice(0, 5).map(function(group, index) {
     // third loans is not grouped data
     group.isGroupRow = index !== 2;
@@ -149,10 +150,66 @@ function makeGroupDataStubs(allLoans) {
   }, {"group": "true"});
 }
 
-function makeGroupedRecordStubs() {
+function makeGroupedRecordStub() {
   var records = loadJsonFile('three-levels-of-grouping.json');
   generateRecordId(records, 0);
-  return makeStub({records: records}, '/records/1');
+  return makeStub({reports: records}, '/reports/1');
+}
+
+function makeChunkedGroupingStubs() {
+  var totalCount = 200;
+  var pageSize = 10;
+  var records = makeChunkedGroups(totalCount);
+  var stubs = [];
+  for (var i=0; i<totalCount/pageSize; i++) {
+    stubs.push(makePerPageChunkedGroupsStub(records, pageSize, i));
+  }
+
+  stubs.push(makeStub(
+    {
+      "header": {
+        "date": new Date()
+      },
+      "chunkedGroups": records.slice(0, pageSize),
+      "meta": {
+        "total": records.length,
+        "page": 0,
+        "page_size": pageSize
+      }
+    }, '/chunkedGroups'));
+
+  return stubs;
+}
+
+function makePerPageChunkedGroupsStub(records, pageSize, pageIndex) {
+  return makeStub(
+    {
+      "header": {
+        "date": new Date()
+      },
+      "chunkedGroups": records.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize),
+      "meta": {
+        "total": records.length,
+        "page": pageIndex,
+        "page_size": pageSize
+      }
+    }, '/chunkedGroups',
+    {
+      "section": pageIndex.toString()
+    });
+}
+
+function makeChunkedGroups(totalCount) {
+  var records = [];
+  for (var i=0; i< totalCount; i++) {
+    records.push({
+      "id": 'p-' + i,
+      children: [
+        {"id": 'p-c' + i + '-' + 1},
+        {"id": 'p-c' + i + '-' + 2}
+      ]});
+  }
+  return records;
 }
 
 function generateRecordId(records, parentId) {
@@ -177,7 +234,7 @@ function makeStub(body, path, query) {
     }
   };
   if (query) {
-    extend(predicate, {"equals": {query: query}});
+    extend(predicate["equals"], {query: query});
   }
   return {
     "responses": [{

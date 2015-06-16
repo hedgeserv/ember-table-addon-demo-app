@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import DS from 'ember-data';
 
-let Record = DS.Model.extend({
+let Report = DS.Model.extend({
   glAccountSection: DS.attr('string'),
   glAccountType: DS.attr('string'),
   glAccountCode: DS.attr('string'),
@@ -15,11 +15,12 @@ let Record = DS.Model.extend({
   endingDr: DS.attr('number'),
   endingCr: DS.attr('number'),
   netEnding: DS.attr('number'),
-  children: DS.hasMany('record', {inverse: null}),
+  children: DS.hasMany('report', {inverse: null}),
   isGroupRow: Ember.computed(function () {
     var children = this.get('children');
     return children && children.length > 0;
   }).property('children')
+
 });
 
-export default Record;
+export default Report;
