@@ -1,13 +1,16 @@
-var fs = require('fs');
 var http = require('http');
+var extend = require('util')._extend;
 
-var allLoans = [1, 2, 3, 4, 5, 6, 7].map(function(index) {
-  return JSON.parse(fs.readFileSync(__dirname + '/../datasets/' + index + '.json'));
-}).reduce(function(previous, current){
-  return previous.concat(current.loans);
-}, []);
+stubLoans(loadAllLoans());
 
-stubLoans(allLoans);
+function loadAllLoans() {
+  var allLoans = [1, 2, 3, 4, 5, 6, 7].map(function(index) {
+    return loadJsonFile(index + '.json');
+  }).reduce(function(previous, current){
+    return previous.concat(current.loans);
+  }, []);
+  return allLoans;
+}
 
 function stubLoans(allLoans) {
   var options = {
@@ -37,7 +40,7 @@ function stubLoans(allLoans) {
 function makeStubs(allLoans) {
   var stubs = [];
   var pageSize = 50;
-  stubs.push(makeGroupDataStubs());
+  stubs.push(makeGroupDataStubs(allLoans));
   makeSortedLoans(allLoans.slice(0, 1000), pageSize, stubs);
   var pageIndex = 1;
   while ((pageIndex - 1) * pageSize < allLoans.slice(0, 1000).length) {
@@ -46,6 +49,7 @@ function makeStubs(allLoans) {
   }
 
   stubs.push(makeAllLoansStub(allLoans));
+  stubs.push(makeGroupedRecordStubs());
   return stubs;
 }
 
@@ -72,64 +76,29 @@ function makeSortedLoans(allLoans, pageSize, stubs) {
 function makePerPageStub(allLoans, pageIndex, pageSize) {
   var startRow = (pageIndex-1) * pageSize;
   var loans = allLoans.slice(startRow, startRow + pageSize);
-  return {
-    "responses": [
+  return makeLoansStub({
+      "header": {
+        "total": allLoans.length,
+        "page": pageIndex,
+        "page_size": pageSize,
+        "date": new Date()
+      },
+      "loans": loans
+    },
     {
-      "is": {
-        "headers": {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*"
-        },
-        "body": JSON.stringify({
-          "header": {
-            "total": allLoans.length,
-            "page": pageIndex,
-            "page_size": pageSize,
-            "date": new Date()
-          },
-          "loans": loans
-        })
-      }
-    }],
-    "predicates": [
-    {
-      "equals": {
-        "method": "GET",
-        "path": "/loans",
-        "query": {
-          "section": pageIndex.toString()
-        }
-      }
+      "section": pageIndex.toString()
     }
-  ]};
+  );
 }
 
 function makeAllLoansStub(allLoans) {
-  return {
-    "responses": [
-      {
-        "is": {
-          "headers": {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
-          },
-          "body": JSON.stringify({
-            "header": {
-              "total": allLoans.length,
-              "date": new Date()
-            },
-            "loans": allLoans
-          })
-        }
-      }],
-    "predicates": [
-      {
-        "equals": {
-          "method": "GET",
-          "path": "/loans"
-        }
-      }
-    ]};
+  return makeLoansStub({
+    "header": {
+      "total": allLoans.length,
+      "date": new Date()
+    },
+    "loans": allLoans
+  });
 }
 
 function stringCompare(prev, next) {
@@ -145,41 +114,23 @@ function intCompare(prev, next) {
 function makeSortedPageLoans(sortedLoans, pageIndex, pageSize, sortName, sortDirect){
   var startRow = (pageIndex-1) * pageSize;
   var loans = sortedLoans.slice(startRow, startRow + pageSize);
-  return {
-    "responses": [
-    {
-      "is": {
-        "headers": {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*"
-        },
-        "body": JSON.stringify({
-          "header": {
-            "total": sortedLoans.length,
-            "page": pageIndex,
-            "page_size": pageSize,
-            "date": new Date()
-          },
-          "loans": loans
-        })
-      }
-    }],
-    "predicates": [
-    {
-      "equals": {
-        "method": "GET",
-        "path": "/loans",
-        "query": {
-          "section": pageIndex.toString(),
-          "sortDirect": sortDirect,
-          "sortName": sortName
-        }
-      }
+  return makeLoansStub({
+      "header": {
+        "total": sortedLoans.length,
+        "page": pageIndex,
+        "page_size": pageSize,
+        "date": new Date()
+      },
+      "loans": loans
+    }, {
+      "section": pageIndex.toString(),
+      "sortDirect": sortDirect,
+      "sortName": sortName
     }
-  ]};
+  );
 }
 
-function makeGroupDataStubs() {
+function makeGroupDataStubs(allLoans) {
   var loans = allLoans.slice(0, 5).map(function(group, index) {
     // third loans is not grouped data
     group.isGroupRow = index !== 2;
@@ -189,6 +140,45 @@ function makeGroupDataStubs() {
     }
     return group;
   });
+  return makeLoansStub({
+    "header": {
+      "total": loans.length,
+      "date": new Date()
+    },
+    "loans": loans
+  }, {"group": "true"});
+}
+
+function makeGroupedRecordStubs() {
+  var records = loadJsonFile('three-levels-of-grouping.json');
+  generateRecordId(records, 0);
+  return makeStub({records: records}, '/records');
+}
+
+function generateRecordId(records, parentId) {
+  for (var i=0; i < records.length; i++) {
+    var record = records[i];
+    record.id = i + parentId * 10;
+    if (record.children) {
+      generateRecordId(record.children, record.id);
+    }
+  }
+}
+
+function makeLoansStub(body, query) {
+  return makeStub(body, "/loans", query);
+}
+
+function makeStub(body, path, query) {
+  var predicate = {
+    "equals": {
+      "method": "GET",
+      "path": path
+    }
+  };
+  if (query) {
+    extend(predicate, {"equals": {query: query}});
+  }
   return {
     "responses": [{
       "is": {
@@ -196,27 +186,15 @@ function makeGroupDataStubs() {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*"
         },
-        "body": JSON.stringify({
-          "header": {
-            "total": loans.length,
-            "date": new Date()
-          },
-          "loans": loans
-        })
+        "body": JSON.stringify(body)
       }
     }],
-    "predicates": [{
-      "equals": {
-        "method": "GET",
-        "path": "/loans",
-        "query": {
-          "group": "true"
-        }
-      }
-    }]
+    "predicates": [predicate]
   };
 }
 
-
-
+function loadJsonFile(fileName) {
+  var fs = require('fs');
+  return JSON.parse(fs.readFileSync(__dirname + '/../datasets/' + fileName));
+}
 
