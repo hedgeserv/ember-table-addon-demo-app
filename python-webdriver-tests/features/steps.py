@@ -275,12 +275,16 @@ def get_column_cursor(step, column_name):
 @step('The user drags the "(.*?)" on column to "(.*?)" with (\d+) pixel')
 def drag_column_with_pixel(step, column_name, left_or_right, offsetx):
     with AssertContextManager(step):
+        if str(column_name) == "GroupingColumn":
+            bo.resize_column_by_index(world.browser, 0, left_or_right, offsetx)
         bo.resize_column(world.browser, column_name, left_or_right, offsetx)
 
 
 @step('Reorder an inner column "(.*?)" header to "(.*?)" with (\d+) pixel')
 def reorder_column_with_pixel(step, column_name, left_or_right, offsetx):
     with AssertContextManager(step):
+        if str(column_name) == "GroupingColumn":
+            bo.reorder_column_by_index(world.browser, 0, left_or_right, offsetx)
         bo.reorder_column(world.browser, column_name, left_or_right, offsetx)
 
 
@@ -310,7 +314,10 @@ def drag_hold_column(step, column_name, left_or_right, offsetx):
 @step('The "(.*?)" column width should be (\d+) pixel')
 def check_column_width(step, column_name, pixel):
     with AssertContextManager(step):
-        assert_true(step, int(bo.get_col_width(world.browser, column_name)) == int(pixel))
+        if str(column_name) == "GroupingColumn":
+            assert_true(step, int(bo.get_col_width_by_index(world.browser, 0)) == int(pixel))
+        else:
+            assert_true(step, int(bo.get_col_width(world.browser, column_name)) == int(pixel))
 
 
 @step('The index (\d+) should be "(.*?)" column$')
@@ -486,4 +493,7 @@ def check_column_is_fixed(step, col_name):
     with AssertContextManager(step):
         col_names = world.browser.execute_script(
             "return $('.ember-table-table-fixed-wrapper > div:eq(0) span').text()")
-        assert_true(step, str(col_name) in str(col_names))
+        if str(col_name) == "GroupingColumn":
+            assert_true(step, str("") in str(col_names))
+        else:
+            assert_true(step, str(col_name) in str(col_names))

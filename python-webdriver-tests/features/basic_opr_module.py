@@ -100,6 +100,17 @@ def resize_column(browser, column_name, left_or_right, offsetx):
         action_chains.drag_and_drop_by_offset(element, int(offsetx), 0).release().perform()
 
 
+def resize_column_by_index(browser, index, left_or_right, offsetx):
+    action_chains = ActionChains(browser)
+    element = browser.execute_script(
+        "return $('.ember-table-header-container .ember-table-content:eq(" + str(
+            index) + ")').parent().parent().children()[1]")
+    if left_or_right == "left":
+        action_chains.drag_and_drop_by_offset(element, -int(offsetx), 0).release().perform()
+    else:
+        action_chains.drag_and_drop_by_offset(element, int(offsetx), 0).release().perform()
+
+
 def reorder_column(browser, col_name, left_or_right, offsetx):
     chains = ActionChains(browser)
     wait_for_elem(browser, "return $('.ember-table-content-container')")
@@ -111,9 +122,25 @@ def reorder_column(browser, col_name, left_or_right, offsetx):
         chains.click_and_hold(element[0]).move_by_offset(int(offsetx), 0).release().perform()
 
 
+def reorder_column_by_index(browser, index, left_or_right, offsetx):
+    chains = ActionChains(browser)
+    wait_for_elem(browser, "return $('.ember-table-content-container')")
+    element = browser.execute_script(
+        "return $('.ember-table-content-container .ember-table-content:eq(" + str(index) + ")')")
+    if left_or_right == "left":
+        chains.click_and_hold(element[0]).move_by_offset(-int(offsetx), 0).release().perform()
+    else:
+        chains.click_and_hold(element[0]).move_by_offset(int(offsetx), 0).release().perform()
+
+
 def get_col_width(browser, col_name):
     return browser.execute_script(
         "return $('.ember-table-header-container .ember-table-content:contains(" + col_name + ")').parent().width()")
+
+
+def get_col_width_by_index(browser, index):
+    return browser.execute_script(
+        "return $('.ember-table-header-container .ember-table-content:eq(" + str(index) + ")').parent().width()")
 
 
 def get_col_name_by_index(browser, index):
