@@ -50,7 +50,7 @@ Feature: Indicators for expanding and collapsing grouped rows
     And The user drags the "status" on column to "right" with 1000 pixel
     And Drag horizontal scroll bar with 1000 pixel
     Then The column header block should has "scroll left" and same as body scroll left
-    And The "GroupingColumn" should not be scrolled
+    And The grouping and fixed columns should not be scrolled
 
 
   @complete
@@ -72,12 +72,12 @@ Feature: Indicators for expanding and collapsing grouped rows
     Then I see grouped rows:
       | indicator | groupName   | Id   | Activity |
       | -         | group1      | f1   | s1       |
-      | +         | group1-chd1 | f1-1 | s1-1     |
-      | +         | group1-chd2 | f1-2 | s1-2     |
+      |           | group1-chd1 | f1-1 | s1-1     |
+      |           | group1-chd2 | f1-2 | s1-2     |
       | +         | group2      | f2   | s2       |
       | -         | group3      | f3   | s3       |
-      | +         | group3-chd1 | f3-1 | s3-1     |
-      | +         | group3-chd2 | f3-2 | s3-2     |
+      |           | group3-chd1 | f3-1 | s3-1     |
+      |           | group3-chd2 | f3-2 | s3-2     |
       | +         | group4      | f4   | s4       |
       | +         | group5      | f5   | s5       |
     When Click "collapse" for row "group1"
@@ -86,8 +86,8 @@ Feature: Indicators for expanding and collapsing grouped rows
       | +         | group1      | f1   | s1       |
       | +         | group2      | f2   | s2       |
       | -         | group3      | f3   | s3       |
-      | +         | group3-chd1 | f3-1 | s3-1     |
-      | +         | group3-chd2 | f3-2 | s3-2     |
+      |           | group3-chd1 | f3-1 | s3-1     |
+      |           | group3-chd2 | f3-2 | s3-2     |
       | +         | group4      | f4   | s4       |
       | +         | group5      | f5   | s5       |
 
@@ -137,11 +137,11 @@ Feature: Indicators for expanding and collapsing grouped rows
       | indicator | groupName        | Id     | Activity |
       | -         | group1           | f1     | s1       |
       | -         | group1-chd1      | f1-1   | s1-1     |
-      | +         | group1-chd1-chd1 | f1-1-1 | s1-1-1   |
-      | +         | group1-chd1-chd2 | f1-1-2 | s1-1-2   |
+      |           | group1-chd1-chd1 | f1-1-1 | s1-1-1   |
+      |           | group1-chd1-chd2 | f1-1-2 | s1-1-2   |
       | -         | group1-chd2      | f1-2   | s1-2     |
-      | +         | group1-chd2-chd1 | f1-2-1 | s1-2-1   |
-      | +         | group1-chd2-chd2 | f1-2-2 | s1-2-2   |
+      |           | group1-chd2-chd1 | f1-2-1 | s1-2-1   |
+      |           | group1-chd2-chd2 | f1-2-2 | s1-2-2   |
       | +         | group2           | f2     | s2       |
     When Click "collapse" for row "group1"
     Then I see grouped rows:
@@ -153,11 +153,11 @@ Feature: Indicators for expanding and collapsing grouped rows
       | indicator | groupName        | Id     | Activity |
       | -         | group1           | f1     | s1       |
       | -         | group1-chd1      | f1-1   | s1-1     |
-      | +         | group1-chd1-chd1 | f1-1-1 | s1-1-1   |
-      | +         | group1-chd1-chd2 | f1-1-2 | s1-1-2   |
+      |           | group1-chd1-chd1 | f1-1-1 | s1-1-1   |
+      |           | group1-chd1-chd2 | f1-1-2 | s1-1-2   |
       | -         | group1-chd2      | f1-2   | s1-2     |
-      | +         | group1-chd2-chd1 | f1-2-1 | s1-2-1   |
-      | +         | group1-chd2-chd2 | f1-2-2 | s1-2-2   |
+      |           | group1-chd2-chd1 | f1-2-1 | s1-2-1   |
+      |           | group1-chd2-chd2 | f1-2-2 | s1-2-2   |
       | +         | group2           | f2     | s2       |
 
   @wip
@@ -200,7 +200,7 @@ Feature: Indicators for expanding and collapsing grouped rows
       | >         | group4      | f4    | s4     |
       | >         | group5      | f5    | s5     |
 
-  @wip
+  @complete
   Scenario: The grouping column should be auto resize
     Given I have the following grouped loans in MounteBank:
       | groupName        | id     | activity | isGroupRow |
@@ -212,18 +212,38 @@ Feature: Indicators for expanding and collapsing grouped rows
       | group1-chd2-chd1 | f1-2-1 | s1-2-1   | False      |
       | group1-chd2-chd2 | f1-2-2 | s1-2-2   | False      |
       | group2           | f2     | s2       | True       |
-      | group3           | f3     | s3       | True       |
-      | group3-chd1      | f3-1   | s3-1     | False      |
-      | group3-chd2      | f3-2   | s3-2     | False      |
-      | group4           | f4     | s4       | True       |
-      | group5           | f5     | s5       | True       |
+      | group2-chd1      | f2-1   | s2-1     | True       |
+      | group2-chd1-chd1 | f2-1-1 | s2-1-1   | False      |
+      | group2-chd1-chd2 | f2-1-2 | s2-1-2   | False      |
+      | group2-chd2      | f2-2   | s2-2     | True       |
+      | group2-chd2-chd1 | f2-2-1 | s2-2-1   | False      |
+      | group2-chd2-chd2 | f2-2-2 | s2-2-2   | False      |
     When Presenting "grouping column"
-    Then The "GroupingColumn" column width should be 150 pixel
+    Then The "GroupingColumn" column width should be 149 pixel
     When Click "expand" for row "group1"
-    Then The "GroupingColumn" column width should be 170 pixel
-    When Click "expand" for row "group-chd1"
-    Then The "GroupingColumn" column width should be 190 pixel
-
+    Then The "GroupingColumn" column width should be 159 pixel
+    When Click "expand" for row "group1-chd1"
+    Then The "GroupingColumn" column width should be 169 pixel
+    When Click "expand" for row "group1-chd2"
+    Then The "GroupingColumn" column width should be 169 pixel
+    When Click "expand" for row "group2"
+    Then The "GroupingColumn" column width should be 169 pixel
+#    When Click "collapse" for row "group1"
+#    Then The "GroupingColumn" column width should be 159 pixel
+#    When Click "collapse" for row "group2"
+#    Then The "GroupingColumn" column width should be 149 pixel
+#    When Click "expand" for row "group1"
+#    Then The "GroupingColumn" column width should be 169 pixel
+#    When Click "collapse" for row "group1-chd1"
+#    Then The "GroupingColumn" column width should be 159 pixel
+#    When Click "expand" for row "group2"
+#    Then The "GroupingColumn" column width should be 159 pixel
+#    When Click "collapse" for row "group1-chd2"
+#    Then The "GroupingColumn" column width should be 159 pixel
+#    When Click "collapse" for row "group1"
+#    Then The "GroupingColumn" column width should be 159 pixel
+#    When Click "collapse" for row "group2"
+#    Then The "GroupingColumn" column width should be 149 pixel
 
   @wip
   Scenario: Expand grouped row with partial loaded
