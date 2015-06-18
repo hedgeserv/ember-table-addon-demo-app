@@ -39,3 +39,25 @@
 .bg-red {
   background-color: red;
 }
+
+.custom-grouped-row-indicator {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  margin-left: 5px;
+  width: 10px;
+  height: 10px;
+  
+  &.fold > span {
+    transition: all .3s linear;
+    display: inline-block;
+    transform: rotate(0deg);
+  }  
+
+
+  &.unfold > span {
+    transition: all .3s linear;
+    display: inline-block;
+    transform: rotate(90deg);
+  }
+}

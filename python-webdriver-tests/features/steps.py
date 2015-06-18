@@ -383,6 +383,13 @@ def is_the_leaf_node(index):
     return int(length) == 0
 
 
+def is_the_leaf_node(index):
+    length = world.browser.execute_script(
+        "return $('.ember-table-body-container .ember-table-left-table-block .ember-table-table-row:eq(" + str(
+            index) + ") .ember-table-cell:eq(0) .grouping-column-indicator:has(div)').length")
+    return int(length) == 0
+
+
 def verify_cell_content(row_index, name, value):
     col_index, is_fixed = find_col_index(name)
     block_selector = '.ember-table-right-table-block'
