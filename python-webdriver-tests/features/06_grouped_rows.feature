@@ -107,8 +107,8 @@ Feature: Indicators for expanding and collapsing grouped rows
     When Customer drags scroll bar by offset 60 with 1 times
     Then There should be 3 sections loaded
 
-  @wip
-  Scenario: Expand all grouped rows with unlimited level
+  @complete
+  Scenario: Expand and collapse grouped rows with unlimited level
     Given I have the following grouped loans in MounteBank:
       | groupName        | id     | activity | isGroupRow |
       | group1           | f1     | s1       | True       |
@@ -125,66 +125,40 @@ Feature: Indicators for expanding and collapsing grouped rows
       | group2-chd2      | f2-2   | s2-2     | True       |
       | group2-chd2-chd1 | f2-2-1 | s2-2-1   | False      |
       | group2-chd2-chd2 | f2-2-2 | s2-2-2   | False      |
-      | group3           | f3     | s3       | True       |
-      | group3-chd1      | f3-1   | s3-1     | True       |
-      | group3-chd1-chd1 | f3-1-1 | s3-1-1   | False      |
-      | group3-chd1-chd2 | f3-1-2 | s3-1-2   | False      |
-      | group3-chd2      | f3-2   | s3-2     | True       |
-      | group3-chd2-chd1 | f3-2-1 | s3-2-1   | False      |
-      | group3-chd2-chd2 | f3-2-2 | s3-2-2   | False      |
-      | group4           | f4     | s4       | True       |
-      | group4-chd1      | f4-1   | s4-1     | True       |
-      | group4-chd1-chd1 | f4-1-1 | s4-1-1   | False      |
-      | group4-chd1-chd2 | f4-1-2 | s4-1-2   | False      |
-      | group4-chd2      | f4-2   | s4-2     | True       |
-      | group4-chd2-chd1 | f4-2-1 | s4-2-1   | False      |
-      | group4-chd2-chd2 | f4-2-2 | s4-2-2   | False      |
-      | group5           | f5     | s5       | True       |
-      | group5-chd1      | f5-1   | s5-1     | True       |
-      | group5-chd1-chd1 | f5-1-1 | s5-1-1   | False      |
-      | group5-chd1-chd2 | f5-1-2 | s5-1-2   | False      |
-      | group5-chd2      | f5-2   | s5-2     | True       |
-      | group5-chd2-chd1 | f5-2-1 | s5-2-1   | False      |
-      | group5-chd2-chd2 | f5-2-2 | s5-2-2   | False      |
     When Presenting "grouping column"
-    And Expand all contraction rows
+    Then I see grouped rows:
+      | indicator | groupName | Id | Activity |
+      | +         | group1    | f1 | s1       |
+      | +         | group2    | f2 | s2       |
+    And Click "expand" for row "group1"
+    And Click "expand" for row "group1-chd1"
+    And Click "expand" for row "group1-chd2"
     Then I see grouped rows:
       | indicator | groupName        | Id     | Activity |
       | -         | group1           | f1     | s1       |
       | -         | group1-chd1      | f1-1   | s1-1     |
-      |           | group1-chd1-chd1 | f1-1-1 | s1-1-1   |
-      |           | group1-chd1-chd2 | f1-1-2 | s1-1-2   |
+      | +         | group1-chd1-chd1 | f1-1-1 | s1-1-1   |
+      | +         | group1-chd1-chd2 | f1-1-2 | s1-1-2   |
       | -         | group1-chd2      | f1-2   | s1-2     |
-      |           | group1-chd2-chd1 | f1-2-1 | s1-2-1   |
-      |           | group1-chd2-chd2 | f1-2-2 | s1-2-2   |
-      | -         | group2           | f2     | s2       |
-      | -         | group2-chd1      | f2-1   | s2-1     |
-      |           | group2-chd1-chd1 | f2-1-1 | s2-1-1   |
-      |           | group2-chd1-chd2 | f2-1-2 | s2-1-2   |
-      | -         | group2-chd2      | f2-2   | s2-2     |
-      |           | group2-chd2-chd1 | f2-2-1 | s2-2-1   |
-      |           | group2-chd2-chd2 | f2-2-2 | s2-2-2   |
-      | -         | group3           | f3     | s3       |
-      | -         | group3-chd1      | f3-1   | s3-1     |
-      |           | group3-chd1-chd1 | f3-1-1 | s3-1-1   |
-      |           | group3-chd1-chd2 | f3-1-2 | s3-1-2   |
-      | -         | group3-chd2      | f3-2   | s3-2     |
-      |           | group3-chd2-chd1 | f3-2-1 | s3-2-1   |
-      |           | group3-chd2-chd2 | f3-2-2 | s3-2-2   |
-      | -         | group4           | f4     | s4       |
-      | -         | group4-chd1      | f4-1   | s4-1     |
-      |           | group4-chd1-chd1 | f4-1-1 | s4-1-1   |
-      |           | group4-chd1-chd2 | f4-1-2 | s4-1-2   |
-      | -         | group4-chd2      | f4-2   | s4-2     |
-      |           | group4-chd2-chd1 | f4-2-1 | s4-2-1   |
-      |           | group4-chd2-chd2 | f4-2-2 | s4-2-2   |
-      | -         | group5           | f5     | s5       |
-      | -         | group5-chd1      | f5-1   | s5-1     |
-      |           | group5-chd1-chd1 | f5-1-1 | s5-1-1   |
-      |           | group5-chd1-chd2 | f5-1-2 | s5-1-2   |
-      | -         | group5-chd2      | f5-2   | s5-2     |
-      |           | group5-chd-chd1  | f5-2-1 | s5-2-1   |
-      |           | group5-chd2-chd2 | f5-2-2 | s5-2-2   |
+      | +         | group1-chd2-chd1 | f1-2-1 | s1-2-1   |
+      | +         | group1-chd2-chd2 | f1-2-2 | s1-2-2   |
+      | +         | group2           | f2     | s2       |
+    When Click "collapse" for row "group1"
+    Then I see grouped rows:
+      | indicator | groupName | Id | Activity |
+      | +         | group1    | f1 | s1       |
+      | +         | group2    | f2 | s2       |
+    When Click "expand" for row "group1"
+    Then I see grouped rows:
+      | indicator | groupName        | Id     | Activity |
+      | -         | group1           | f1     | s1       |
+      | -         | group1-chd1      | f1-1   | s1-1     |
+      | +         | group1-chd1-chd1 | f1-1-1 | s1-1-1   |
+      | +         | group1-chd1-chd2 | f1-1-2 | s1-1-2   |
+      | -         | group1-chd2      | f1-2   | s1-2     |
+      | +         | group1-chd2-chd1 | f1-2-1 | s1-2-1   |
+      | +         | group1-chd2-chd2 | f1-2-2 | s1-2-2   |
+      | +         | group2           | f2     | s2       |
 
   @wip
   Scenario: The expand indicator should be pluggable
