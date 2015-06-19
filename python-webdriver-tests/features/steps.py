@@ -277,7 +277,8 @@ def drag_column_with_pixel(step, column_name, left_or_right, offsetx):
     with AssertContextManager(step):
         if str(column_name) == "GroupingColumn":
             bo.resize_column_by_index(world.browser, 0, left_or_right, offsetx)
-        bo.resize_column(world.browser, column_name, left_or_right, offsetx)
+        else:
+            bo.resize_column(world.browser, column_name, left_or_right, offsetx)
 
 
 @step('Reorder an inner column "(.*?)" header to "(.*?)" with (\d+) pixel')
@@ -285,7 +286,8 @@ def reorder_column_with_pixel(step, column_name, left_or_right, offsetx):
     with AssertContextManager(step):
         if str(column_name) == "GroupingColumn":
             bo.reorder_column_by_index(world.browser, 0, left_or_right, offsetx)
-        bo.reorder_column(world.browser, column_name, left_or_right, offsetx)
+        else:
+            bo.reorder_column(world.browser, column_name, left_or_right, offsetx)
 
 
 @step('The reorder indicator line should be (\d+) from left$')
@@ -323,7 +325,10 @@ def check_column_width(step, column_name, pixel):
 @step('The index (\d+) should be "(.*?)" column$')
 def check_reorder_column(step, index, name):
     with AssertContextManager(step):
-        assert_true(step, bo.get_col_name_by_index(world.browser, index) == name)
+        if name == "GroupingColumn":
+            assert_true(step, bo.get_col_name_by_index(world.browser, index) == "")
+        else:
+            assert_true(step, bo.get_col_name_by_index(world.browser, index) == name)
 
 
 @step('The "(.*?)" column sort indicator should be "(.*?)"$')
@@ -357,6 +362,8 @@ def verify_grouped_row(index, row):
         assert_true(step, is_the_row_expanded(index))
     elif indicator == '+':
         assert_true(step, not is_the_row_expanded(index))
+    elif indicator == '':
+        assert_true(step, is_the_leaf_node(index))
 
     for field in row:
         if field != 'indicator':
@@ -365,11 +372,15 @@ def verify_grouped_row(index, row):
 
 def is_the_row_expanded(index):
     return world.browser.execute_script(
-        "return $('.ember-table-body-container "
-        ".ember-table-left-table-block "
-        ".ember-table-table-row:eq(" + str(index) + ") "
-        ".ember-table-cell:eq(0) "
-        ".grouping-column-indicator').hasClass('unfold')")
+        "return $('.ember-table-body-container .ember-table-left-table-block .ember-table-table-row:eq(" + str(
+            index) + ") .ember-table-cell:eq(0) .grouping-column-indicator').hasClass('unfold')")
+
+
+def is_the_leaf_node(index):
+    length = world.browser.execute_script(
+        "return $('.ember-table-body-container .ember-table-left-table-block .ember-table-table-row:eq(" + str(
+            index) + ") .ember-table-cell:eq(0) .grouping-column-indicator:has(div)').length")
+    return int(length) == 0
 
 
 def verify_cell_content(row_index, name, value):
