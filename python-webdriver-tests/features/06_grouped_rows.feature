@@ -148,45 +148,24 @@ Feature: Indicators for expanding and collapsing grouped rows
       |           | group1-chd2-chd2 | f1-2-2 | s1-2-2   |
       | +         | group2           | f2     | s2       |
 
-  @wip
-  Scenario: The expand indicator should be pluggable
+  @complete
+  Scenario: The expand and collapse indicator should be pluggable
     Given I have the following grouped loans in MounteBank:
-      | groupName | first | second |
-      | group1    | f1    | s1     |
-      | group2    | f2    | s2     |
-      | group3    | f3    | s3     |
-      | group4    | f4    | s4     |
-      | group5    | f5    | s5     |
+      | groupName   | id   | activity | isGroupRow |
+      | group1      | f1   | s1       | True       |
+      | group1-chd1 | f1-1 | s1-1     | False      |
+      | group1-chd2 | f1-2 | s1-2     | False      |
+      | group2      | f2   | s2       | True       |
+      | group3      | f3   | s3       | True       |
+      | group3-chd1 | f3-1 | s3-1     | False      |
+      | group3-chd2 | f3-2 | s3-2     | False      |
+      | group4      | f4   | s4       | True       |
+      | group5      | f5   | s5       | True       |
     When Presenting "grouping column with pluggable indicator"
-    Then I see grouped rows:
-      | indicator | groupName | first | second |
-      | >         | group1    | f1    | s1     |
-      | >         | group2    | f2    | s2     |
-      | >         | group3    | f3    | s3     |
-      | >         | group4    | f4    | s4     |
-      | >         | group5    | f5    | s5     |
+    Then The row "group1" indicator should be "expand" with customized
+    When When Click "expand" for row "group1"
+    Then The row "group1" indicator should be "collapse" with customized
 
-  @wip
-  Scenario: The collapse indicator should be pluggable
-    Given I have the following grouped loans in MounteBank:
-      | groupName   | first | second |
-      | group1      | f1    | s1     |
-      | group1-chd1 | f1-1  | s1-1   |
-      | group1-chd2 | f1-2  | s1-2   |
-      | group2      | f2    | s2     |
-      | group3      | f3    | s3     |
-      | group4      | f4    | s4     |
-      | group5      | f5    | s5     |
-    When Presenting "grouping column with pluggable indicator"
-    Then I see grouped rows:
-      | indicator | groupName   | first | second |
-      | *         | group1      | f1    | s1     |
-      | >         | group1-chd1 | f1-1  | s1-1   |
-      | >         | group1-chd2 | f1-2  | s1-2   |
-      | >         | group2      | f2    | s2     |
-      | >         | group3      | f3    | s3     |
-      | >         | group4      | f4    | s4     |
-      | >         | group5      | f5    | s5     |
 
   @complete
   Scenario: The grouping column should be auto resize
@@ -216,8 +195,8 @@ Feature: Indicators for expanding and collapsing grouped rows
     Then The "GroupingColumn" column width should be 169 pixel
     When Click "expand" for row "group2"
     Then The "GroupingColumn" column width should be 169 pixel
-#    When Click "collapse" for row "group1"
-#    Then The "GroupingColumn" column width should be 159 pixel
+    When Click "collapse" for row "group1"
+    Then The "GroupingColumn" column width should be 159 pixel
 #    When Click "collapse" for row "group2"
 #    Then The "GroupingColumn" column width should be 149 pixel
 #    When Click "expand" for row "group1"
