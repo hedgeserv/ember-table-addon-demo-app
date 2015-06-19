@@ -1,5 +1,6 @@
 var http = require('http');
 var extend = require('util')._extend;
+var format = require('util').format;
 
 stubLoans(loadAllLoans());
 
@@ -42,15 +43,10 @@ function makeStubs(allLoans) {
   var pageSize = 50;
   stubs.push(makeGroupDataStub(allLoans));
   makeSortedLoans(allLoans.slice(0, 1000), pageSize, stubs);
-  var pageIndex = 1;
-  while ((pageIndex - 1) * pageSize < allLoans.slice(0, 1000).length) {
-    stubs.push(makePerPageStub(allLoans, pageIndex, pageSize));
-    pageIndex++;
-  }
-
+  stubs = stubs.concat(makePagedStubs(pageSize, allLoans, "loans"));
   stubs.push(makeAllLoansStub(allLoans));
   stubs.push(makeGroupedRecordStub());
-  stubs = stubs.concat(makeChunkedGroupingStubs());
+  stubs = stubs.concat(makeNestedGroupingStubs());
   return stubs;
 }
 
@@ -70,22 +66,32 @@ function makeSortedLoans(allLoans, pageSize, stubs) {
       stubs.push(makeSortedPageLoans(descLoans, pageIndex, pageSize, columnName, 'desc'));
       pageIndex++;
     }
-
   });
 }
 
-function makePerPageStub(allLoans, pageIndex, pageSize) {
+function makePagedStubs(pageSize, allRecords, contentKey) {
+  var stubs = [];
+  var pageIndex = 1;
+  while ((pageIndex - 1) * pageSize < allRecords.slice(0, 1000).length) {
+    stubs.push(makePerPageStub(allRecords, pageIndex, pageSize, contentKey));
+    pageIndex++;
+  }
+  return stubs;
+}
+
+function makePerPageStub(allRecords, pageIndex, pageSize, contentKey) {
   var startRow = (pageIndex-1) * pageSize;
-  var loans = allLoans.slice(startRow, startRow + pageSize);
-  return makeLoansStub({
-      "header": {
-        "total": allLoans.length,
-        "page": pageIndex,
-        "page_size": pageSize,
-        "date": new Date()
-      },
-      "loans": loans
-    },
+  var records = allRecords.slice(startRow, startRow + pageSize);
+  var body = {
+    "header": {
+      "total": allRecords.length,
+      "page": pageIndex,
+      "page_size": pageSize,
+      "date": new Date()
+    }
+    };
+  body[contentKey] = records
+    return makeLoansStub(body,
     {
       "section": pageIndex.toString()
     }
@@ -156,60 +162,53 @@ function makeGroupedRecordStub() {
   return makeStub({reports: records}, '/reports/1');
 }
 
-function makeChunkedGroupingStubs() {
-  var totalCount = 200;
-  var pageSize = 10;
-  var records = makeChunkedGroups(totalCount);
-  var stubs = [];
-  for (var i=0; i<totalCount/pageSize; i++) {
-    stubs.push(makePerPageChunkedGroupsStub(records, pageSize, i));
+function makeNestedGroupingStubs() {
+  var records = loadJsonFile('three-levels-of-grouping.json');
+  for(var i=0; i<20; i++) {
+    records[0].children[2].children.push(cloneObject(records[0].children[2].children[0]));
+  }
+  for (var i=0; i< 20; i++) {
+    records[0].children.push(cloneObject(records[0].children[2]));
   }
 
-  stubs.push(makeStub(
-    {
-      "header": {
-        "date": new Date()
-      },
-      "chunkedGroups": records.slice(0, pageSize),
-      "meta": {
-        "total": records.length,
-        "page": 0,
-        "page_size": pageSize
-      }
-    }, '/chunkedGroups'));
+  generateRecordId(records, 0);
+  return doMakeNestedStubs({
+    children: records
+  }, ['chunkedGroups', 'accountSections', 'accountTypes', 'accountCodes'], '');
+}
 
+function doMakeNestedStubs(theRecord, resourceNames, parentPath) {
+  var stubs = [];
+  if (theRecord.children) {
+    var body = { "header": { "date": new Date()}};
+    body[resourceNames[0]] = noChildren(theRecord.children);
+    var path = parentPath + '/' + resourceNames[0];
+    stubs.push(makeStub(body, path));
+    theRecord.children.forEach(function(value) {
+      var nextParentPath = format("%s/%s/%s", parentPath, resourceNames[0], value.id);
+      stubs = stubs.concat(doMakeNestedStubs(value, resourceNames.slice(1), nextParentPath));
+    });
+  }
   return stubs;
 }
 
-function makePerPageChunkedGroupsStub(records, pageSize, pageIndex) {
-  return makeStub(
-    {
-      "header": {
-        "date": new Date()
-      },
-      "chunkedGroups": records.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize),
-      "meta": {
-        "total": records.length,
-        "page": pageIndex,
-        "page_size": pageSize
-      }
-    }, '/chunkedGroups',
-    {
-      "section": pageIndex.toString()
-    });
+function noChildren(obj) {
+  if (Array.isArray(obj)) {
+    return obj.map(function(x) {
+      return doRemoveChildren(x);
+    })
+  }
+  return doRemoveChildren(obj);
 }
 
-function makeChunkedGroups(totalCount) {
-  var records = [];
-  for (var i=0; i< totalCount; i++) {
-    records.push({
-      "id": 'p-' + i,
-      children: [
-        {"id": 'p-c' + i + '-' + 1},
-        {"id": 'p-c' + i + '-' + 2}
-      ]});
-  }
-  return records;
+function doRemoveChildren(obj) {
+  var clone = cloneObject(obj);
+  clone.children = [];
+  return clone;
+}
+
+function cloneObject(obj) {
+  return JSON.parse(JSON.stringify(obj));
 }
 
 function generateRecordId(records, parentId) {
