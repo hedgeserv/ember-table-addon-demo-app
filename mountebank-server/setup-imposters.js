@@ -69,17 +69,18 @@ function makeSortedLoans(allLoans, pageSize, stubs) {
   });
 }
 
-function makePagedStubs(allRecords, pageSize, contentKey, path) {
+function makePagedStubs(allRecords, pageSize, contentKey, path, query) {
   var stubs = [];
   var pageIndex = 1;
   while ((pageIndex - 1) * pageSize < allRecords.slice(0, 1000).length) {
-    stubs.push(makePerPageStub(allRecords, pageIndex, pageSize, contentKey, path));
+    stubs.push(makePerPageStub(allRecords, pageIndex, pageSize, contentKey, path, query));
     pageIndex++;
   }
   return stubs;
 }
 
-function makePerPageStub(allRecords, pageIndex, pageSize, contentKey, path) {
+function makePerPageStub(allRecords, pageIndex, pageSize, contentKey, path, query) {
+  query = query || {}
   var startRow = (pageIndex-1) * pageSize;
   var records = allRecords.slice(startRow, startRow + pageSize);
   var body = {
@@ -91,11 +92,9 @@ function makePerPageStub(allRecords, pageIndex, pageSize, contentKey, path) {
     }
   };
   body[contentKey] = records;
-    return makeStub(body, path,
-    {
-      "section": pageIndex.toString()
-    }
-  );
+  var theQuery = cloneObject(query);
+  theQuery["section"] = pageIndex.toString();
+  return makeStub(body, path, theQuery);
 }
 
 function makeAllLoansStub(allLoans) {
@@ -170,18 +169,18 @@ function makeNestedGroupingStubs() {
   generateRecordId(records, 0);
   return doMakeNestedStubs({
     children: records
-  }, ['chunkedGroups', 'accountSections', 'accountTypes', 'accountCodes'], '');
+  }, ['chunkedGroup', 'accountSection', 'accountType', 'accountCode'], {});
 }
 
-function doMakeNestedStubs(theRecord, resourceNames, parentPath) {
+function doMakeNestedStubs(theRecord, resourceNames, parentQuery) {
   var stubs = [];
   if (theRecord.children) {
     var body = { "meta": { "date": new Date()}};
-    var path = parentPath + '/' + resourceNames[0];
-    stubs = stubs.concat(makePagedStubs(noChildren(theRecord.children), 10, resourceNames[0], path));
+    stubs = stubs.concat(makePagedStubs(noChildren(theRecord.children), 10, resourceNames[0], "/chunkedGroups", parentQuery));
     theRecord.children.forEach(function(value) {
-      var nextParentPath = format("%s/%s/%s", parentPath, resourceNames[0], value.id);
-      stubs = stubs.concat(doMakeNestedStubs(value, resourceNames.slice(1), nextParentPath));
+      var theQuery = cloneObject(parentQuery);
+      theQuery[resourceNames[0]] = value.id;
+      stubs = stubs.concat(doMakeNestedStubs(value, resourceNames.slice(1), theQuery));
     });
   }
   return stubs;
@@ -222,13 +221,13 @@ function makeLoansStub(body, query) {
 
 function makeStub(body, path, query) {
   var predicate = {
-    "equals": {
+    "deepEquals": {
       "method": "GET",
       "path": path
     }
   };
   if (query) {
-    extend(predicate["equals"], {query: query});
+    extend(predicate["deepEquals"], {query: query});
   }
   return {
     "responses": [{
