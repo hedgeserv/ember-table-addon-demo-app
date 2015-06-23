@@ -123,6 +123,7 @@ def list_all_loans(step, url):
             "lazy load page": "http://localhost:4200/lazy-loaded-loans?totalCount=200",
             "grouping column": "http://localhost:4200/grouping-column",
             "grouping column with fixed columns": "http://localhost:4200/grouping-column-and-fixed",
+            "grouping column with pluggable indicator": "http://localhost:4200/grouped-rows-with-level",
         }
         get_url(world.browser, options.get(url))
 
@@ -466,6 +467,22 @@ def check_row_indicator(step, row_name, indicator):
             assert_true(step, "unfold" not in row[0].get_attribute("class"))
         else:
             assert_true(step, "unfold" in row[0].get_attribute("class"))
+
+
+@step('The row "(.*?)" indicator should be "(.*?)" with customized$')
+def check_row_indicator(step, row_name, indicator):
+    with AssertContextManager(step):
+        row = world.browser.execute_script(
+            "return $('.ember-table-content:contains(" + str(row_name) + ")').siblings()")
+        if indicator == "expand":
+            assert_true(step, ("unfold" not in row[0].get_attribute("class")) and is_the_row_custom(row_name))
+        else:
+            assert_true(step, ("unfold" in row[0].get_attribute("class")) and is_the_row_custom(row_name))
+
+
+def is_the_row_custom(row_name):
+    return world.browser.execute_script(
+        "return $('.ember-table-content:contains(" + row_name + ")').siblings().hasClass('custom-grouped-row-indicator')")
 
 
 @step('There are (\d+) grouped loans$')
