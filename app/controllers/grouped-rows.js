@@ -28,6 +28,8 @@ export default Ember.Controller.extend({
         }
       });
     });
-  }.property()
+  }.property(),
+
+  groupingMetadata: ["", ""]
 
 });

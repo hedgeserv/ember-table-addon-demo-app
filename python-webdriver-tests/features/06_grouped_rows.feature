@@ -60,12 +60,12 @@ Feature: Indicators for expanding and collapsing grouped rows
     Then I see grouped rows:
       | indicator | groupName   | Id   | Activity |
       | -         | group1      | f1   | s1       |
-      |           | group1-chd1 | f1-1 | s1-1     |
-      |           | group1-chd2 | f1-2 | s1-2     |
+      | +         | group1-chd1 | f1-1 | s1-1     |
+      | +         | group1-chd2 | f1-2 | s1-2     |
       | +         | group2      | f2   | s2       |
       | -         | group3      | f3   | s3       |
-      |           | group3-chd1 | f3-1 | s3-1     |
-      |           | group3-chd2 | f3-2 | s3-2     |
+      | +         | group3-chd1 | f3-1 | s3-1     |
+      | +         | group3-chd2 | f3-2 | s3-2     |
       | +         | group4      | f4   | s4       |
       | +         | group5      | f5   | s5       |
     When Click "collapse" for row "group1"
@@ -74,8 +74,8 @@ Feature: Indicators for expanding and collapsing grouped rows
       | +         | group1      | f1   | s1       |
       | +         | group2      | f2   | s2       |
       | -         | group3      | f3   | s3       |
-      |           | group3-chd1 | f3-1 | s3-1     |
-      |           | group3-chd2 | f3-2 | s3-2     |
+      | +         | group3-chd1 | f3-1 | s3-1     |
+      | +         | group3-chd2 | f3-2 | s3-2     |
       | +         | group4      | f4   | s4       |
       | +         | group5      | f5   | s5       |
 

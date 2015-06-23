@@ -35,6 +35,8 @@ export default Ember.Controller.extend({
     });
 
     return [idColumn, activityColumn, statusColumn];
-  }.property()
+  }.property(),
+
+  groupingMetadata: ["", ""]
 
 });

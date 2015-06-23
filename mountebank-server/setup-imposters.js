@@ -176,7 +176,7 @@ function doMakeNestedStubs(theRecord, resourceNames, parentQuery) {
   var stubs = [];
   if (theRecord.children) {
     var body = { "meta": { "date": new Date()}};
-    stubs = stubs.concat(makePagedStubs(noChildren(theRecord.children), 10, resourceNames[0], "/chunkedGroups", parentQuery));
+    stubs = stubs.concat(makePagedStubs(noChildren(theRecord.children), 10, "chunkedGroups", "/chunkedGroups", parentQuery));
     theRecord.children.forEach(function(value) {
       var theQuery = cloneObject(parentQuery);
       theQuery[resourceNames[0]] = value.id;
