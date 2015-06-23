@@ -43,7 +43,7 @@ function makeStubs(allLoans) {
   var pageSize = 50;
   stubs.push(makeGroupDataStub(allLoans));
   makeSortedLoans(allLoans.slice(0, 1000), pageSize, stubs);
-  stubs = stubs.concat(makePagedStubs(pageSize, allLoans, "loans"));
+  stubs = stubs.concat(makePagedStubs(allLoans, pageSize, "loans", "/loans"));
   stubs.push(makeAllLoansStub(allLoans));
   stubs.push(makeGroupedRecordStub());
   stubs = stubs.concat(makeNestedGroupingStubs());
@@ -69,29 +69,29 @@ function makeSortedLoans(allLoans, pageSize, stubs) {
   });
 }
 
-function makePagedStubs(pageSize, allRecords, contentKey) {
+function makePagedStubs(allRecords, pageSize, contentKey, path) {
   var stubs = [];
   var pageIndex = 1;
   while ((pageIndex - 1) * pageSize < allRecords.slice(0, 1000).length) {
-    stubs.push(makePerPageStub(allRecords, pageIndex, pageSize, contentKey));
+    stubs.push(makePerPageStub(allRecords, pageIndex, pageSize, contentKey, path));
     pageIndex++;
   }
   return stubs;
 }
 
-function makePerPageStub(allRecords, pageIndex, pageSize, contentKey) {
+function makePerPageStub(allRecords, pageIndex, pageSize, contentKey, path) {
   var startRow = (pageIndex-1) * pageSize;
   var records = allRecords.slice(startRow, startRow + pageSize);
   var body = {
-    "header": {
+    "meta": {
       "total": allRecords.length,
       "page": pageIndex,
       "page_size": pageSize,
       "date": new Date()
     }
-    };
-  body[contentKey] = records
-    return makeLoansStub(body,
+  };
+  body[contentKey] = records;
+    return makeStub(body, path,
     {
       "section": pageIndex.toString()
     }
@@ -100,10 +100,6 @@ function makePerPageStub(allRecords, pageIndex, pageSize, contentKey) {
 
 function makeAllLoansStub(allLoans) {
   return makeLoansStub({
-    "header": {
-      "total": allLoans.length,
-      "date": new Date()
-    },
     "loans": allLoans
   });
 }
@@ -122,7 +118,7 @@ function makeSortedPageLoans(sortedLoans, pageIndex, pageSize, sortName, sortDir
   var startRow = (pageIndex-1) * pageSize;
   var loans = sortedLoans.slice(startRow, startRow + pageSize);
   return makeLoansStub({
-      "header": {
+      "meta": {
         "total": sortedLoans.length,
         "page": pageIndex,
         "page_size": pageSize,
@@ -148,7 +144,7 @@ function makeGroupDataStub(allLoans) {
     return group;
   });
   return makeLoansStub({
-    "header": {
+    "meta": {
       "total": loans.length,
       "date": new Date()
     },
@@ -180,10 +176,9 @@ function makeNestedGroupingStubs() {
 function doMakeNestedStubs(theRecord, resourceNames, parentPath) {
   var stubs = [];
   if (theRecord.children) {
-    var body = { "header": { "date": new Date()}};
-    body[resourceNames[0]] = noChildren(theRecord.children);
+    var body = { "meta": { "date": new Date()}};
     var path = parentPath + '/' + resourceNames[0];
-    stubs.push(makeStub(body, path));
+    stubs = stubs.concat(makePagedStubs(noChildren(theRecord.children), 10, resourceNames[0], path));
     theRecord.children.forEach(function(value) {
       var nextParentPath = format("%s/%s/%s", parentPath, resourceNames[0], value.id);
       stubs = stubs.concat(doMakeNestedStubs(value, resourceNames.slice(1), nextParentPath));
