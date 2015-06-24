@@ -1,3 +1,5 @@
+from selenium.webdriver.common.keys import Keys
+
 __author__ = 'Liang Zhen'
 from selenium.webdriver import ActionChains
 import time
@@ -163,3 +165,13 @@ def expand_collapse_row(browser, row_name):
     row = browser.execute_script(
         "return $('.ember-table-content:contains(" + str(row_name) + ")').siblings()")
     row[0].click()
+
+
+def command_ctrl_with_click(browser, col_name, command_or_ctrl):
+    chains = ActionChains(browser)
+    element = browser.execute_script(
+        "return $('.ember-table-header-container .ember-table-content:contains(" + col_name + ")').parent().parent()")
+    if command_or_ctrl == "command":
+        chains.key_down(Keys.COMMAND).click(element).perform()
+    elif command_or_ctrl == "control":
+        chains.key_down(Keys.CONTROL).click(element).perform()
