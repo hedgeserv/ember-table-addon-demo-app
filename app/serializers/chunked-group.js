@@ -2,10 +2,11 @@ import DS from 'ember-data';
 
 export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
   attrs: {
-    children: { deserialize: 'records' }
+    children: { embedded: 'always' }
   },
-  keyForAttribute: function(attr, method) {
-    if(method === 'deserialize') {
+
+  keyForAttribute: function (attr, method) {
+    if (method === 'deserialize') {
       var mappings = {
         "glAccountSection": "GL Account Section",
         "glAccountType": "GL Account Type",
@@ -19,8 +20,7 @@ export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
         "netActivity": "Net Activity (Base)",
         "endingDr": "Ending DR (Base)",
         "endingCr": "Ending CR (Base)",
-        "netEnding": "Net Ending (Base)",
-        "children": "children"
+        "netEnding": "Net Ending (Base)"
       };
       return mappings[attr];
     }

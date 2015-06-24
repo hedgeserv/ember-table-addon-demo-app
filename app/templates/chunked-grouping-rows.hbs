@@ -1,0 +1,15 @@
+<h3 class="inline-header">Chunked Grouping Rows</h3>
+<h4>Grouping by:</h4>
+<ul>
+    <li>AccountType</li>
+    <li>AccountCode</li>
+</ul>
+<div class="lazy-loaded-table-container" style="height:200px;">
+  {{ember-table
+	  hasFooter=false
+	  enableContentSelection=true
+	  content=model
+	  groupingMetadata=groupingMetadata
+	  columns=columns
+  }}
+</div>

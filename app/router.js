@@ -15,4 +15,5 @@ export default Router.map(function() {
   this.route('groupingColumnAndFixed', {path: 'grouping-column-and-fixed'});
   this.route('groupedRows', {path: 'grouped-rows'});
   this.route('groupedRowsWithLevel', {path: 'grouped-rows-with-level'});
+  this.route('chunkedGroupingRows', {path: 'chunked-grouping-rows'});
 });
