@@ -213,6 +213,12 @@ def click_to_sort_column(step, asc_or_desc, column_name="Id"):
         bo.sort_column(world.browser, column_name)
 
 
+@step('"(.*?)" + click to sort as "(.*?)" for column "(.*?)"')
+def command_ctrl_click_column(step, command_or_ctrl, asce_or_desc, col_name):
+    with AssertContextManager(step):
+        bo.command_ctrl_with_click(world.browser, col_name, command_or_ctrl)
+
+
 @step('The "(.*?)" record should be "(.*?)"$')
 def check_sort_column(step, record_index, record_content):
     with AssertContextManager(step):
@@ -342,7 +348,8 @@ def check_sort_indicator(step, column_name, sort):
                    "desc": "sort-indicator-icon sort-indicator-icon-down", }
         if options.get(sort) == "none":
             assert_true(step, "sort-indicator-icon" not in class_content)
-        assert_true(step, options.get(sort) in class_content)
+        else:
+            assert_true(step, options.get(sort) in class_content)
 
 
 @step('I have the following grouped loans in MounteBank:')
