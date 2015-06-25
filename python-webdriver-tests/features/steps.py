@@ -213,7 +213,7 @@ def click_to_sort_column(step, asc_or_desc, column_name="Id"):
         bo.sort_column(world.browser, column_name)
 
 
-@step('"(.*?)" + click to sort as "(.*?)" for column "(.*?)"')
+@step('"(.*?)" click to sort as "(.*?)" for column "(.*?)"')
 def command_ctrl_click_column(step, command_or_ctrl, asce_or_desc, col_name):
     with AssertContextManager(step):
         bo.command_ctrl_with_click(world.browser, col_name, command_or_ctrl)
@@ -539,3 +539,44 @@ def check_column_is_fixed(step, col_name):
             assert_true(step, str("") in str(col_names))
         else:
             assert_true(step, str(col_name) in str(col_names))
+
+
+@step('Prepare the grid with no existing sorting column:')
+def prepare_no_sort_col(step):
+    with AssertContextManager(step):
+        prepare_grouped_loans(step.hashes)
+        step.given('Presenting "grouping column"')
+
+
+@step('The grid sorted as "(.*?)" by "(.*?)" column:')
+def prepare_asc_sort_col(step, asc_or_desc, col_name):
+    with AssertContextManager(step):
+        if not asc_or_desc == "none":
+            times = 1 if asc_or_desc == "ASC" else 2
+            for i in range(0, times):
+                step.behave_as("""
+                Given Click to sort as "{sort}" for column "{name}"
+                """.format(sort=asc_or_desc, name=col_name))
+        for index in range(0, len(step.hashes)):
+            verify_grouped_row(index, step.hashes[index])
+        step.behave_as("""
+            Then The "{name}" column sort indicator should be "{sort}"
+        """.format(name=col_name, sort=str(asc_or_desc).lower()))
+
+
+@step('The grid sorted as "(.*?)" by "(.*?)" columns:')
+def prepare_asc_sort_col(step, asc_or_desc, cols_name):
+    with AssertContextManager(step):
+        columns = str(cols_name).strip()
+        for index in range(0, columns.__len__()):
+            if not asc_or_desc == "none":
+                times = 1 if asc_or_desc == "ASC" else 2
+                for i in range(0, times):
+                    step.behave_as("""
+                    Given "command" click to sort as "{sort}" for column "{name}"
+                    """.format(sort=asc_or_desc, name=columns[index].strip()))
+            step.behave_as("""
+                Then The "{name}" column sort indicator should be "{sort}"
+            """.format(name=columns[index], sort=str(asc_or_desc).lower()))
+        for index in range(0, len(step.hashes)):
+            verify_grouped_row(index, step.hashes[index])
