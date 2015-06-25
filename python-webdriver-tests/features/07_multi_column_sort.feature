@@ -22,7 +22,7 @@ Feature: Multi-Column Sorting
       | +         | group5    | f5 | s5       |
     And The "Activity" column sort indicator should be "asc"
 
-    Given The grid with no existing sorting column:
+    Given Prepare the grid with no existing sorting column:
       | groupName | id | activity | isGroupRow |
       | group2    | f2 | s2       | True       |
       | group1    | f1 | s1       | True       |
@@ -46,7 +46,7 @@ Feature: Multi-Column Sorting
       | +         | group1    | f1 | s1       |
     And The "Activity" column sort indicator should be "desc"
 
-    Given The grid with no existing sorting column:
+    Given Prepare the grid with no existing sorting column:
       | groupName | id | activity | isGroupRow |
       | group2    | f2 | s2       | True       |
       | group1    | f1 | s1       | True       |
