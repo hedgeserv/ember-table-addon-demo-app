@@ -479,9 +479,9 @@ def check_row_indicator(step, row_name, indicator):
         row = world.browser.execute_script(
             "return $('.ember-table-content:contains(" + str(row_name) + ")').siblings()")
         if indicator == "expand":
-            assert_true(step, "unfold" not in row[0].get_attribute("class"))
+            assert_true(step, "unfold" not in row[1].get_attribute("class"))
         else:
-            assert_true(step, "unfold" in row[0].get_attribute("class"))
+            assert_true(step, "unfold" in row[1].get_attribute("class"))
 
 
 @step('The row "(.*?)" indicator should be "(.*?)" with customized$')
@@ -490,9 +490,9 @@ def check_row_indicator(step, row_name, indicator):
         row = world.browser.execute_script(
             "return $('.ember-table-content:contains(" + str(row_name) + ")').siblings()")
         if indicator == "expand":
-            assert_true(step, ("unfold" not in row[0].get_attribute("class")) and is_the_row_custom(row_name))
+            assert_true(step, ("unfold" not in row[1].get_attribute("class")) and is_the_row_custom(row_name))
         else:
-            assert_true(step, ("unfold" in row[0].get_attribute("class")) and is_the_row_custom(row_name))
+            assert_true(step, ("unfold" in row[1].get_attribute("class")) and is_the_row_custom(row_name))
 
 
 def is_the_row_custom(row_name):
