@@ -17,6 +17,7 @@ from prepare_loans import prepare_loans_in_chunk
 from prepare_loans import prepare_sort_in_chunk
 from prepare_loans import prepare_grouping_data
 from prepare_loans import prepare_grouped_loans
+from prepare_loans import prepare_lazy_loaded_grouped_loans
 
 import requests
 import json
@@ -124,6 +125,7 @@ def list_all_loans(step, url):
             "grouping column": "http://localhost:4200/grouping-column",
             "grouping column with fixed columns": "http://localhost:4200/grouping-column-and-fixed",
             "grouping column with pluggable indicator": "http://localhost:4200/grouped-rows-with-level",
+            "grouping column present partial loaded children": "http://localhost:4200/chunked-grouping-rows",
         }
         get_url(world.browser, options.get(url))
 
@@ -356,6 +358,12 @@ def check_sort_indicator(step, column_name, sort):
 def prepare_grouped_loans_in_mb(step):
     with AssertContextManager(step):
         prepare_grouped_loans(step.hashes)
+
+
+@step('I have the following partial loaded grouped data in MounteBank:')
+def prepare_lazy_loaded_group_data_in_mb(step):
+    with AssertContextManager(step):
+        prepare_lazy_loaded_grouped_loans(step.hashes)
 
 
 @step('I see grouped rows:$')
