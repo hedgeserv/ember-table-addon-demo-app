@@ -169,7 +169,7 @@ def drag_scroll_bar_with_offset(step, offset, times):
         bo.drag_scroll_by_css_with_times(world.browser, offset, times)
 
 
-@step('Only first and last chunk was loaded in total (\d+) in first time')
+@step('Only first chunk was loaded in total (\d+) in first time')
 def check_loaded_chunk(step, num):
     with AssertContextManager(step):
         get_url(world.browser, "http://localhost:4200/lazy-loaded-loans?totalCount=" + str(num))
@@ -177,10 +177,8 @@ def check_loaded_chunk(step, num):
         dumpText = json.dumps(text)
         toJson = json.loads(dumpText)['requests']
 
-        assert_true(step, len(toJson) == 2)
+        assert_true(step, len(toJson) == 1)
         assert_true(step, toJson[0]['query']['section'] == "1")
-        assert_true(step, toJson[1]['query']['section'] == str(int(num) / 50))
-
 
 @step('There should be (\d+) sections loaded')
 def get_loaded_section(step, num):
@@ -193,10 +191,10 @@ def check_next_chunk_loaded(step, offsety, times, num):
     get_url(world.browser, "http://localhost:4200/lazy-loaded-loans?totalCount=" + str(num))
 
     bo.drag_scroll_by_css_with_times(world.browser, offsety, times)
-    assert len(get_mb_request()) == int(times) + 2
+    assert len(get_mb_request()) == int(times) + 1
 
     bo.drag_scroll_to_top(world.browser, -int(offsety))
-    assert len(get_mb_request()) == int(times) + 2
+    assert len(get_mb_request()) == int(times) + 1
 
 
 @step('The page should style for entire group, inner column, first column and last column')
