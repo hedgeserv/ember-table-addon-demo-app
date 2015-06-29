@@ -80,16 +80,31 @@ Feature: Indicators for expanding and collapsing grouped rows
       | +         | group5      | f5   | s5       |
 
 
-  @test
+  @wip
   Scenario: Expand grouped row with partial loaded children loans
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                         | id | Beginning DR (Base) |
       | accountSection[20]-accountType[15]-accountCode[4] | f  | s                   |
-    When Presenting "grouping column present partial loaded children"
-    And The row "group1" indicator should be "expand"
+    And Presenting "grouping column present partial loaded children"
+    When Click "expand" for the 0 row
     Then There should be 2 sections loaded
-    When Customer drags scroll bar by offset 60 with 1 times
+
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                         | id | Beginning DR (Base) |
+      | accountSection[20]-accountType[15]-accountCode[4] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    And Click "expand" for the 0 row
+    When Click "expand" for the 1 row
     Then There should be 3 sections loaded
+
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                         | id | Beginning DR (Base) |
+      | accountSection[20]-accountType[15]-accountCode[4] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    And Click "expand" for the 0 row
+    And Click "expand" for the 1 row
+    When Customer drags scroll bar by offset 60 with 1 times
+    Then There should be 4 sections loaded
 
   @complete
   Scenario: Expand and collapse grouped rows with unlimited level
@@ -210,50 +225,71 @@ Feature: Indicators for expanding and collapsing grouped rows
 
   @wip
   Scenario: Expand grouped row with partial loaded
-    Given Given I have 200 grouped loans
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                         | id | Beginning DR (Base) |
+      | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    Then There should be 1 sections loaded
+
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                         | id | Beginning DR (Base) |
+      | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    When Customer drags scroll bar by offset 60 with 2 times
+    Then There should be 3 sections loaded
+
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                         | id | Beginning DR (Base) |
+      | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    When Click "expand" for the 0 row
     Then There should be 2 sections loaded
+
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                         | id | Beginning DR (Base) |
+      | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    And Click "expand" for the 0 row
     When Customer drags scroll bar by offset 60 with 1 times
     Then There should be 3 sections loaded
 
+
   @wip
   Scenario: The default loading indicator should display when partial load grouped loans
-    Given I have 200 grouped loans
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                         | id | Beginning DR (Base) |
+      | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    And Stop mountebank
     When Customer drags scroll bar by offset 60 with 1 times
-    Then The default loading indicator should display
+    Then The default loading indicator should display on 15 items
 
   @wip
   Scenario: The default loading indicator should display when partial load children loans
-    Given I have the following grouped loans in MounteBank:
-      | groupName | first | second |
-      | group1    | f1    | s1     |
-      | group2    | f2    | s2     |
-      | group3    | f3    | s3     |
-      | group4    | f4    | s4     |
-      | group5    | f5    | s5     |
-    When Presenting "grouping column present partial loaded children"
-    And The row "group1" indicator should be "expand"
-    When Customer drags scroll bar by offset 60 with 1 times
-    Then The default loading indicator should display
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                         | id | Beginning DR (Base) |
+      | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    And Click "expand" for the 0 row
+    And Stop mountebank
+    When Customer drags scroll bar by offset 20 with 1 times
+    Then The default loading indicator should display on 15 items
 
   @wip
   Scenario: The custom loading indicator should display when partial load grouped loans
-    Given I have 200 grouped loans
-    When Customer drags scroll bar by offset 60 with 1 times
-    Then The "custom" loading indicator should display
+    Given Presenting "grouping column with pluggable loading indicator"
+    When Click "expand" for the 0 row
+    And Click "expand" for the 1 row
+    Then The custom loading indicator should display on 15 items
 
   @wip
   Scenario: The default loading indicator should display when partial load children loans
-    Given I have the following grouped loans in MounteBank:
-      | groupName | first | second |
-      | group1    | f1    | s1     |
-      | group2    | f2    | s2     |
-      | group3    | f3    | s3     |
-      | group4    | f4    | s4     |
-      | group5    | f5    | s5     |
-    When Presenting "grouping column present partial loaded children"
-    And The row "group1" indicator should be "expand"
-    When Customer drags scroll bar by offset 60 with 1 times
-    Then The "custom" loading indicator should display
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                         | id | Beginning DR (Base) |
+      | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    When Click "expand" for the 0 row to check indicator
+    Then The default loading indicator should display on 15 items
 
   @complete
   Scenario: The grouping column should not be resizable and draggable
