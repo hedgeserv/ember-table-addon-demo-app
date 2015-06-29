@@ -80,15 +80,11 @@ Feature: Indicators for expanding and collapsing grouped rows
       | +         | group5      | f5   | s5       |
 
 
-  @wip
+  @test
   Scenario: Expand grouped row with partial loaded children loans
-    Given I have the following grouped loans in MounteBank:
-      | groupName | first | second |
-      | group1    | f1    | s1     |
-      | group2    | f2    | s2     |
-      | group3    | f3    | s3     |
-      | group4    | f4    | s4     |
-      | group5    | f5    | s5     |
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                         | id | Beginning DR (Base) |
+      | accountSection[20]-accountType[15]-accountCode[4] | f  | s                   |
     When Presenting "grouping column present partial loaded children"
     And The row "group1" indicator should be "expand"
     Then There should be 2 sections loaded

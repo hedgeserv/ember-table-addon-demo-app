@@ -17,6 +17,7 @@ from prepare_loans import prepare_loans_in_chunk
 from prepare_loans import prepare_sort_in_chunk
 from prepare_loans import prepare_grouping_data
 from prepare_loans import prepare_grouped_loans
+from prepare_loans import prepare_lazy_loaded_grouped_loans
 
 import requests
 import json
@@ -124,6 +125,7 @@ def list_all_loans(step, url):
             "grouping column": "http://localhost:4200/grouping-column",
             "grouping column with fixed columns": "http://localhost:4200/grouping-column-and-fixed",
             "grouping column with pluggable indicator": "http://localhost:4200/grouped-rows-with-level",
+            "grouping column present partial loaded children": "http://localhost:4200/chunked-grouping-rows",
         }
         get_url(world.browser, options.get(url))
 
@@ -358,6 +360,12 @@ def prepare_grouped_loans_in_mb(step):
         prepare_grouped_loans(step.hashes)
 
 
+@step('I have the following partial loaded grouped data in MounteBank:')
+def prepare_lazy_loaded_group_data_in_mb(step):
+    with AssertContextManager(step):
+        prepare_lazy_loaded_grouped_loans(step.hashes)
+
+
 @step('I see grouped rows:$')
 def verify_grouped_rows(step):
     for index in range(0, len(step.hashes)):
@@ -471,9 +479,9 @@ def check_row_indicator(step, row_name, indicator):
         row = world.browser.execute_script(
             "return $('.ember-table-content:contains(" + str(row_name) + ")').siblings()")
         if indicator == "expand":
-            assert_true(step, "unfold" not in row[0].get_attribute("class"))
+            assert_true(step, "unfold" not in row[1].get_attribute("class"))
         else:
-            assert_true(step, "unfold" in row[0].get_attribute("class"))
+            assert_true(step, "unfold" in row[1].get_attribute("class"))
 
 
 @step('The row "(.*?)" indicator should be "(.*?)" with customized$')
