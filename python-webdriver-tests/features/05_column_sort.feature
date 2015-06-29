@@ -19,14 +19,14 @@ Feature: Column sort
   Scenario: Sort individual column with partial loaded data
     Given There are 200 sortable loans in chunk size 50
     When Presenting "column sort"
-    Then There should be 2 sections loaded
+    Then There should be 1 sections loaded
     When Customer drags scroll bar by offset 60 with 1 times
-    Then There should be 3 sections loaded
+    Then There should be 2 sections loaded
     And The "current" record should be "47"
     When Click to sort as "ASC" for column "Id"
-    Then There should be 6 sections loaded
+    Then There should be 4 sections loaded
     When Click to sort as "DESC" for column "Id"
-    Then There should be 9 sections loaded
+    Then There should be 6 sections loaded
     And The "current" record should be "152"
 
   @complete
