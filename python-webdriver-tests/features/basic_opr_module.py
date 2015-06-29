@@ -164,7 +164,7 @@ def sort_column(browser, col_name):
 def expand_collapse_row(browser, row_name):
     row = browser.execute_script(
         "return $('.ember-table-content:contains(" + str(row_name) + ")').siblings()")
-    row[0].click()
+    row[1].click()
 
 
 def command_ctrl_with_click(browser, col_name, command_or_ctrl):

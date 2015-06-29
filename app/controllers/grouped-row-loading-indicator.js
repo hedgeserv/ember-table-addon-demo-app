@@ -1,5 +1,7 @@
 import Ember from 'ember';
 import ColumnDefinition from 'ember-table/models/column-definition';
+import CustomRowLoadingIndicator from './../views/custom-row-loading-indicator';
+
 
 export default Ember.Controller.extend({
 
@@ -10,8 +12,8 @@ export default Ember.Controller.extend({
       ["GL Account Type", "glAccountType"],
       ["GL Account Code", "glAccountCode"],
       ["GL Account Description", "glAccountDescription"],
-      ["Beginning DR (Base)", "beginningDr"],
-      ["Beginning CR (Base)", "beginningCr"],
+      ["Beginning DR (Base)", "beginningDR"],
+      ["Beginning CR (Base)", "beginningCR"],
       ["Net Beginning (Base)", "netBeginning"],
       ["Activity DR (Base)", "activityDr"],
       ["Activity CR (Base)", "activityCr"],
@@ -29,6 +31,8 @@ export default Ember.Controller.extend({
       });
     });
   }.property(),
+
+  rowLoadingIndicatorView: CustomRowLoadingIndicator,
 
   groupingMetadata: ["", ""]
 
