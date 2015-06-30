@@ -263,7 +263,7 @@ Feature: Indicators for expanding and collapsing grouped rows
 #    Then There should be 2 sections loaded
 
 
-  @complete
+  @wip
   Scenario: The default loading indicator should display when partial load grouped loans
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                         | id | Beginning DR (Base) |
@@ -273,16 +273,16 @@ Feature: Indicators for expanding and collapsing grouped rows
     When Customer drags scroll bar by offset 40 with 1 times
     Then The default loading indicator should display on 15 items
 
-  @complete
-  Scenario: The default loading indicator should display when partial load children loans
-    Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                         | id | Beginning DR (Base) |
-      | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
-    And Presenting "grouping column present partial loaded children"
-    And Click "expand" for the 0 row
-    And Stop mountebank
-    When Customer drags scroll bar by offset 20 with 1 times
-    Then The default loading indicator should display on 15 items
+#  @complete
+#  Scenario: The default loading indicator should display when partial load children loans
+#    Given I have the following partial loaded grouped data in MounteBank:
+#      | groupName                                         | id | Beginning DR (Base) |
+#      | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
+#    And Presenting "grouping column present partial loaded children"
+#    And Click "expand" for the 0 row
+#    And Stop mountebank
+#    When Customer drags scroll bar by offset 20 with 1 times
+#    Then The default loading indicator should display on 15 items
 
   @complete
   Scenario: The custom loading indicator should display when partial load grouped loans
@@ -291,7 +291,7 @@ Feature: Indicators for expanding and collapsing grouped rows
     And Click "expand" for the 1 row
     Then The custom loading indicator should display on 15 items
 
-  @complete
+  @wip
   Scenario: The default loading indicator should display when partial load children loans
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                         | id | Beginning DR (Base) |
