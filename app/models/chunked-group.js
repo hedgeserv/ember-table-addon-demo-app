@@ -1,8 +1,8 @@
 import DS from 'ember-data';
 
 let ChunkedGroup = DS.Model.extend({
-  glAccountSection: DS.attr('string'),
-  glAccountType: DS.attr('string'),
+  accountSection: DS.attr('string'),
+  accountType: DS.attr('string'),
   glAccountCode: DS.attr('string'),
   glAccountDescription: DS.attr('string'),
   beginningDr: DS.attr('number'),
