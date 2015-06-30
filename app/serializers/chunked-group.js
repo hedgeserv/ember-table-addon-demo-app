@@ -8,8 +8,8 @@ export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
   keyForAttribute: function (attr, method) {
     if (method === 'deserialize') {
       var mappings = {
-        "glAccountSection": "GL Account Section",
-        "glAccountType": "GL Account Type",
+        "accountSection": "GL Account Section",
+        "accountType": "GL Account Type",
         "glAccountCode": "GL Account Code",
         "glAccountDescription": "GL Account Description",
         "beginningDr": "Beginning DR (Base)",
