@@ -6,8 +6,8 @@ export default Ember.Controller.extend({
   columns: function () {
     var columnTitleAndNames = [
       ["Id", "id"],
-      ["GL Account Section", "glAccountSection"],
-      ["GL Account Type", "glAccountType"],
+      ["GL Account Section", "accountSection"],
+      ["GL Account Type", "accountType"],
       ["GL Account Code", "glAccountCode"],
       ["GL Account Description", "glAccountDescription"],
       ["Beginning DR (Base)", "beginningDr"],
@@ -28,8 +28,6 @@ export default Ember.Controller.extend({
         }
       });
     });
-  }.property(),
-
-  groupingMetadata: ["", ""]
+  }.property()
 
 });
