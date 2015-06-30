@@ -3,6 +3,7 @@ from selenium.webdriver.common.keys import Keys
 __author__ = 'Liang Zhen'
 from selenium.webdriver import ActionChains
 import time
+import os
 
 
 def drag_scroll_by_css(browser, offsetx, offsety):
@@ -165,6 +166,19 @@ def expand_collapse_row(browser, row_name):
     row = browser.execute_script(
         "return $('.ember-table-content:contains(" + str(row_name) + ")').siblings()")
     row[1].click()
+
+
+def expand_collapse_row_by_index(browser, index):
+    row = browser.execute_script("return $('.grouping-column-indicator')")
+    row[int(index)].click()
+
+
+def stop_mb():
+    os.system("mb stop")
+
+
+def start_mb():
+    os.system('mb --allowCORS &')
 
 
 def command_ctrl_with_click(browser, col_name, command_or_ctrl):

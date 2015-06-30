@@ -125,6 +125,7 @@ def list_all_loans(step, url):
             "grouping column": "http://localhost:4200/grouping-column",
             "grouping column with fixed columns": "http://localhost:4200/grouping-column-and-fixed",
             "grouping column with pluggable indicator": "http://localhost:4200/grouped-rows-with-level",
+            "grouping column with pluggable loading indicator": "http://localhost:4200/grouped-row-loading-indicator",
             "grouping column present partial loaded children": "http://localhost:4200/chunked-grouping-rows",
         }
         get_url(world.browser, options.get(url))
@@ -179,6 +180,7 @@ def check_loaded_chunk(step, num):
 
         assert_true(step, len(toJson) == 1)
         assert_true(step, toJson[0]['query']['section'] == "1")
+
 
 @step('There should be (\d+) sections loaded')
 def get_loaded_section(step, num):
@@ -456,6 +458,19 @@ def expand_collapse_row(step, expand_collapse, row_name):
         bo.expand_collapse_row(world.browser, row_name)
 
 
+@step('Click "(.*?)" for the (\d+) row to check indicator$')
+def expand_collapse_row(step, expand_collapse, index):
+    with AssertContextManager(step):
+        bo.stop_mb()
+        bo.expand_collapse_row_by_index(world.browser, index)
+
+
+@step('Click "(.*?)" for the (\d+) row$')
+def expand_collapse_row_by_index(step, expand_collapse, index):
+    with AssertContextManager(step):
+        bo.expand_collapse_row_by_index(world.browser, index)
+
+
 @step('Collapse all expanded rows')
 def collapse_expanded_rows(step):
     with AssertContextManager(step):
@@ -480,6 +495,33 @@ def check_row_indicator(step, row_name, indicator):
             assert_true(step, "unfold" not in row[1].get_attribute("class"))
         else:
             assert_true(step, "unfold" in row[1].get_attribute("class"))
+
+
+@step('Stop mountebank$')
+def stop_mb(step):
+    with AssertContextManager(step):
+        bo.stop_mb()
+
+
+@step('Start mountebank$')
+def start_mb(step):
+    with AssertContextManager(step):
+        bo.start_mb()
+
+
+@step('The default loading indicator should display on (\d+) items$')
+def check_default_loading_indicator(step, num):
+    with AssertContextManager(step):
+        indicator = world.browser.execute_script("return $('.row-loading-indicator.loading')")
+        assert_true(step, len(indicator) == int(num))
+        bo.start_mb()
+
+
+@step('The custom loading indicator should display on (\d+) items$')
+def check_costom_loading_indicator(step, num):
+    with AssertContextManager(step):
+        indicator = world.browser.execute_script("return $('.custom-row-loading-indicator.loading')")
+        assert_true(step, len(indicator) == int(num))
 
 
 @step('The row "(.*?)" indicator should be "(.*?)" with customized$')
