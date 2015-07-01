@@ -4,6 +4,9 @@ __author__ = 'Liang Zhen'
 from selenium.webdriver import ActionChains
 import time
 import os
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 
 def drag_scroll_by_css(browser, offsetx, offsety):
@@ -23,11 +26,19 @@ def wait_for_elem(browser, script, timeout=20):
     return elems
 
 
+def wait_element_clickable(browser, css):
+    WebDriverWait(browser, 30).until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, css)))
+
+
 def drag_scroll_by_css_with_times(browser, offsety, times):
     start = time.time()
     css = "div.antiscroll-scrollbar.antiscroll-scrollbar-vertical"
+    wait_element_clickable(browser, css)
+
     while time.time() - start < 15:
         drag_scroll_by_css(browser, 0, offsety)
+        wait_element_clickable(browser, css)
         eles = browser.find_elements_by_css_selector(css)
         value = int(eles[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
         if value > int(offsety) * int(times):
