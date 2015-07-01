@@ -46,6 +46,13 @@ def drag_scroll_by_css_with_times(browser, offsety, times):
         time.sleep(1)
 
 
+def drag_scroll_by_css_with_times_after_loading(browser, offsety, times):
+    while not times == 0:
+        time.sleep(1)
+        drag_scroll_by_css(browser, 0, offsety)
+        times = int(times) - 1
+
+
 def drag_scroll_to_top(browser, offsety):
     start = time.time()
     css = "div.antiscroll-scrollbar.antiscroll-scrollbar-vertical"
