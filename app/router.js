@@ -17,4 +17,5 @@ export default Router.map(function() {
   this.route('groupedRowsWithLevel', {path: 'grouped-rows-with-level'});
   this.route('chunkedGroupingRows', {path: 'chunked-grouping-rows'});
   this.route('groupedRowLoadingIndicator', {path: 'grouped-row-loading-indicator'});
+  this.route('grandTotalRow', {path: 'grand-total-row'});
 });
