@@ -170,6 +170,12 @@ def drag_scroll_bar_with_offset(step, offset, times):
         bo.drag_scroll_by_css_with_times(world.browser, offset, times)
 
 
+@step('Customer drags scroll bar by offset (\d+) with (\d+) times and wait loading section$')
+def drag_scroll_bar_with_offset_after_loading(step, offset, times):
+    with AssertContextManager(step):
+        bo.drag_scroll_by_css_with_times_after_loading(world.browser, offset, times)
+
+
 @step('Only first chunk was loaded in total (\d+) in first time')
 def check_loaded_chunk(step, num):
     with AssertContextManager(step):

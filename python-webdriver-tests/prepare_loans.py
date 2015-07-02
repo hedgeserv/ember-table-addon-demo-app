@@ -206,7 +206,7 @@ def make_group_rows_for_one_level(base_query, base_value, group_levels, group_le
     group_name, count = extract_name_count(group_level)
     query = {"chunkedGroup": 1}
     query.update(base_query)
-    body = [make_one_row(zipped_row, base_value, x) for x in range(1, count + 1)]
+    body = [make_one_row(zipped_row, base_value, x, base_query, group_name) for x in range(1, count + 1)]
     current_level_result = {"query": query, "body": body}
     result.append(current_level_result)
     if group_level_index < len(group_levels) - 1:
@@ -233,11 +233,15 @@ def extract_name_count(meta_str):
     m = re.search('(.+)\[(\d+)\]', meta_str)
     return m.group(1), int(m.group(2))
 
-def make_one_row(zipped_row, base_value, x):
+def make_one_row(zipped_row, base_value, x, base_query, group_name):
     result = {}
     for key in zipped_row:
         if key != "groupName":
             result[key] = zipped_row[key] + base_value + str(x)
+    for key in base_query:
+        result[key] = base_query[key]
+    if group_name:
+        result[group_name] = result["id"]
     return result
 
 
