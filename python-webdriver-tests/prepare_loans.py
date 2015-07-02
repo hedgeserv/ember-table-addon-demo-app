@@ -71,6 +71,11 @@ class MountebankStub:
         stubs = [make_the_stub(loans, query={"group": 'true'})]
         self.create_imposter(stubs)
 
+    def stub_grand_total_row(self):
+        rows = [{"id": "1"}]
+        stubs = make_the_chunk_stubs(rows, chunk_size=1, path="/chunkedGroups", content_key="chunkedGroups")
+        self.create_imposter(stubs)
+
     def stub_lazy_loaded_grouped_loans(self, array_of_query_and_body):
         stubs = []
         for item in array_of_query_and_body:
@@ -192,7 +197,9 @@ def prepare_lazy_loaded_grouped_loans(zipped_rows):
     array_of_url_and_body = make_group_rows(zipped_row)
     mb.stub_lazy_loaded_grouped_loans(array_of_url_and_body)
 
-
+def prepare_grand_total_row():
+    mb = MountebankStub()
+    mb.stub_grand_total_row()
 
 def make_group_rows(zipped_row):
     zipped_group_name = zipped_row["groupName"]
