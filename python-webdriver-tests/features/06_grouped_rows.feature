@@ -270,11 +270,11 @@ Feature: Indicators for expanding and collapsing grouped rows
   Scenario: The default loading indicator should display when partial load children loans
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                         | id | Beginning DR (Base) |
-      | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
+      | accountSection[1]-accountType[15]-accountCode[4] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And Click "expand" for the 0 row
     And Stop mountebank
-    When Customer drags scroll bar by offset 20 with 1 times
+    When Customer drags scroll bar by offset 1000 with 1 times and wait loading section
     Then The default loading indicator should display on 15 items
 
   @complete
@@ -474,7 +474,7 @@ Feature: Indicators for expanding and collapsing grouped rows
   Scenario: The children rows should be sorted by single column in lazily loaded data
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                        | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[1]-accountCode[11] | f  | s                   |
+      | accountSection[1]-accountType[1]-accountCode[10] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And Click "expand" for the 0 row
     And Click "expand" for the 1 row
@@ -486,8 +486,8 @@ Feature: Indicators for expanding and collapsing grouped rows
       | +         |           | f1-1-8  |
       | +         |           | f1-1-9  |
       | +         |           | f1-1-10 |
-      | +         |           | f1-1-4  |
-      | +         |           | f1-1-5  |
+#      | +         |           | f1-1-4  |
+#      | +         |           | f1-1-5  |
 
 #    Given I have the following grouped loans in MounteBank:
 #      | groupName | first | second |
