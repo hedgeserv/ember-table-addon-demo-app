@@ -1,0 +1,10 @@
+<h3 class="inline-header">Grand total Row</h3>
+<div class="lazy-loaded-table-container" style="height:600px; padding: 10px;">
+  {{ember-table
+	  hasFooter=false
+	  enableContentSelection=true
+	  content=model
+	  columns=columns
+    groundTotalTitle=grandTotalTitle
+  }}
+</div>
