@@ -18,6 +18,7 @@ from prepare_loans import prepare_sort_in_chunk
 from prepare_loans import prepare_grouping_data
 from prepare_loans import prepare_grouped_loans
 from prepare_loans import prepare_lazy_loaded_grouped_loans
+from prepare_loans import prepare_grand_total_row
 
 import requests
 import json
@@ -127,6 +128,7 @@ def list_all_loans(step, url):
             "grouping column with pluggable indicator": "http://localhost:4200/grouped-rows-with-level",
             "grouping column with pluggable loading indicator": "http://localhost:4200/grouped-row-loading-indicator",
             "grouping column present partial loaded children": "http://localhost:4200/chunked-grouping-rows",
+            "grand total row": "http://localhost:4200/grand-total-row",
         }
         get_url(world.browser, options.get(url))
 
@@ -372,6 +374,12 @@ def prepare_lazy_loaded_group_data_in_mb(step):
         prepare_lazy_loaded_grouped_loans(step.hashes)
 
 
+@step('I have one grand total row in MounteBank')
+def prepare_grand_total_row_in_mb(step):
+    with AssertContextManager(step):
+        prepare_grand_total_row()
+
+
 @step('I see grouped rows:$')
 def verify_grouped_rows(step):
     for index in range(0, len(step.hashes)):
@@ -383,7 +391,7 @@ def verify_grouped_row(index, row):
     if indicator == '-':
         assert_true(step, is_the_row_expanded(index))
     elif indicator == '+':
-        assert_true(step, not is_the_row_expanded(index))
+        assert_true(step, (not is_the_row_expanded(index)) and (not is_the_leaf_node(index)))
     elif indicator == '':
         assert_true(step, is_the_leaf_node(index))
 
