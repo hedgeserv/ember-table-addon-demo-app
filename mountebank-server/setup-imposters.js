@@ -167,15 +167,28 @@ function makeNestedGroupingStubs() {
   }
 
   generateRecordId(records, 0);
-  return doMakeNestedStubs({
+  var stubs =  doMakeNestedStubs({
     children: records
   }, ['chunkedGroup', 'accountSection', 'accountType', 'accountCode'], {});
+
+  var parentQuery = {"chunkedGroup": 1};
+  parentQuery["sortName"] = "id";
+  records[0].children.forEach(function(accountSection) {
+    parentQuery["accountSection"] = accountSection['id'];
+    accountSection.children.forEach(function(accountType) {
+      parentQuery["accountType"] = accountType['id'];
+      parentQuery["sortDirect"] = "asc";
+      stubs = stubs.concat(makePagedStubs((noChildren(accountType.children)).sort(function(pre, cur){ return pre['id'] - cur['id'];}), 10, "chunkedGroups", "/chunkedGroups", parentQuery));
+      parentQuery["sortDirect"] = "desc";
+      stubs = stubs.concat(makePagedStubs((noChildren(accountType.children)).sort(function(pre, cur){ return -(pre['id'] - cur['id']);}), 10, "chunkedGroups", "/chunkedGroups", parentQuery));
+    });
+  });
+  return stubs;
 }
 
 function doMakeNestedStubs(theRecord, resourceNames, parentQuery) {
   var stubs = [];
   if (theRecord.children) {
-    var body = { "meta": { "date": new Date()}};
     stubs = stubs.concat(makePagedStubs(noChildren(theRecord.children), 10, "chunkedGroups", "/chunkedGroups", parentQuery));
     theRecord.children.forEach(function(value) {
       var theQuery = cloneObject(parentQuery);

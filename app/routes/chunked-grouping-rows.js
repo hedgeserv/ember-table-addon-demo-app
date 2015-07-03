@@ -2,6 +2,9 @@ import Ember from 'ember';
 import LazyGroupRowArray from 'ember-table/models/lazy-group-row-array';
 
 export default Ember.Route.extend({
+  sortName: null,
+  sortDirect: null,
+
   model: function () {
     var self = this;
     var groupingMetadata = [{id: 'accountSection'}, {id: 'accountType'}, {id: 'glAccountCode'}];
@@ -11,6 +14,11 @@ export default Ember.Route.extend({
           chunkedGroup: 1,
           section: chunkIndex + 1
         };
+        var sortName = self.get('sortName');
+        if(sortName){
+          query.sortDirect = self.get('sortDirect');
+          query.sortName = sortName;
+        }
         Ember.setProperties(query, parentQuery);
         return self.store.find('chunked-group', query).then(function (result) {
           var meta = self.store.metadataFor('chunked-group');
@@ -26,5 +34,13 @@ export default Ember.Route.extend({
       groupingMetadata: groupingMetadata
     });
     return tableContent;
+  },
+
+  actions: {
+    setSortConditions: function (column) {
+      var columnName = column.get('headerCellName').toLowerCase();
+      this.set('sortName', columnName);
+      this.set('sortDirect', column.get('currentDirect'));
+    }
   }
 });

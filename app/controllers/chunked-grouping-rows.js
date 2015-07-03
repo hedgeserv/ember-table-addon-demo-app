@@ -25,6 +25,9 @@ export default Ember.Controller.extend({
         headerCellName: titleAndName[0],
         getCellContent: function (row) {
           return row.get(titleAndName[1]);
+        },
+        sortBy: function(prev, next){
+          return prev.get(titleAndName[1]) - next.get(titleAndName[1]);
         }
       });
     });
