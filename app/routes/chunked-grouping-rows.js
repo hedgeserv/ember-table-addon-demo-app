@@ -4,7 +4,7 @@ import LazyGroupRowArray from 'ember-table/models/lazy-group-row-array';
 export default Ember.Route.extend({
   model: function () {
     var self = this;
-    var groupingMetadata = [{id: 'accountSection'}, {id: 'accountType'}];
+    var groupingMetadata = [{id: 'accountSection'}, {id: 'accountType'}, {id: 'glAccountCode'}];
     var tableContent = LazyGroupRowArray.create({
       loadChildren: function (chunkIndex, parentQuery) {
         var query = {
