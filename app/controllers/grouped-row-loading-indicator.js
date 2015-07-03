@@ -34,6 +34,6 @@ export default Ember.Controller.extend({
 
   rowLoadingIndicatorView: CustomRowLoadingIndicator,
 
-  groupingMetadata: ["", ""]
+  groupingMetadata: ["", "", ""]
 
 });
