@@ -37,5 +37,5 @@ export default Ember.Controller.extend({
 
   indicatorView: GroupedRowIndicatorWithLevel,
 
-  groupingMetadata: ["", ""]
+  groupingMetadata: ["", "", ""]
 });

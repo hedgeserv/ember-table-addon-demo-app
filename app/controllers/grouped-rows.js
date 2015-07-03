@@ -30,6 +30,6 @@ export default Ember.Controller.extend({
     });
   }.property(),
 
-  groupingMetadata: ["", ""]
+  groupingMetadata: ["", "", "", ""]
 
 });
