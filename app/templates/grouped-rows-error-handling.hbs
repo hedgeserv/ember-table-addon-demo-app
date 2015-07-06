@@ -1,0 +1,13 @@
+<h3 class="inline-header">Error handling for Grouped rows</h3>
+<p>Error will be thrown when expand second level rows</p>
+{{#if isErrorThrown}}
+    <p class="load-data-error">{{errorDescription}}</p>
+{{/if}}
+<div class="lazy-loaded-table-container" style="height:600px;">
+  {{ember-table
+  hasFooter=false
+  enableContentSelection=true
+  content=tableContent
+  columns=columns
+  }}
+</div>
