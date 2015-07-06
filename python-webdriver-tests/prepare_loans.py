@@ -204,35 +204,48 @@ def prepare_grand_total_row():
 def make_group_rows(zipped_row):
     zipped_group_name = zipped_row["groupName"]
     group_levels = zipped_group_name.split('-')
-    return make_group_rows_for_one_level({}, "", group_levels, 0, zipped_row)
+    normal_order_rows =  make_group_rows_for_one_level({}, "", group_levels, 0, zipped_row)
+    asc_rows = make_group_rows_for_one_level({'sortName': 'id', 'sortDirect': 'asc'}, "", group_levels, 0,
+                                             zipped_row, 'asc')
+    desc_rows = make_group_rows_for_one_level({'sortName': 'id', 'sortDirect': 'desc'}, "", group_levels, 0,
+                                              zipped_row, 'desc')
+    return normal_order_rows + asc_rows + desc_rows
 
 
-def make_group_rows_for_one_level(base_query, base_value, group_levels, group_level_index, zipped_row):
+def make_group_rows_for_one_level(base_query, base_value, group_levels, group_level_index, zipped_row,
+                                  sort_direction=None):
     result = []
     group_level = group_levels[group_level_index]
     group_name, count = extract_name_count(group_level)
     query = {"chunkedGroup": 1}
     query.update(base_query)
-    body = [make_one_row(zipped_row, base_value, x, base_query, group_name) for x in range(1, count + 1)]
+    id_range = [str(x) for x in range(1, count + 1)]
+    if sort_direction == 'desc':
+        id_range.sort(reverse=True)
+    elif sort_direction == 'asc':
+        id_range.sort()
+
+    body = [make_one_row(zipped_row, base_value, x, base_query, group_name) for x in id_range]
     current_level_result = {"query": query, "body": body}
     result.append(current_level_result)
     if group_level_index < len(group_levels) - 1:
         for child_index in range(1, count + 1):
             next_level_result = make_child_group_rows(base_query, base_value, child_index, group_levels, group_name,
                                                       group_level_index,
-                                                      zipped_row)
+                                                      zipped_row, sort_direction)
             result.extend(next_level_result)
 
     return result
 
 
-def make_child_group_rows(base_query, base_value, child_index, group_levels, group_name, group_level_index, zipped_row):
+def make_child_group_rows(base_query, base_value, child_index, group_levels, group_name, group_level_index, zipped_row,
+                          sort_direction=None):
     next_base_query = base_query.copy()
     next_base_query.update({group_name: zipped_row["id"] + base_value + str(child_index)})
     next_base_value = base_value + str(child_index) + "-"
     next_level_result = make_group_rows_for_one_level(next_base_query, next_base_value, group_levels,
                                                       group_level_index + 1,
-                                                      zipped_row)
+                                                      zipped_row, sort_direction)
     return next_level_result
 
 

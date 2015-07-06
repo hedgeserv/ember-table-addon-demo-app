@@ -264,7 +264,7 @@ Feature: Indicators for expanding and collapsing grouped rows
     And Presenting "grouping column present partial loaded children"
     And Stop mountebank
     When Customer drags scroll bar by offset 40 with 1 times
-    Then The default loading indicator should display on 15 items
+    Then The default loading indicator should display on 1 items
 
   @complete
   Scenario: The default loading indicator should display when partial load children loans
@@ -275,7 +275,7 @@ Feature: Indicators for expanding and collapsing grouped rows
     And Click "expand" for the 0 row
     And Stop mountebank
     When Customer drags scroll bar by offset 1000 with 1 times and wait loading section
-    Then The default loading indicator should display on 15 items
+    Then The default loading indicator should display on 1 items
 
   @complete
   Scenario: The custom loading indicator should display when partial load grouped loans
@@ -291,7 +291,7 @@ Feature: Indicators for expanding and collapsing grouped rows
       | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     When Click "expand" for the 0 row to check indicator
-    Then The default loading indicator should display on 15 items
+    Then The default loading indicator should display on 1 items
 
   @complete
   Scenario: The grouping column should not be resizable and draggable
@@ -317,6 +317,24 @@ Feature: Indicators for expanding and collapsing grouped rows
     And The column "Id" should be fixed
     And The column "Activity" should be fixed
     And The grouping and fixed columns should not be scrolled
+
+  @complete
+  Scenario: The loading indicator in next section if there's only one row lazily load
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                          | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[1]-glAccountCode[11] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    And Click "expand" for the 0 row
+    And Click "expand" for the 1 row
+    When Customer drags scroll bar by offset 1000 with 1 times and wait loading section
+    Then I see grouped rows:
+      | indicator | groupName | Id      |
+      |           | f1-1-6    | f1-1-6  |
+      |           | f1-1-7    | f1-1-7  |
+      |           | f1-1-8    | f1-1-8  |
+      |           | f1-1-9    | f1-1-9  |
+      |           | f1-1-10   | f1-1-10 |
+      |           | f1-1-11   | f1-1-11 |
 
   @complete
   Scenario: The label for grouping column
@@ -347,7 +365,8 @@ Feature: Indicators for expanding and collapsing grouped rows
       | accountSection[30]-accountType[15]-glAccountCode[4] | f  | s
     And Presenting "grouping column present partial loaded children"
     And Click "expand" for the 0 row
-    When Click "expand" for the 1 row
+    When Click "expand" for row "f1-1"
+    Then There should be 3 sections loaded
     Then I see grouped rows:
       | indicator | groupName | Id     | GL Account Section | GL Account Type |
       | -         | f1        | f1     | f1                 |                 |
@@ -370,7 +389,7 @@ Feature: Indicators for expanding and collapsing grouped rows
       | +         | Total     | 1  |
 
 
-  @wip
+  @complete
   Scenario: The children rows should be sorted by single column in completely loaded data
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                          | id | Beginning DR (Base) |
@@ -389,173 +408,127 @@ Feature: Indicators for expanding and collapsing grouped rows
     And Click to sort as "ASC" for column "Id"
     When Click to sort as "DESC" for column "Id"
     Then I see grouped rows:
-      | indicator | groupName | Id      |
-      | -         | f1        | f1      |
-      | -         | f-1       | f1-1    |
-      | +         |           | f1-1-10 |
-      | +         |           | f1-1-9  |
-      | +         |           | f1-1-8  |
-      | +         |           | f1-1-7  |
+      | indicator | groupName | Id     |
+      | -         | f1        | f1     |
+      | -         | f1-1      | f1-1   |
+      |           | f1-1-9    | f1-1-9 |
+      |           | f1-1-8    | f1-1-8 |
+      |           | f1-1-7    | f1-1-7 |
     And The "Id" column sort indicator should be "desc"
     And There should be 3 sections loaded
 
-#    Given I have the following partial loaded grouped data in MounteBank:
-#      | groupName                                       | id | Beginning DR (Base) |
-#      | accountSection[1]-accountType[2]-accountCode[2] | f  | s                   |
-#    And Presenting "grouping column present partial loaded children"
-#    And Click "expand" for the 0 row
-#    And Click "expand" for the 2 row
-#    And Click to sort as "ASC" for column "Id"
-#    And Click to sort as "DESC" for column "Id"
-#    When Click "expand" for the 1 row
-#    Then I see grouped rows:
-#      | indicator | groupName | Id     |
-#      | -         | f1        | f1     |
-#      | -         | f1-1      | f1-1   |
-#      | +         |           | f1-1-2 |
-#      | +         |           | f1-1-1 |
-#      | -         | f1-2      | f1-2   |
-#      | +         |           | f1-2-2 |
-#    And The "Id" column sort indicator should be "desc"
-#
-#    Given I have the following partial loaded grouped data in MounteBank:
-#      | groupName                                       | id | Beginning DR (Base) |
-#      | accountSection[1]-accountType[2]-accountCode[2] | f  | s                   |
-#    And Presenting "grouping column present partial loaded children"
-#    And Click "expand" for the 0 row
-#    And Click "expand" for the 2 row
-#    And Click to sort as "ASC" for column "Id"
-#    And Click to sort as "DESC" for column "Id"
-#    And Click "expand" for the 1 row
-#    And I see grouped rows:
-#      | indicator | groupName | Id     |
-#      | -         | f1        | f1     |
-#      | -         | f1-1      | f1-1   |
-#      | +         |           | f1-1-2 |
-#      | +         |           | f1-1-1 |
-#      | -         | f1-2      | f1-2   |
-#      | +         |           | f1-2-2 |
-#    When And Click to sort as "ASC" for column "Id"
-#    Then I see grouped rows:
-#      | indicator | groupName | Id     |
-#      | -         | f1        | f1     |
-#      | -         | f1-1      | f1-1   |
-#      | +         |           | f1-1-1 |
-#      | +         |           | f1-1-2 |
-#      | -         | f1-2      | f1-2   |
-#      | +         |           | f1-2-1 |
-#
-#    Given I have the following partial loaded grouped data in MounteBank:
-#      | groupName                                       | id | Beginning DR (Base) |
-#      | accountSection[1]-accountType[2]-accountCode[2] | f  | s                   |
-#    And Presenting "grouping column present partial loaded children"
-#    And Click to sort as "ASC" for column "Id"
-#    And Click to sort as "DESC" for column "Id"
-#    When Click "expand" for the 0 row
-#    And Click "expand" for the 2 row
-#    And Click "expand" for the 1 row
-#    Then I see grouped rows:
-#      | indicator | groupName | Id     |
-#      | -         | f1        | f1     |
-#      | -         | f1-1      | f1-1   |
-#      | +         |           | f1-1-2 |
-#      | +         |           | f1-1-1 |
-#      | -         | f1-2      | f1-2   |
-#      | +         |           | f1-2-2 |
-#    And The "Id" column sort indicator should be "desc"
-#
-#    Given I have the following partial loaded grouped data in MounteBank:
-#      | groupName                                        | id | Beginning DR (Base) |
-#      | accountSection[1]-accountType[2]-accountCode[10] | f  | s                   |
-#    And Presenting "grouping column present partial loaded children"
-#    When Click "expand" for the 0 row
-#    And Click "expand" for the 2 row
-#    And Click "expand" for the 1 row
-#    And Click to sort as "ASC" for column "Id"
-#    When Click to sort as "DESC" for column "Id"
-#    Then I see grouped rows:
-#      | indicator | groupName | Id      |
-#      | -         | f1        | f1      |
-#      | -         | f1-1      | f1-1    |
-#      | +         |           | f1-1-10 |
-#      | +         |           | f1-1-9  |
-#      | -         | f1-2      | f1-2    |
-#      | +         |           | f1-2-10 |
-#    And The "Id" column sort indicator should be "desc"
-
-  @wip
-  Scenario: The children rows should be sorted by single column in lazily loaded data
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                        | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[1]-accountCode[20] | f  | s                   |
-    And Presenting "grouping column present partial loaded children"
-    And Click "expand" for the 0 row
-    And Click "expand" for the 1 row
-    And Click to sort as "ASC" for column "Id"
-    When Click to sort as "DESC" for column "Id"
-    Then I see grouped rows:
-      | indicator | groupName | Id      |
-      | -         | f1        | f1      |
-      | -         | f1-1      | f1-1    |
-      |           |           | f1-1-10 |
-      |           |           | f1-1-9  |
-      |           |           | f1-1-8  |
-      |           |           | f1-1-7  |
-    And There should be 4 sections loaded
-    And The "Id" column sort indicator should be "desc"
-
-    Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                        | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[1]-accountCode[20] | f  | s                   |
-    And Presenting "grouping column present partial loaded children"
-    And Click to sort as "ASC" for column "Id"
-    When Click to sort as "DESC" for column "Id"
-    Then There should be 1 sections loaded
-
-    Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                        | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[1]-accountCode[20] | f  | s                   |
-    And Presenting "grouping column present partial loaded children"
-    And Click to sort as "ASC" for column "Id"
-    And Click to sort as "DESC" for column "Id"
-    And Click "expand" for the 0 row
-    When Click "expand" for the 1 row
-    Then I see grouped rows:
-      | indicator | groupName | Id      |
-      | -         | f1        | f1      |
-      | -         | f1-1      | f1-1    |
-      |           |           | f1-1-10 |
-      |           |           | f1-1-9  |
-      |           |           | f1-1-8  |
-      |           |           | f1-1-7  |
-    And There should be 3 sections loaded
-
-
-    Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                        | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[1]-accountCode[20] | f  | s                   |
-    And Presenting "grouping column present partial loaded children"
-    And Click "expand" for the 0 row
-    And Click "expand" for the 1 row
-    And Click "collapse" for the 0 row
-    And Click to sort as "ASC" for column "Id"
-    When Click to sort as "DESC" for column "Id"
-    Then I see grouped rows:
-      | indicator | groupName | Id      |
-      | -         | f1        | f1      |
-      | -         | f1-1      | f1-1    |
-      |           |           | f1-1-10 |
-      |           |           | f1-1-9  |
-      |           |           | f1-1-8  |
-      |           |           | f1-1-7  |
-    Then There should be 3 sections loaded
-
-    Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                       | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[2]-accountCode[2] | f  | s                   |
+      | groupName                                         | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[2]-glAccountCode[2] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And Click "expand" for the 0 row
     And Click "expand" for the 2 row
+    And Click to sort as "ASC" for column "Id"
+    And Click to sort as "DESC" for column "Id"
+    When Click "expand" for the 1 row
+    Then I see grouped rows:
+      | indicator | groupName | Id     |
+      | -         | f1        | f1     |
+      | -         | f1-1      | f1-1   |
+      |           | f1-1-2    | f1-1-2 |
+      |           | f1-1-1    | f1-1-1 |
+      | -         | f1-2      | f1-2   |
+      |           | f1-2-2    | f1-2-2 |
+    And The "Id" column sort indicator should be "desc"
+
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                         | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[2]-glAccountCode[2] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    And Click "expand" for the 0 row
+    And Click "expand" for the 2 row
+    And Click to sort as "ASC" for column "Id"
+    And Click to sort as "DESC" for column "Id"
+    And Click "expand" for the 1 row
+    And I see grouped rows:
+      | indicator | groupName | Id     |
+      | -         | f1        | f1     |
+      | -         | f1-1      | f1-1   |
+      |           | f1-1-2    | f1-1-2 |
+      |           | f1-1-1    | f1-1-1 |
+      | -         | f1-2      | f1-2   |
+      |           | f1-2-2    | f1-2-2 |
+    When And Click to sort as "ASC" for column "Id"
+    Then I see grouped rows:
+      | indicator | groupName | Id     |
+      | -         | f1        | f1     |
+      | -         | f1-1      | f1-1   |
+      |           | f1-1-1    | f1-1-1 |
+      |           | f1-1-2    | f1-1-2 |
+      | -         | f1-2      | f1-2   |
+      |           | f1-2-1    | f1-2-1 |
+
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                         | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[2]-glAccountCode[2] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    And Click to sort as "ASC" for column "Id"
+    And Click to sort as "DESC" for column "Id"
+    When Click "expand" for the 0 row
+    And Click "expand" for the 2 row
+    And Click "expand" for the 1 row
+    Then I see grouped rows:
+      | indicator | groupName | Id     |
+      | -         | f1        | f1     |
+      | -         | f1-1      | f1-1   |
+      |           | f1-1-2    | f1-1-2 |
+      |           | f1-1-1    | f1-1-1 |
+      | -         | f1-2      | f1-2   |
+      |           | f1-2-2    | f1-2-2 |
+    And The "Id" column sort indicator should be "desc"
+
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                          | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[2]-glAccountCode[10] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    When Click "expand" for the 0 row
+    And Click "expand" for the 2 row
+    And Click "expand" for the 1 row
+    And Click to sort as "ASC" for column "Id"
+    When Click to sort as "DESC" for column "Id"
+    And Click "collapse" for the 1 row
+    Then I see grouped rows:
+      | indicator | groupName | Id     |
+      | -         | f1        | f1     |
+      | +         | f1-1      | f1-1   |
+      | -         | f1-2      | f1-2   |
+      |           | f1-2-9    | f1-2-9 |
+      |           | f1-2-8    | f1-2-8 |
+      |           | f1-2-7    | f1-2-7 |
+      |           | f1-2-6    | f1-2-6 |
+    And The "Id" column sort indicator should be "desc"
+
+  @complete
+  Scenario: The children rows should be sorted by single column in lazily loaded data
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                          | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[1]-glAccountCode[20] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    And Click "expand" for the 0 row
+    And Click "expand" for the 1 row
+    When Click to sort as "ASC" for column "Id"
+    Then I see grouped rows:
+      | indicator | groupName | Id      |
+      | -         | f1        | f1      |
+      | -         | f1-1      | f1-1    |
+      |           | f1-1-1    | f1-1-1  |
+      |           | f1-1-10   | f1-1-10 |
+      |           | f1-1-11   | f1-1-11 |
+      |           | f1-1-12   | f1-1-12 |
+      |           | f1-1-13   | f1-1-13 |
+    And There should be 4 sections loaded
+    And The "Id" column sort indicator should be "asc"
+
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                          | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[1]-glAccountCode[20] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    And Click "expand" for the 0 row
     And Click "expand" for the 1 row
     And Click to sort as "ASC" for column "Id"
     When Click to sort as "DESC" for column "Id"
@@ -563,9 +536,99 @@ Feature: Indicators for expanding and collapsing grouped rows
       | indicator | groupName | Id     |
       | -         | f1        | f1     |
       | -         | f1-1      | f1-1   |
-      |           |           | f1-1-2 |
-      |           |           | f1-1-9 |
-      |           |           | f1-1-8 |
-      |           |           | f1-1-7 |
-    Then There should be 8 sections loaded
+      |           | f1-1-9    | f1-1-9 |
+      |           | f1-1-8    | f1-1-8 |
+      |           | f1-1-7    | f1-1-7 |
+      |           | f1-1-6    | f1-1-6 |
+      |           | f1-1-5    | f1-1-5 |
+    And There should be 5 sections loaded
+    And The "Id" column sort indicator should be "desc"
 
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                          | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[1]-glAccountCode[20] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    And Click to sort as "ASC" for column "Id"
+    When Click to sort as "DESC" for column "Id"
+    Then There should be 1 sections loaded
+
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                          | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[1]-glAccountCode[20] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    And Click to sort as "ASC" for column "Id"
+    And Click to sort as "DESC" for column "Id"
+    And Click "expand" for the 0 row
+    When Click "expand" for the 1 row
+    Then I see grouped rows:
+      | indicator | groupName | Id     |
+      | -         | f1        | f1     |
+      | -         | f1-1      | f1-1   |
+      |           | f1-1-9    | f1-1-9 |
+      |           | f1-1-8    | f1-1-8 |
+      |           | f1-1-7    | f1-1-7 |
+      |           | f1-1-6    | f1-1-6 |
+      |           | f1-1-5    | f1-1-5 |
+    And There should be 3 sections loaded
+
+
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                          | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[1]-glAccountCode[20] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    And Click "expand" for the 0 row
+    And Click "expand" for the 1 row
+    And Click "collapse" for the 0 row
+    And Click to sort as "ASC" for column "Id"
+    When Click "expand" for the 0 row
+    Then I see grouped rows:
+      | indicator | groupName | Id      |
+      | -         | f1        | f1      |
+      | -         | f1-1      | f1-1    |
+      |           | f1-1-1    | f1-1-1  |
+      |           | f1-1-10   | f1-1-10 |
+      |           | f1-1-11   | f1-1-11 |
+      |           | f1-1-12   | f1-1-12 |
+      |           | f1-1-13   | f1-1-13 |
+    Then There should be 4 sections loaded
+
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                          | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[2]-glAccountCode[20] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    And Click "expand" for the 0 row
+    And Click "expand" for the 2 row
+    And Click "expand" for the 1 row
+    And Customer drags scroll bar by offset 1000 with 1 times and wait loading section
+    And Click to sort as "ASC" for column "Id"
+    When Click to sort as "DESC" for column "Id"
+    Then I see grouped rows:
+      | indicator | groupName | Id      |
+      |           | f1-1-1    | f1-1-1  |
+      | -         | f1-2      | f1-2    |
+      |           | f1-2-9    | f1-2-9  |
+      |           | f1-2-8    | f1-2-8  |
+      |           | f1-2-7    | f1-2-7  |
+      |           | f1-1-11   | f1-1-11 |
+      |           | f1-1-10   | f1-1-10 |
+    Then There should be 6 sections loaded
+
+#    Given I have the following partial loaded grouped data in MounteBank:
+#      | groupName                                          | id | Beginning DR (Base) |
+#      | accountSection[1]-accountType[1]-glAccountCode[30] | f  | s                   |
+#    And Presenting "grouping column present partial loaded children"
+#    And Click "expand" for the 0 row
+#    And Click "expand" for the 1 row
+#    And Customer drags scroll bar by offset 50 with 2 times and wait loading section
+#    And Click to sort as "ASC" for column "Id"
+#    When Click to sort as "DESC" for column "Id"
+#    Then I see grouped rows:
+#      | indicator | groupName | Id      |
+#      |           | f1-1-6    | f1-1-6  |
+#      |           | f1-2-7    | f1-2-7  |
+#      |           | f1-2-8    | f1-2-8  |
+#      |           | f1-2-9    | f1-2-9  |
+#      |           | f1-1-10   | f1-1-10 |
+#      |           | f1-1-11   | f1-1-11 |
+#      |           | f1-1-12   | f1-1-12 |
+#    Then There should be 6 sections loaded
