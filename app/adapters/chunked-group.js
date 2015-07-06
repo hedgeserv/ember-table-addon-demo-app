@@ -16,7 +16,6 @@ export default DS.RESTAdapter.extend({
       }
       return res;
     }, [url]);
-    console.log(options.query);
     return this.ajax(urlArray.join('/'), 'GET', { data: options.query});
   }
 });

@@ -26,13 +26,25 @@ moduleFor('adapter:chunked-group', 'Unit | Adapter | chunked group', {
 });
 
 // Replace this with your real tests.
-test('it exists', function(assert) {
+test('only one level', function(assert) {
   ajaxResponse({chunkedGroups: [{id: 1}]});
   this.subject();
 
   Ember.run(function () {
     store.find('chunkedGroup', 1).then(function () {
       assert.equal(passedUrl, 'http://localhost:5555/chunkedGroups/1');
+    });
+  });
+});
+
+test('three level data', function(assert) {
+  ajaxResponse({chunkedGroups: [{id: 1}]});
+  this.subject();
+  var content = [{value: 1}, {name: 'accountSection', value: 2}, {name: 'accountType', value: 3}];
+
+  Ember.run(function () {
+    store.find('chunkedGroup', {resource: content, query:{}}).then(function () {
+      assert.equal(passedUrl, 'http://localhost:5555/chunkedGroups/1/accountSection/2/accountType/3');
     });
   });
 });
