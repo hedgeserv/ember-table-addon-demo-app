@@ -1,24 +1,19 @@
 import Ember from 'ember';
-import ChunkedGroupDataMixin from '../mixins/chunked-group-data-mixin';
-
-export default Ember.Route.extend(ChunkedGroupDataMixin, {
+import LazyGroupRowArray from 'ember-table/models/lazy-group-row-array';
+export default Ember.Route.extend({
 
   model: function () {
     var self = this;
-    var groupingMetadata = [{id: 'accountSection'}, {id: 'accountType'}, {id: 'glAccountCode'}];
+    var groupingMetadata = [{id: 'accountSection'}, {id: 'accountType'}, {id: 'accountCode'}];
     var tableContent = LazyGroupRowArray.create({
       loadChildren: function (chunkIndex, parentQuery) {
-        var params = {};
-        params.resource = [{
-          value: 1
-        }];
-        params.query = {section: chunkIndex + 1};
+        var params = {content: parentQuery, groupingMetadata: groupingMetadata};
+        Ember.setProperties(params.content, {section: chunkIndex + 1});
         var sortName = self.get('sortName');
         if(sortName){
-          params.query.sortDirect = self.get('sortDirect');
-          params.query.sortName = sortName;
+          params.content.sortDirect = self.get('sortDirect');
+          params.content.sortName = sortName;
         }
-        Ember.setProperties(params.resource, parentQuery);
         return self.store.find('chunked-group', params).then(function (result) {
           var meta = self.store.metadataFor('chunked-group');
           return {

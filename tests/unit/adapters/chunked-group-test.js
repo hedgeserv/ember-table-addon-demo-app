@@ -29,10 +29,15 @@ moduleFor('adapter:chunked-group', 'Unit | Adapter | chunked group', {
 test('only one level', function(assert) {
   ajaxResponse({chunkedGroups: [{id: 1}]});
   this.subject();
-
+  var query = {
+    groupingMetadata: [{id: 'accountSection'}, {id: 'accountType'}],
+    content: {
+      accountSection: 1
+    }
+  };
   Ember.run(function () {
-    store.find('chunkedGroup', 1).then(function () {
-      assert.equal(passedUrl, 'http://localhost:5555/chunkedGroups/1');
+    store.find('chunkedGroup', query).then(function () {
+      assert.equal(passedUrl, 'http://localhost:5555/chunkedGroups/accountSections/1/accountTypes');
     });
   });
 });
@@ -40,11 +45,11 @@ test('only one level', function(assert) {
 test('three level data', function(assert) {
   ajaxResponse({chunkedGroups: [{id: 1}]});
   this.subject();
-  var content = [{value: 1}, {name: 'accountSection', value: 2}, {name: 'accountType', value: 3}];
-
+  var content = {accountSection: 2, accountType: 3};
+  var groupingMetadata = [{id: 'accountSection'}, {id: 'accountType'}, {id: 'accountCode'}];
   Ember.run(function () {
-    store.find('chunkedGroup', {resource: content, query:{}}).then(function () {
-      assert.equal(passedUrl, 'http://localhost:5555/chunkedGroups/1/accountSection/2/accountType/3');
+    store.find('chunkedGroup', {groupingMetadata: groupingMetadata, content: content}).then(function () {
+      assert.equal(passedUrl, 'http://localhost:5555/chunkedGroups/accountSections/2/accountTypes/3/accountCodes');
     });
   });
 });

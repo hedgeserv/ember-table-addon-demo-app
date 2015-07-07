@@ -5,9 +5,9 @@ export default Ember.Mixin.create({
   columns: function () {
     var columnTitleAndNames = [
       ["Id", "id"],
-      ["GL Account Section", "glAccountSection"],
-      ["GL Account Type", "glAccountType"],
-      ["GL Account Code", "glAccountCode"],
+      ["GL Account Section", "accountSection"],
+      ["GL Account Type", "accountType"],
+      ["GL Account Code", "accountCode"],
       ["GL Account Description", "glAccountDescription"],
       ["Beginning DR (Base)", "beginningDR"],
       ["Beginning CR (Base)", "beginningCR"],

@@ -8,11 +8,10 @@ export default Ember.Route.extend({
     var tableContent = GrandTotalRow.create({
       loadChildren: function (chunkIndex, parentQuery) {
         var query = {
-          section: chunkIndex + 1,
-          chunkedGroup: 1
+          section: chunkIndex + 1
         };
         Ember.setProperties(query, parentQuery);
-        return self.store.find('chunked-group', query).then(function (result) {
+        return self.store.find('chunked-group', {content: query, groupingMetadata: groupingMetadata}).then(function (result) {
           var meta = self.store.metadataFor('chunked-group');
           return {
             content: result,
@@ -24,7 +23,7 @@ export default Ember.Route.extend({
         });
       },
       loadGrandTotal: function () {
-        return self.store.find('chunked-group', {"section": 1}).then(function (result) {
+        return self.store.find('chunked-group', {content: {section: 1}}).then(function (result) {
           return result.get('firstObject');
         });
       },

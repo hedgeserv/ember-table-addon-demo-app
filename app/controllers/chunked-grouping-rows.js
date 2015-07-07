@@ -8,7 +8,7 @@ export default Ember.Controller.extend({
       ["Id", "id"],
       ["GL Account Section", "accountSection"],
       ["GL Account Type", "accountType"],
-      ["GL Account Code", "glAccountCode"],
+      ["GL Account Code", "accountCode"],
       ["GL Account Description", "glAccountDescription"],
       ["Beginning DR (Base)", "beginningDr"],
       ["Beginning CR (Base)", "beginningCr"],

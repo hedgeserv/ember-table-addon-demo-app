@@ -10,7 +10,7 @@ export default DS.RESTSerializer.extend(DS.EmbeddedRecordsMixin, {
       var mappings = {
         "accountSection": "GL Account Section",
         "accountType": "GL Account Type",
-        "glAccountCode": "GL Account Code",
+        "accountCode": "GL Account Code",
         "glAccountDescription": "GL Account Description",
         "beginningDr": "Beginning DR (Base)",
         "beginningCr": "Beginning CR (Base)",
