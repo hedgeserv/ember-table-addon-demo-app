@@ -613,6 +613,9 @@ Feature: Indicators for expanding and collapsing grouped rows
       |           | f1-1-10   | f1-1-10 |
     Then There should be 6 sections loaded
 
+    """
+    link to defect: https://hedgeserv.leankit.com/Boards/View/200742377/219355887
+    """
 #    Given I have the following partial loaded grouped data in MounteBank:
 #      | groupName                                          | id | Beginning DR (Base) |
 #      | accountSection[1]-accountType[1]-glAccountCode[30] | f  | s                   |
@@ -632,3 +635,26 @@ Feature: Indicators for expanding and collapsing grouped rows
 #      |           | f1-1-11   | f1-1-11 |
 #      |           | f1-1-12   | f1-1-12 |
 #    Then There should be 6 sections loaded
+
+  @complete
+  Scenario: The grouped row named with long characters shouldn't wrap
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                         | id                                             |
+      | accountSection[1]-accountType[2]-glAccountCode[3] | ffffffffffffffffffffffffffffffffffffffffffffff |
+    And Presenting "grouping column present partial loaded children"
+    When Click "expand" for the 0 row
+    And Click "expand" for the 2 row
+    And Click "expand" for the 1 row
+    Then The grouped row "ffffffffffffffffffffffffffffffffffffffffffffff1-1-1" should not wrap
+
+  """
+  this case checks the row wrap in with pluggable indicator,
+  link to defect:https://hedgeserv.leankit.com/Boards/View/200742377/219833102
+  """
+#    Given I have the following grouped loans in MounteBank:
+#      | groupName   | id   | activity | isGroupRow |
+#      | group1      | f1   | s1       | True       |
+#      | group1-chd1 | f1-1 | s1-1     | False      |
+#      | group1-chd2 | f1-2 | s1-2     | False      |
+#    When Presenting "grouping column with pluggable indicator"
+#    Then The grouped row "Group 0" should not wrap
