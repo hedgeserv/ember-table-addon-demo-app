@@ -27,7 +27,14 @@ export default Ember.Controller.extend({
           return row.get(titleAndName[1]);
         },
         sortBy: function(prev, next){
-          return prev.get(titleAndName[1]) - next.get(titleAndName[1]);
+          var prevName = prev.get(titleAndName[1]).toUpperCase();
+          var nextName = next.get(titleAndName[1]).toUpperCase();
+          if(typeof prevName === 'number') {
+            return prevName - nextName;
+          }
+          else {
+            return (prevName < nextName) ? -1 : (prevName > nextName) ? 1 : 0;
+          }
         }
       });
     });

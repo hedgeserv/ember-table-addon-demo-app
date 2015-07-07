@@ -181,8 +181,7 @@ def sort_column(browser, col_name):
 
 
 def expand_collapse_row(browser, row_name):
-    row = browser.execute_script(
-        "return $('.ember-table-content:contains(" + str(row_name) + ")').siblings()")
+    row = wait_for_elem(browser, "return $('.ember-table-content:contains(" + str(row_name) + ")').siblings()")
     row[1].click()
 
 
