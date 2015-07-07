@@ -37,6 +37,16 @@ export default Ember.Controller.extend(ChunkedGroupDataMixin, {
     return !!this.get('loadError');
   }).property('loadError'),
 
-  errorDescription: Ember.computed.alias('loadError')
+  errorDescription: Ember.computed.alias('loadError'),
+  group: null,
+  chunkIndex: null,
+
+  actions: {
+    handleDataLoadingError: function (errorMessage, group, chunkIndex) {
+      this.set('loadError', errorMessage);
+      this.set('group', group);
+      this.set('chunkIndex', chunkIndex);
+    }
+  }
 
 });

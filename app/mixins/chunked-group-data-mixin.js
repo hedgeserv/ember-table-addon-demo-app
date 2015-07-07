@@ -30,9 +30,6 @@ export default Ember.Mixin.create({
           };
         });
       },
-      onLoadError: function(error) {
-        self.set('loadError', error);
-      },
       groupingMetadata: self.get('groupingMetadata')
     });
     return tableContent;

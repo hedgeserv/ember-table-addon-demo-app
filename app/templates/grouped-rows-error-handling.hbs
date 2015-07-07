@@ -2,6 +2,8 @@
 <p>Error will be thrown when expand second level rows</p>
 {{#if isErrorThrown}}
     <p class="load-data-error">{{errorDescription}}</p>
+    <p>groupingName:{{group.id}}</p>
+    <p>chunkIndex:{{chunkIndex}}</p>
 {{/if}}
 <div class="lazy-loaded-table-container" style="height:600px;">
   {{ember-table
@@ -9,5 +11,6 @@
   enableContentSelection=true
   content=tableContent
   columns=columns
+  handleDataLoadingError='handleDataLoadingError'
   }}
 </div>
