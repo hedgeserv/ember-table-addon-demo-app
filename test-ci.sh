@@ -10,7 +10,7 @@ mb --allowCORS &
 sleep 1
 
 echo "${green}Run ember test ...${reset}"
-ember test -c ./testem-ci.json | tee temp.xml
+ember test -c ./testem-ci.json > temp.xml
 if [ $? -eq 0 ];then
   sed '1,4d' temp.xml > test-result.xml
 
