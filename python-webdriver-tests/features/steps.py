@@ -642,3 +642,14 @@ def prepare_asc_sort_col(step, asc_or_desc, cols_name):
             """.format(name=columns[index], sort=str(asc_or_desc).lower()))
         for index in range(0, len(step.hashes)):
             verify_grouped_row(index, step.hashes[index])
+
+
+@step('The grouped row "(.*?)" should not wrap')
+def check_grouped_row_wrap(step, col_name):
+    with AssertContextManager(step):
+        indicator_offset = world.browser.execute_script(
+            "return $('.grouping-column-cell .ember-table-content:contains(" + col_name + ")').siblings().eq(1).offset().left")
+        name_offset = world.browser.execute_script(
+            "return $('.grouping-column-cell .ember-table-content:contains(" + col_name + ")').offset().left")
+
+        assert_true(step, int(indicator_offset) < int(name_offset))
