@@ -212,7 +212,7 @@ Feature: Indicators for expanding and collapsing grouped rows
   Scenario: Expand grouped row with partial loaded
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                           | id | Beginning DR (Base) |
-      | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
+      | accountSection[30]-accountType[15]-accountCode[4]   | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     Then There should be 1 sections loaded
 
@@ -340,7 +340,7 @@ Feature: Indicators for expanding and collapsing grouped rows
   Scenario: The label for grouping column
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                           | id | Beginning DR (Base) |
-      | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
+      | accountSection[30]-accountType[15]-accountCode[4]   | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And I see grouped rows:
       | indicator | groupName | Id | GL Account Section |
@@ -362,7 +362,7 @@ Feature: Indicators for expanding and collapsing grouped rows
 
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                           | id | Beginning DR (Base)
-      | accountSection[30]-accountType[15]-accountCode[4] | f  | s
+      | accountSection[30]-accountType[15]-accountCode[4]   | f  | s
     And Presenting "grouping column present partial loaded children"
     And Click "expand" for the 0 row
     When Click "expand" for row "f1-1"
@@ -546,7 +546,7 @@ Feature: Indicators for expanding and collapsing grouped rows
 
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                          | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[1]-accountCode[20] | f  | s                   |
+      | accountSection[1]-accountType[1]-accountCode[20]   | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And Click to sort as "ASC" for column "Id"
     When Click to sort as "DESC" for column "Id"
@@ -554,7 +554,7 @@ Feature: Indicators for expanding and collapsing grouped rows
 
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                          | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[1]-accountCode[20] | f  | s                   |
+      | accountSection[1]-accountType[1]-accountCode[20]   | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And Click to sort as "ASC" for column "Id"
     And Click to sort as "DESC" for column "Id"
@@ -640,7 +640,7 @@ Feature: Indicators for expanding and collapsing grouped rows
   Scenario: The grouped row named with long characters shouldn't wrap
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                         | id                                             |
-      | accountSection[1]-accountType[2]-glAccountCode[3] | ffffffffffffffffffffffffffffffffffffffffffffff |
+      | accountSection[1]-accountType[2]-accountCode[3]   | ffffffffffffffffffffffffffffffffffffffffffffff |
     And Presenting "grouping column present partial loaded children"
     When Click "expand" for the 0 row
     And Click "expand" for the 2 row
