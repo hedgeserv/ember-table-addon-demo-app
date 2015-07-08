@@ -76,10 +76,19 @@ class MountebankStub:
         stubs = make_the_chunk_stubs(rows, chunk_size=1, path="/chunkedGroups", content_key="chunkedGroups")
         self.create_imposter(stubs)
 
-    def stub_lazy_loaded_grouped_loans(self, array_of_query_and_body):
+    def stub_lazy_loaded_grouped_loans(self, array_of_query_and_body, groupingMetadata):
         stubs = []
         for item in array_of_query_and_body:
-            stubs.extend(make_the_chunk_stubs(item["body"], 10, item["query"], path="/chunkedGroups", content_key="chunkedGroups"))
+            path = "/chunkedGroups"
+            query = item['query']
+            for groupKey in groupingMetadata:
+                path += '/' + groupKey + 's'
+                if(query.has_key(groupKey)):
+                    path += '/' + str(query[groupKey])
+                    del query[groupKey]
+                else:
+                    break
+            stubs.extend(make_the_chunk_stubs(item["body"], 10, query, path=path, content_key="chunkedGroups"))
         self.create_imposter(stubs)
 
     def find_parent(self, loans, path):
@@ -194,8 +203,17 @@ def prepare_grouped_loans(data):
 def prepare_lazy_loaded_grouped_loans(zipped_rows):
     mb = MountebankStub()
     zipped_row = zipped_rows[0]
+    groupingMetadata = get_grouping_metadata(zipped_row['groupName'])
     array_of_url_and_body = make_group_rows(zipped_row)
-    mb.stub_lazy_loaded_grouped_loans(array_of_url_and_body)
+    mb.stub_lazy_loaded_grouped_loans(array_of_url_and_body, groupingMetadata)
+
+def get_grouping_metadata(group_name):
+    group_names = group_name.split('-')
+    return map(get_group_name, group_names)
+
+def get_group_name(name):
+    return re.search('(.+?)\[\d+\]', name).group(1)
+
 
 def prepare_grand_total_row():
     mb = MountebankStub()
@@ -217,7 +235,7 @@ def make_group_rows_for_one_level(base_query, base_value, group_levels, group_le
     result = []
     group_level = group_levels[group_level_index]
     group_name, count = extract_name_count(group_level)
-    query = {"chunkedGroup": 1}
+    query = {}
     query.update(base_query)
     id_range = [str(x) for x in range(1, count + 1)]
     if sort_direction == 'desc':
