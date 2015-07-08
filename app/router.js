@@ -14,7 +14,7 @@ export default Router.map(function() {
   this.route('groupingColumn', {path: 'grouping-column'});
   this.route('groupingColumnAndFixed', {path: 'grouping-column-and-fixed'});
   this.route('groupedRows', {path: 'grouped-rows'});
-  this.route('groupedRowsWithLevel', {path: 'grouped-rows-with-level'});
+  this.route('customGroupIndicator', {path: 'custom-group-indicator'});
   this.route('chunkedGroupingRows', {path: 'chunked-grouping-rows'});
   this.route('groupedRowLoadingIndicator', {path: 'grouped-row-loading-indicator'});
   this.route('grandTotalRow', {path: 'grand-total-row'});
