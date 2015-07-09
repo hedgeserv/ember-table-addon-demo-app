@@ -125,7 +125,7 @@ def list_all_loans(step, url):
             "lazy load page": "http://localhost:4200/lazy-loaded-loans?totalCount=200",
             "grouping column": "http://localhost:4200/grouping-column",
             "grouping column with fixed columns": "http://localhost:4200/grouping-column-and-fixed",
-            "grouping column with pluggable indicator": "http://localhost:4200/grouped-rows-with-level",
+            "grouping column with pluggable indicator": "http://localhost:4200/custom-group-indicator",
             "grouping column with pluggable loading indicator": "http://localhost:4200/grouped-row-loading-indicator",
             "grouping column present partial loaded children": "http://localhost:4200/chunked-grouping-rows",
             "grand total row": "http://localhost:4200/grand-total-row",
