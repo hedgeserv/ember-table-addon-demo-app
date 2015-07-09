@@ -211,8 +211,8 @@ Feature: Indicators for expanding and collapsing grouped rows
   @complete
   Scenario: Expand grouped row with partial loaded
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                           | id | Beginning DR (Base) |
-      | accountSection[30]-accountType[15]-accountCode[4]   | f  | s                   |
+      | groupName                                         | id | Beginning DR (Base) |
+      | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     Then There should be 1 sections loaded
 
@@ -319,10 +319,19 @@ Feature: Indicators for expanding and collapsing grouped rows
     And The grouping and fixed columns should not be scrolled
 
   @complete
+  Scenario: The fixed columns shouldn't be reordered
+    Given There are 5 grouped loans
+    And Presenting "grouping column with fixed columns"
+    When Reorder an inner column "Id" header to "right" with 300 pixel
+    Then The index 0 should be "GroupingColumn" column
+    And The index 1 should be "Id" column
+    And The index 2 should be "Activity" column
+
+  @complete
   Scenario: The loading indicator in next section if there's only one row lazily load
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                          | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[1]-accountCode[11]   | f  | s                   |
+      | groupName                                        | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[1]-accountCode[11] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And Click "expand" for the 0 row
     And Click "expand" for the 1 row
@@ -339,8 +348,8 @@ Feature: Indicators for expanding and collapsing grouped rows
   @complete
   Scenario: The label for grouping column
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                           | id | Beginning DR (Base) |
-      | accountSection[30]-accountType[15]-accountCode[4]   | f  | s                   |
+      | groupName                                         | id | Beginning DR (Base) |
+      | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And I see grouped rows:
       | indicator | groupName | Id | GL Account Section |
@@ -361,8 +370,8 @@ Feature: Indicators for expanding and collapsing grouped rows
       | +         | f1-5      | f1-5 | f1                 | f1-5            |
 
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                           | id | Beginning DR (Base)
-      | accountSection[30]-accountType[15]-accountCode[4]   | f  | s
+      | groupName                                         | id | Beginning DR (Base)
+      | accountSection[30]-accountType[15]-accountCode[4] | f  | s
     And Presenting "grouping column present partial loaded children"
     And Click "expand" for the 0 row
     When Click "expand" for row "f1-1"
@@ -392,8 +401,8 @@ Feature: Indicators for expanding and collapsing grouped rows
   @complete
   Scenario: The children rows should be sorted by single column in completely loaded data
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                          | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[2]-accountCode[10]   | f  | s                   |
+      | groupName                                        | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[2]-accountCode[10] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And Click "expand" for the 0 row
     And Click "expand" for the 1 row
@@ -418,8 +427,8 @@ Feature: Indicators for expanding and collapsing grouped rows
     And There should be 3 sections loaded
 
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                         | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[2]-accountCode[2]   | f  | s                   |
+      | groupName                                       | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[2]-accountCode[2] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And Click "expand" for the 0 row
     And Click "expand" for the 2 row
@@ -437,8 +446,8 @@ Feature: Indicators for expanding and collapsing grouped rows
     And The "Id" column sort indicator should be "desc"
 
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                         | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[2]-accountCode[2]   | f  | s                   |
+      | groupName                                       | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[2]-accountCode[2] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And Click "expand" for the 0 row
     And Click "expand" for the 2 row
@@ -464,8 +473,8 @@ Feature: Indicators for expanding and collapsing grouped rows
       |           | f1-2-1    | f1-2-1 |
 
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                         | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[2]-accountCode[2]   | f  | s                   |
+      | groupName                                       | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[2]-accountCode[2] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And Click to sort as "ASC" for column "Id"
     And Click to sort as "DESC" for column "Id"
@@ -483,8 +492,8 @@ Feature: Indicators for expanding and collapsing grouped rows
     And The "Id" column sort indicator should be "desc"
 
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                          | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[2]-accountCode[10]   | f  | s                   |
+      | groupName                                        | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[2]-accountCode[10] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     When Click "expand" for the 0 row
     And Click "expand" for the 2 row
@@ -506,8 +515,8 @@ Feature: Indicators for expanding and collapsing grouped rows
   @complete
   Scenario: The children rows should be sorted by single column in lazily loaded data
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                          | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[1]-accountCode[20]   | f  | s                   |
+      | groupName                                        | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[1]-accountCode[20] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And Click "expand" for the 0 row
     And Click "expand" for the 1 row
@@ -525,8 +534,8 @@ Feature: Indicators for expanding and collapsing grouped rows
     And The "Id" column sort indicator should be "asc"
 
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                          | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[1]-accountCode[20]   | f  | s                   |
+      | groupName                                        | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[1]-accountCode[20] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And Click "expand" for the 0 row
     And Click "expand" for the 1 row
@@ -545,16 +554,16 @@ Feature: Indicators for expanding and collapsing grouped rows
     And The "Id" column sort indicator should be "desc"
 
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                          | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[1]-accountCode[20]   | f  | s                   |
+      | groupName                                        | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[1]-accountCode[20] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And Click to sort as "ASC" for column "Id"
     When Click to sort as "DESC" for column "Id"
     Then There should be 1 sections loaded
 
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                          | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[1]-accountCode[20]   | f  | s                   |
+      | groupName                                        | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[1]-accountCode[20] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And Click to sort as "ASC" for column "Id"
     And Click to sort as "DESC" for column "Id"
@@ -573,8 +582,8 @@ Feature: Indicators for expanding and collapsing grouped rows
 
 
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                          | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[1]-accountCode[20]   | f  | s                   |
+      | groupName                                        | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[1]-accountCode[20] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And Click "expand" for the 0 row
     And Click "expand" for the 1 row
@@ -593,8 +602,8 @@ Feature: Indicators for expanding and collapsing grouped rows
     Then There should be 4 sections loaded
 
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                          | id | Beginning DR (Base) |
-      | accountSection[1]-accountType[2]-accountCode[20]   | f  | s                   |
+      | groupName                                        | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[2]-accountCode[20] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And Click "expand" for the 0 row
     And Click "expand" for the 2 row
@@ -639,8 +648,8 @@ Feature: Indicators for expanding and collapsing grouped rows
   @complete
   Scenario: The grouped row named with long characters shouldn't wrap
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                         | id                                             |
-      | accountSection[1]-accountType[2]-accountCode[3]   | ffffffffffffffffffffffffffffffffffffffffffffff |
+      | groupName                                       | id                                             |
+      | accountSection[1]-accountType[2]-accountCode[3] | ffffffffffffffffffffffffffffffffffffffffffffff |
     And Presenting "grouping column present partial loaded children"
     When Click "expand" for the 0 row
     And Click "expand" for the 2 row
@@ -658,3 +667,13 @@ Feature: Indicators for expanding and collapsing grouped rows
 #      | group1-chd2 | f1-2 | s1-2     | False      |
 #    When Presenting "grouping column with pluggable indicator"
 #    Then The grouped row "Group 0" should not wrap
+
+  @complete
+  Scenario: The error handling when load section in grouping column
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                       | id |
+      | accountSection[1]-accountType[1]-accountCode[1] | f  |
+    When Presenting "grouping column error handling"
+    Then The content "Error will be thrown when expand second level rows" should display in page
+    And The content "groupingName:accountSection" should display in page
+    And The content "chunkIndex:0" should display in page

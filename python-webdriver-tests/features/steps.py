@@ -129,8 +129,15 @@ def list_all_loans(step, url):
             "grouping column with pluggable loading indicator": "http://localhost:4200/grouped-row-loading-indicator",
             "grouping column present partial loaded children": "http://localhost:4200/chunked-grouping-rows",
             "grand total row": "http://localhost:4200/grand-total-row",
+            "grouping column error handling": "http://localhost:4200/grouped-rows-error-handling"
         }
         get_url(world.browser, options.get(url))
+
+
+@step('The content "(.*?)" should display in page$')
+def chanck_page_source(step, content):
+    with AssertContextManager(step):
+        assert_true(step, content.strip() in world.browser.page_source)
 
 
 @step('(\d+) loans should be shown in a table, from the outset')
