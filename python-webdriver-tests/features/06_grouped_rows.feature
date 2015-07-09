@@ -290,8 +290,10 @@ Feature: Indicators for expanding and collapsing grouped rows
       | groupName                                         | id | Beginning DR (Base) |
       | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
+    And Stop mountebank
     When Click "expand" for the 0 row to check indicator
     Then The default loading indicator should display on 1 items
+    And The 1 row indicator should be "hidden"
 
   @complete
   Scenario: The grouping column should not be resizable and draggable
@@ -374,7 +376,7 @@ Feature: Indicators for expanding and collapsing grouped rows
       | accountSection[30]-accountType[15]-accountCode[4] | f  | s
     And Presenting "grouping column present partial loaded children"
     And Click "expand" for the 0 row
-    When Click "expand" for row "f1-1"
+    When Click "expand" for the 1 row
     Then There should be 3 sections loaded
     Then I see grouped rows:
       | indicator | groupName | Id     | GL Account Section | GL Account Type |
@@ -622,28 +624,18 @@ Feature: Indicators for expanding and collapsing grouped rows
       |           | f1-1-10   | f1-1-10 |
     Then There should be 6 sections loaded
 
-    """
-    link to defect: https://hedgeserv.leankit.com/Boards/View/200742377/219355887
-    """
 #    Given I have the following partial loaded grouped data in MounteBank:
-#      | groupName                                          | id | Beginning DR (Base) |
-#      | accountSection[1]-accountType[1]-accountCode[30]   | f  | s                   |
+#      | groupName                                        | id | Beginning DR (Base) |
+#      | accountSection[1]-accountType[1]-accountCode[40] | f  | s                   |
 #    And Presenting "grouping column present partial loaded children"
 #    And Click "expand" for the 0 row
 #    And Click "expand" for the 1 row
-#    And Customer drags scroll bar by offset 50 with 2 times and wait loading section
+#    And Customer drags scroll bar by offset 100 with 2 times and wait loading section
 #    And Click to sort as "ASC" for column "Id"
 #    When Click to sort as "DESC" for column "Id"
-#    Then I see grouped rows:
-#      | indicator | groupName | Id      |
-#      |           | f1-1-6    | f1-1-6  |
-#      |           | f1-2-7    | f1-2-7  |
-#      |           | f1-2-8    | f1-2-8  |
-#      |           | f1-2-9    | f1-2-9  |
-#      |           | f1-1-10   | f1-1-10 |
-#      |           | f1-1-11   | f1-1-11 |
-#      |           | f1-1-12   | f1-1-12 |
-#    Then There should be 6 sections loaded
+#    Then There should be 10 sections loaded
+#    And The default loading indicator should display on 0 items
+
 
   @complete
   Scenario: The grouped row named with long characters shouldn't wrap
@@ -656,17 +648,14 @@ Feature: Indicators for expanding and collapsing grouped rows
     And Click "expand" for the 1 row
     Then The grouped row "ffffffffffffffffffffffffffffffffffffffffffffff1-1-1" should not wrap
 
-  """
-  this case checks the row wrap in with pluggable indicator,
-  link to defect:https://hedgeserv.leankit.com/Boards/View/200742377/219833102
-  """
-#    Given I have the following grouped loans in MounteBank:
-#      | groupName   | id   | activity | isGroupRow |
-#      | group1      | f1   | s1       | True       |
-#      | group1-chd1 | f1-1 | s1-1     | False      |
-#      | group1-chd2 | f1-2 | s1-2     | False      |
-#    When Presenting "grouping column with pluggable indicator"
-#    Then The grouped row "Group 0" should not wrap
+    Given I have the following grouped loans in MounteBank:
+      | groupName   | id   | activity | isGroupRow |
+      | group1      | f1   | s1       | True       |
+      | group1-chd1 | f1-1 | s1-1     | False      |
+      | group1-chd2 | f1-2 | s1-2     | False      |
+    When Presenting "grouping column with pluggable indicator"
+    Then The grouped row "group1" should not wrap
+
 
   @complete
   Scenario: The error handling when load section in grouping column

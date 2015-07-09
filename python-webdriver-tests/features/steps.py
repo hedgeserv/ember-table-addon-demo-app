@@ -61,10 +61,10 @@ def wait_for_elem(browser, script, timeout=20):
     return elems
 
 
-def drag_element_by_offset_class_name(browser, className, index, rightOrLeft, offset):
-    elements = find_elements_by_class(browser, className)
+def drag_element_by_offset_class_name(browser, class_name, index, right_or_left, offset):
+    elements = find_elements_by_class(browser, class_name)
     action_chains = ActionChains(browser)
-    if str(rightOrLeft) == "left":
+    if str(right_or_left) == "left":
         action_chains.drag_and_drop_by_offset(elements[int(index) - 1], -int(offset), 0).perform()
     else:
         action_chains.drag_and_drop_by_offset(elements[int(index) - 1], int(offset), 0).perform()
@@ -72,21 +72,21 @@ def drag_element_by_offset_class_name(browser, className, index, rightOrLeft, of
 
 # the index starts from 1
 def get_column_header_name(browser, css, index):
-    columnsHeader = find_elements_by_css(browser, css)
-    return columnsHeader[int(index) - 1].text
+    columns_header = find_elements_by_css(browser, css)
+    return columns_header[int(index) - 1].text
 
 
 def sort_column_by_css(browser, css, index):
-    columnHeaders = find_elements_by_css(browser, css)
-    columnHeaders[int(index) - 1].click()
+    columns_header = find_elements_by_css(browser, css)
+    columns_header[int(index) - 1].click()
 
 
 def get_mb_request():
     text = requests.get("http://localhost:2525/imposters/8888").json()
-    dumpText = json.dumps(text)
-    toJson = json.loads(dumpText)['requests']
+    dump_text = json.dumps(text)
+    to_json = json.loads(dump_text)['requests']
 
-    return toJson
+    return to_json
 
 
 @step('I visit "(.*?)"$')
@@ -102,15 +102,15 @@ def fill_in_textfield_by_class(step, num):
 
 
 @step('There are (\d+) loans in chunk size (\d+)$')
-def there_are_loans_in_chunk(step, totalCount, chunkSize):
+def there_are_loans_in_chunk(step, total_count, chunk_size):
     with AssertContextManager(step):
-        prepare_loans_in_chunk(int(totalCount), int(chunkSize))
+        prepare_loans_in_chunk(int(total_count), int(chunk_size))
 
 
 @step('There are (\d+) sortable loans in chunk size (\d+)$')
-def prepare_loans_as_asc(step, totalCount, chunkSize):
+def prepare_loans_as_asc(step, total_count, chunk_size):
     with AssertContextManager(step):
-        prepare_sort_in_chunk(int(totalCount), int(chunkSize))
+        prepare_sort_in_chunk(int(total_count), int(chunk_size))
 
 
 @step('Presenting "(.*?)"')
@@ -135,7 +135,7 @@ def list_all_loans(step, url):
 
 
 @step('The content "(.*?)" should display in page$')
-def chanck_page_source(step, content):
+def check_page_source(step, content):
     with AssertContextManager(step):
         assert_true(step, content.strip() in world.browser.page_source)
 
@@ -155,16 +155,16 @@ def wait_page_load(step):
 
 
 @step('I want to drag element by class "(.*?)" and the (\d+) column to "(.*?)" with (-?\d+)$')
-def drag_element_offset(step, className, index, rightOrLeft, offsetx):
+def drag_element_offset(step, class_name, index, right_or_left, offsetx):
     with AssertContextManager(step):
-        originalWidth = bo.get_column_width_by_class_name(world.browser, index)
-        drag_element_by_offset_class_name(world.browser, className, index, rightOrLeft, offsetx)
-        changedWidth = bo.get_column_width_by_class_name(world.browser, index)
+        original_width = bo.get_column_width_by_class_name(world.browser, index)
+        drag_element_by_offset_class_name(world.browser, class_name, index, right_or_left, offsetx)
+        changed_width = bo.get_column_width_by_class_name(world.browser, index)
 
-        if str(rightOrLeft) == "left":
-            assert_true(step, (int(changedWidth) - int(originalWidth)) == (-int(offsetx) - int(spanWidthPix)))
+        if str(right_or_left) == "left":
+            assert_true(step, (int(changed_width) - int(original_width)) == (-int(offsetx) - int(1)))
         else:
-            assert_true(step, (int(changedWidth) - int(originalWidth)) == (int(offsetx) - int(spanWidthPix)))
+            assert_true(step, (int(changed_width) - int(original_width)) == (int(offsetx) - int(1)))
 
 
 @step('I want to sort column with index (\d+) by css "(.*?)"')
@@ -190,11 +190,11 @@ def check_loaded_chunk(step, num):
     with AssertContextManager(step):
         get_url(world.browser, "http://localhost:4200/lazy-loaded-loans?totalCount=" + str(num))
         text = requests.get("http://localhost:2525/imposters/8888").json()
-        dumpText = json.dumps(text)
-        toJson = json.loads(dumpText)['requests']
+        dump_text = json.dumps(text)
+        to_json = json.loads(dump_text)['requests']
 
-        assert_true(step, len(toJson) == 1)
-        assert_true(step, toJson[0]['query']['section'] == "1")
+        assert_true(step, len(to_json) == 1)
+        assert_true(step, to_json[0]['query']['section'] == "1")
 
 
 @step('There should be (\d+) sections loaded')
@@ -518,6 +518,17 @@ def check_row_indicator(step, row_name, indicator):
             assert_true(step, "unfold" in row[1].get_attribute("class"))
 
 
+@step('The (\d+) row indicator should be "(.*?)"$')
+def check_row_indicator(step, index, indicator):
+    with AssertContextManager(step):
+        if indicator == 'collapse':
+            assert_true(step, is_the_row_expanded(index))
+        elif indicator == 'expand':
+            assert_true(step, (not is_the_row_expanded(index)) and (not is_the_leaf_node(index)))
+        else:
+            assert_true(step, is_the_leaf_node(index))
+
+
 @step('Stop mountebank$')
 def stop_mb(step):
     with AssertContextManager(step):
@@ -539,7 +550,7 @@ def check_default_loading_indicator(step, num):
 
 
 @step('The custom loading indicator should display on (\d+) items$')
-def check_costom_loading_indicator(step, num):
+def check_custom_loading_indicator(step, num):
     with AssertContextManager(step):
         indicator = world.browser.execute_script("return $('.custom-row-loading-indicator.loading')")
         assert_true(step, len(indicator) == int(num))
@@ -610,11 +621,15 @@ def check_column_is_fixed(step, col_name):
             assert_true(step, str(col_name) in str(col_names))
 
 
-@step('Prepare the grid with no existing sorting column:')
-def prepare_no_sort_col(step):
+@step('Prepare the grid with no existing sorting column for "(.*?)":')
+def prepare_no_sort_col(step, fully_or_partial):
     with AssertContextManager(step):
-        prepare_grouped_loans(step.hashes)
-        step.given('Presenting "grouping column"')
+        if "fully" in fully_or_partial:
+            prepare_grouped_loans(step.hashes)
+            step.given('Presenting "grouping column"')
+        elif "lazily" in fully_or_partial:
+            prepare_lazy_loaded_grouped_loans(step.hashes)
+            step.given('Presenting "grouping column present partial loaded children"')
 
 
 @step('The grid sorted as "(.*?)" by "(.*?)" column:')
