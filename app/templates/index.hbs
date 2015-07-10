@@ -1,6 +1,7 @@
+<p>These are all different configurations and uses of Ember Table</p>
 <ul>
-    <li>{{#link-to 'fullyLoadedLoans'}}Fully Loaded Loans{{/link-to}}</li>
-    <li>{{#link-to 'lazyLoadedLoans' (query-params totalCount="200")}}Lazy Loaded Loans{{/link-to}}</li>
+    <li>{{#link-to 'fullyLoadedLoans'}}Fully Loaded Loans{{/link-to}} - this is a vanilla usage of Ember Table that is slow to load because of a large data set. i.e. expect this page to load slowly</li>
+    <li>{{#link-to 'lazyLoadedLoans' (query-params totalCount="200")}}Lazy Loaded Loans{{/link-to}} - this is a faster experience for the end user because of lazy loading.</li>
     <li>{{#link-to 'groups'}}Column Groups{{/link-to}}</li>
     <li>{{#link-to 'groupsReorder'}}Column Groups Reorder{{/link-to}}</li>
     <li>{{#link-to 'groupsSort'}}Column Groups Sort inner column{{/link-to}}</li>
