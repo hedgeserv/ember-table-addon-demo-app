@@ -76,12 +76,12 @@ class MountebankStub:
         stubs = make_the_chunk_stubs(rows, chunk_size=1, path="/chunkedGroups", content_key="chunkedGroups")
         self.create_imposter(stubs)
 
-    def stub_lazy_loaded_grouped_loans(self, array_of_query_and_body, groupingMetadata):
+    def stub_lazy_loaded_grouped_loans(self, array_of_query_and_body, grouping_metadata):
         stubs = []
         for item in array_of_query_and_body:
             path = "/chunkedGroups"
             query = item['query']
-            for groupKey in groupingMetadata:
+            for groupKey in grouping_metadata:
                 path += '/' + groupKey + 's'
                 if(query.has_key(groupKey)):
                     path += '/' + str(query[groupKey])
@@ -203,9 +203,9 @@ def prepare_grouped_loans(data):
 def prepare_lazy_loaded_grouped_loans(zipped_rows):
     mb = MountebankStub()
     zipped_row = zipped_rows[0]
-    groupingMetadata = get_grouping_metadata(zipped_row['groupName'])
+    grouping_metadata = get_grouping_metadata(zipped_row['groupName'])
     array_of_url_and_body = make_group_rows(zipped_row)
-    mb.stub_lazy_loaded_grouped_loans(array_of_url_and_body, groupingMetadata)
+    mb.stub_lazy_loaded_grouped_loans(array_of_url_and_body, grouping_metadata)
 
 def get_grouping_metadata(group_name):
     group_names = group_name.split('-')

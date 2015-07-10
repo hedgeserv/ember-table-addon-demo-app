@@ -4,14 +4,14 @@ Feature: Multi-Column Sorting
   I need an intuitive an set of controls to specify which columns to sort on
 
   @wip
-  Scenario: Regular click when no existing sorting should sort ascending and then descending on column
-    Given Prepare the grid with no existing sorting column:
+  Scenario: Regular click when no existing sorting should sort ascending and then descending on column with no grouped row
+    Given Prepare the grid with no existing sorting column for "fully load":
       | groupName | id | activity | isGroupRow |
-      | group2    | f2 | s2       | True       |
-      | group1    | f1 | s1       | True       |
-      | group4    | f4 | s4       | True       |
-      | group3    | f3 | s3       | True       |
-      | group5    | f5 | s5       | True       |
+      | group2    | f2 | s2       | False      |
+      | group1    | f1 | s1       | False      |
+      | group4    | f4 | s4       | False      |
+      | group3    | f3 | s3       | False      |
+      | group5    | f5 | s5       | False      |
     When Click to sort as "ASC" for column "Activity"
     Then I see grouped rows:
       | indicator | groupName | Id | Activity |
@@ -22,7 +22,7 @@ Feature: Multi-Column Sorting
       | +         | group5    | f5 | s5       |
     And The "Activity" column sort indicator should be "asc"
 
-    Given Prepare the grid with no existing sorting column:
+    Given Prepare the grid with no existing sorting column for "fully load":
       | groupName | id | activity | isGroupRow |
       | group2    | f2 | s2       | True       |
       | group1    | f1 | s1       | True       |
@@ -46,7 +46,7 @@ Feature: Multi-Column Sorting
       | +         | group1    | f1 | s1       |
     And The "Activity" column sort indicator should be "desc"
 
-    Given Prepare the grid with no existing sorting column:
+    Given Prepare the grid with no existing sorting column for "fully load":
       | groupName | id | activity | isGroupRow |
       | group2    | f2 | s2       | True       |
       | group1    | f1 | s1       | True       |
@@ -68,6 +68,169 @@ Feature: Multi-Column Sorting
       | +         | group3    | f3 | s3       |
       | +         | group4    | f4 | s4       |
       | +         | group5    | f5 | s5       |
+
+  @wip
+  Scenario: Regular click when no existing sorting should sort ascending and then descending on column with grouped row fully load
+    Given Prepare the grid with no existing sorting column for "fully load":
+      | groupName   | id   | activity | isGroupRow |
+      | group1      | f1   | s1       | True       |
+      | group1-chd2 | f1-2 | s1-2     | False      |
+      | group1-chd1 | f1-1 | s1-1     | False      |
+      | group2      | f2   | s2       | True       |
+      | group3      | f3   | s3       | True       |
+      | group3-chd2 | f3-2 | s3-2     | False      |
+      | group3-chd2 | f3-1 | s3-1     | False      |
+      | group4      | f4   | s4       | True       |
+      | group5      | f5   | s5       | True       |
+    When Click to sort as "ASC" for column "Activity"
+    Then I see grouped rows:
+      | groupName   | id   | activity | isGroupRow |
+      | group1      | f1   | s1       | True       |
+      | group1-chd1 | f1-1 | s1-1     | False      |
+      | group1-chd2 | f1-2 | s1-2     | False      |
+      | group2      | f2   | s2       | True       |
+      | group3      | f3   | s3       | True       |
+      | group3-chd2 | f3-1 | s3-1     | False      |
+      | group3-chd2 | f3-2 | s3-2     | False      |
+      | group4      | f4   | s4       | True       |
+      | group5      | f5   | s5       | True       |
+    And The "Activity" column sort indicator should be "asc"
+
+    Given Prepare the grid with no existing sorting column for "fully load":
+      | groupName   | id   | activity | isGroupRow |
+      | group1      | f1   | s1       | True       |
+      | group1-chd2 | f1-2 | s1-2     | False      |
+      | group1-chd3 | f1-3 | s1-3     | False      |
+      | group1-chd1 | f1-1 | s1-1     | False      |
+      | group2      | f2   | s2       | True       |
+      | group3      | f3   | s3       | True       |
+      | group3-chd3 | f3-3 | s3-3     | False      |
+      | group3-chd1 | f3-1 | s3-1     | False      |
+      | group3-chd2 | f3-2 | s3-2     | False      |
+    And The grid sorted as "ASC" by "Activity" column:
+      | groupName   | id   | activity | isGroupRow |
+      | group1      | f1   | s1       | True       |
+      | group1-chd1 | f1-1 | s1-1     | False      |
+      | group1-chd2 | f1-2 | s1-2     | False      |
+      | group1-chd3 | f1-3 | s1-3     | False      |
+      | group2      | f2   | s2       | True       |
+      | group3      | f3   | s3       | True       |
+      | group3-chd1 | f3-1 | s3-1     | False      |
+      | group3-chd2 | f3-2 | s3-2     | False      |
+      | group3-chd3 | f3-3 | s3-3     | False      |
+    When Click to sort as "DESC" for column "Activity"
+    Then I see grouped rows:
+      | groupName   | id   | activity | isGroupRow |
+      | group1      | f1   | s1       | True       |
+      | group1-chd3 | f1-3 | s1-3     | False      |
+      | group1-chd2 | f1-2 | s1-2     | False      |
+      | group1-chd1 | f1-1 | s1-1     | False      |
+      | group2      | f2   | s2       | True       |
+      | group3      | f3   | s3       | True       |
+      | group3-chd3 | f3-3 | s3-3     | False      |
+      | group3-chd2 | f3-2 | s3-2     | False      |
+      | group3-chd1 | f3-1 | s3-1     | False      |
+    And The "Activity" column sort indicator should be "desc"
+
+    Given Prepare the grid with no existing sorting column for "fully load":
+      | groupName   | id   | activity | isGroupRow |
+      | group1      | f1   | s1       | True       |
+      | group1-chd2 | f1-2 | s1-2     | False      |
+      | group1-chd3 | f1-3 | s1-3     | False      |
+      | group1-chd1 | f1-1 | s1-1     | False      |
+      | group2      | f2   | s2       | True       |
+      | group3      | f3   | s3       | True       |
+      | group3-chd3 | f3-3 | s3-3     | False      |
+      | group3-chd1 | f3-1 | s3-1     | False      |
+      | group3-chd2 | f3-2 | s3-2     | False      |
+    And The grid sorted as "DESC" by "Activity" column:
+      | groupName   | id   | activity | isGroupRow |
+      | group1      | f1   | s1       | True       |
+      | group1-chd3 | f1-3 | s1-3     | False      |
+      | group1-chd2 | f1-2 | s1-2     | False      |
+      | group1-chd1 | f1-1 | s1-1     | False      |
+      | group2      | f2   | s2       | True       |
+      | group3      | f3   | s3       | True       |
+      | group3-chd3 | f3-3 | s3-3     | False      |
+      | group3-chd2 | f3-2 | s3-2     | False      |
+      | group3-chd1 | f3-1 | s3-1     | False      |
+    When Click to sort as "ASC" for column "Activity"
+    Then I see grouped rows:
+      | groupName   | id   | activity | isGroupRow |
+      | group1      | f1   | s1       | True       |
+      | group1-chd1 | f1-1 | s1-1     | False      |
+      | group1-chd2 | f1-2 | s1-2     | False      |
+      | group1-chd3 | f1-3 | s1-3     | False      |
+      | group2      | f2   | s2       | True       |
+      | group3      | f3   | s3       | True       |
+      | group3-chd1 | f3-1 | s3-1     | False      |
+      | group3-chd2 | f3-2 | s3-2     | False      |
+      | group3-chd3 | f3-3 | s3-3     | False      |
+
+  @wip
+  Scenario: Regular click when no existing sorting should sort ascending and then descending on column with grouped row partial load
+    Given Prepare the grid with no existing sorting column for "lazily load":
+      | groupName                                        | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[1]-accountCode[11] | f  | s                   |
+    And Click "expand" for row "f1"
+    And Click "expand" for row "f1-1"
+    When Click to sort as "ASC" for column "Id"
+    Then I see grouped rows:
+      | indicator | groupName | Id      |
+      | -         | f1        | f1      |
+      | -         | f1-1      | f1-1    |
+      |           | f1-1-1    | f1-1-1  |
+      |           | f1-1-10   | f1-1-10 |
+      |           | f1-1-11   | f1-1-11 |
+      |           | f1-1-2    | f1-1-2  |
+    And The "Id" column sort indicator should be "asc"
+
+    Given Prepare the grid with no existing sorting column for "lazily load":
+      | groupName                                        | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[1]-accountCode[11] | f  | s                   |
+    And Click "expand" for row "f1"
+    And Click "expand" for row "f1-1"
+    And The grid sorted as "ASC" by "Id" column:
+      | indicator | groupName | Id      |
+      | -         | f1        | f1      |
+      | -         | f1-1      | f1-1    |
+      |           | f1-1-1    | f1-1-1  |
+      |           | f1-1-10   | f1-1-10 |
+      |           | f1-1-11   | f1-1-11 |
+      |           | f1-1-2    | f1-1-2  |
+    When Click to sort as "DESC" for column "Id"
+    Then I see grouped rows:
+      | indicator | groupName | Id     |
+      | -         | f1        | f1     |
+      | -         | f1-1      | f1-1   |
+      |           | f1-1-9    | f1-1-9 |
+      |           | f1-1-8    | f1-1-8 |
+      |           | f1-1-7    | f1-1-7 |
+      |           | f1-1-6    | f1-1-6 |
+    And The "Id" column sort indicator should be "desc"
+
+    Given Prepare the grid with no existing sorting column for "lazily load":
+      | groupName                                        | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[1]-accountCode[11] | f  | s                   |
+    And Click "expand" for row "f1"
+    And Click "expand" for row "f1-1"
+    And The grid sorted as "DESC" by "Id" column:
+      | indicator | groupName | Id     |
+      | -         | f1        | f1     |
+      | -         | f1-1      | f1-1   |
+      |           | f1-1-9    | f1-1-9 |
+      |           | f1-1-8    | f1-1-8 |
+      |           | f1-1-7    | f1-1-7 |
+      |           | f1-1-6    | f1-1-6 |
+    When Click to sort as "ASC" for column "Id"
+    Then I see grouped rows:
+      | indicator | groupName | Id      |
+      | -         | f1        | f1      |
+      | -         | f1-1      | f1-1    |
+      |           | f1-1-1    | f1-1-1  |
+      |           | f1-1-10   | f1-1-10 |
+      |           | f1-1-11   | f1-1-11 |
+      |           | f1-1-2    | f1-1-2  |
 
   @wip
   Scenario: Control/Command click when no existing sorting should sort ascending and then descending on column
