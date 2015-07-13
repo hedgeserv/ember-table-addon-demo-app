@@ -624,6 +624,20 @@ Feature: Indicators for expanding and collapsing grouped rows
       |           | f1-1-10   | f1-1-10 |
     Then There should be 6 sections loaded
 
+    Given I have the following partial loaded grouped data in MounteBank:
+      | groupName                                        | id | Beginning DR (Base) |
+      | accountSection[1]-accountType[1]-accountCode[40] | f  | s                   |
+    And Presenting "grouping column present partial loaded children"
+    And Click "expand" for the 0 row
+    And Click "expand" for the 1 row
+    And Customer drags scroll bar by offset 100 with 2 times and wait loading section
+    And Click to sort as "ASC" for column "Id"
+    When Click to sort as "DESC" for column "Id"
+    And The default loading indicator should display on 0 items
+
+    """
+    this scenario was linked to the defect:https://hedgeserv.leankit.com/Boards/View/200742377/221169566
+    """
 #    Given I have the following partial loaded grouped data in MounteBank:
 #      | groupName                                        | id | Beginning DR (Base) |
 #      | accountSection[1]-accountType[1]-accountCode[40] | f  | s                   |
@@ -634,8 +648,6 @@ Feature: Indicators for expanding and collapsing grouped rows
 #    And Click to sort as "ASC" for column "Id"
 #    When Click to sort as "DESC" for column "Id"
 #    Then There should be 8 sections loaded
-#    And The default loading indicator should display on 0 items
-
 
   @complete
   Scenario: The grouped row named with long characters shouldn't wrap
