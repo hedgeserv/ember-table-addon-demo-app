@@ -657,7 +657,7 @@ Feature: Indicators for expanding and collapsing grouped rows
     Then The grouped row "group1" should not wrap
 
 
-  @complete11
+  @complete
   Scenario: The error handling when load section in grouping column
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                       | id |
