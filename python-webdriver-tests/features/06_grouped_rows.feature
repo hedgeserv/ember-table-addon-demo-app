@@ -633,7 +633,7 @@ Feature: Indicators for expanding and collapsing grouped rows
 #    And Customer drags scroll bar by offset 100 with 2 times and wait loading section
 #    And Click to sort as "ASC" for column "Id"
 #    When Click to sort as "DESC" for column "Id"
-#    Then There should be 10 sections loaded
+#    Then There should be 8 sections loaded
 #    And The default loading indicator should display on 0 items
 
 
