@@ -45,7 +45,6 @@ function makeStubs(allLoans) {
   makeSortedLoans(allLoans.slice(0, 1000), pageSize, stubs);
   stubs = stubs.concat(makePagedStubs(allLoans, pageSize, "loans", "/loans"));
   stubs.push(makeAllLoansStub(allLoans));
-  stubs.push(makeGroupedRecordStub());
   stubs = stubs.concat(makeNestedGroupingStubs());
   return stubs;
 }
@@ -149,12 +148,6 @@ function makeGroupDataStub(allLoans) {
     },
     "loans": loans
   }, {"group": "true"});
-}
-
-function makeGroupedRecordStub() {
-  var records = loadJsonFile('three-levels-of-grouping.json');
-  generateRecordId(records, 0);
-  return makeStub({reports: records}, '/reports/1');
 }
 
 function makeNestedGroupingStubs() {

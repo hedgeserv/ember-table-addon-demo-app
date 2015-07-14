@@ -24,6 +24,16 @@ export default Ember.Mixin.create({
         headerCellName: titleAndName[0],
         getCellContent: function (row) {
           return row.get(titleAndName[1]);
+        },
+        sortBy: function(prev, next){
+          var prevName = prev.get(titleAndName[1]).toUpperCase();
+          var nextName = next.get(titleAndName[1]).toUpperCase();
+          if(typeof prevName === 'number') {
+            return prevName - nextName;
+          }
+          else {
+            return (prevName < nextName) ? -1 : (prevName > nextName) ? 1 : 0;
+          }
         }
       });
     });
