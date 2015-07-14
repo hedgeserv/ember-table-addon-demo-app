@@ -50,8 +50,9 @@ export default Ember.Controller.extend({
     return LazyArray.create({
       chunkSize: 50,
       totalCount: totalCount,
-      callback: function (pageIndex) {
+      callback: function (pageIndex, query) {
         var params = {section: pageIndex + 1};
+        Ember.setProperties(params, query);
         var sortName = self.get('sortName');
         if(sortName){
           params.sortDirect = self.get('sortDirect');
@@ -69,10 +70,10 @@ export default Ember.Controller.extend({
       window.location.reload(true);
     },
 
-    setSortConditions: function (column) {
-      var columnName = column.get('headerCellName').toLowerCase();
-      this.set('sortName', columnName);
-      this.set('sortDirect', column.get('currentDirect'));
+    sortAction: function(sortCondition) {
+      console.log(sortCondition.get('sortName'), sortCondition.get('sortDirect'));
+      this.set('sortName', sortCondition.get('sortName'));
+      this.set('sortDirect', sortCondition.get('sortDirect'));
     }
   }
 });
