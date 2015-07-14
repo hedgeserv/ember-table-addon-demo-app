@@ -7,7 +7,7 @@ use_chrome: true
 cache:
   directories:
     - node_modules
-
+    - $HOME/.cache/pip
 before_install:
 
   - export DISPLAY=:99.0
