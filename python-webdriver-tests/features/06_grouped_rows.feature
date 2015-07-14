@@ -674,7 +674,9 @@ Feature: Indicators for expanding and collapsing grouped rows
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                       | id |
       | accountSection[1]-accountType[1]-accountCode[1] | f  |
-    When Presenting "grouping column error handling"
+    And Presenting "grouping column error handling"
+    When Click "expand" for the 0 row
+    And Click "expand" for the 1 row
     Then The content "Error will be thrown when expand second level rows" should display in page
-    And The content "groupingName:accountSection" should display in page
+    And The content "groupingName:errorName" should display in page
     And The content "chunkIndex:0" should display in page
