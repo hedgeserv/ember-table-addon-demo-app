@@ -541,6 +541,7 @@ Feature: Multi-Column Sorting
       |           | f1-1-1    | f1-1-1  | s1-1-1   | t1-1-3  |
     And The "Activity" column sort indicator should be "none"
     And The "Status" column sort indicator should be "asc"
+    And There should be 5 sections loaded
 
 
   @wip
@@ -755,20 +756,20 @@ Feature: Multi-Column Sorting
       | indicator | groupName | Id      | Activity | Status  | Use      | Sector   |
       | -         | f1        | f1      | s1       | t1      | fo1      | fi1      |
       | -         | f1-1      | f1-1    | s1-1     | t1-1    | fo1-1    | fi1-1    |
-      |           | f1-1-f2   | f1-1-2  | s1-1-1   | t1-1-3  | fo1-1-1  | fi1-1-2  |
-      |           | f1-1-f10  | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
-      |           | f1-1-f11  | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
-      |           | f1-1-f1   | f1-1-1  | s1-1-2   | t1-1-1  | fo1-1-4  | fi1-1-5  |
-      |           | f1-1-f4   | f1-1-4  | s1-1-2   | t1-1-1  | fo1-1-2  | fi1-1-3  |
-      |           | f1-1-f3   | f1-1-3  | s1-1-2   | t1-1-5  | fo1-1-3  | fi1-1-1  |
+      |           | f1-1-2    | f1-1-2  | s1-1-1   | t1-1-3  | fo1-1-1  | fi1-1-2  |
+      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
+      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
+      |           | f1-1-1    | f1-1-1  | s1-1-2   | t1-1-1  | fo1-1-4  | fi1-1-5  |
+      |           | f1-1-4    | f1-1-4  | s1-1-2   | t1-1-1  | fo1-1-2  | fi1-1-3  |
+      |           | f1-1-3    | f1-1-3  | s1-1-2   | t1-1-5  | fo1-1-3  | fi1-1-1  |
     When "command" click to sort as "ASC" for column "Use"
     Then I see grouped rows:
       | indicator | groupName | Id      | Activity | Status  | Use      | Sector   |
       | -         | f1        | f1      | s1       | t1      | fo1      | fi1      |
       | -         | f1-1      | f1-1    | s1-1     | t1-1    | fo1-1    | fi1-1    |
       |           | f1-1-2    | f1-1-2  | s1-1-1   | t1-1-3  | fo1-1-1  | fi1-1-2  |
-      |           | f1-1-f10  | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
-      |           | f1-1-f11  | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
+      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
+      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
       |           | f1-1-4    | f1-1-4  | s1-1-2   | t1-1-1  | fo1-1-2  | fi1-1-3  |
       |           | f1-1-1    | f1-1-1  | s1-1-2   | t1-1-1  | fo1-1-4  | fi1-1-5  |
       |           | f1-1-3    | f1-1-3  | s1-1-2   | t1-1-5  | fo1-1-3  | fi1-1-1  |
@@ -776,6 +777,7 @@ Feature: Multi-Column Sorting
     And The "Activity" column sort indicator should be "asc"
     And The "Status" column sort indicator should be "asc"
     And The "Use" column sort indicator should be "asc"
+    And There should be 6 sections loaded
 
     Given Prepare the grid with no existing sorting column for "lazily load":
       | groupName                                                             | id                         | activity                   | status                     | use                         | sector                      |
@@ -787,8 +789,8 @@ Feature: Multi-Column Sorting
       | -         | f1        | f1      | s1       | t1      | fo1      | fi1      |
       | -         | f1-1      | f1-1    | s1-1     | t1-1    | fo1-1    | fi1-1    |
       |           | f1-1-2    | f1-1-2  | s1-1-1   | t-1-3   | fo-1-1   | fi-1-2   |
-      |           | f1-1-f10  | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
-      |           | f1-1-f11  | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
+      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
+      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
       |           | f1-1-4    | f1-1-4  | s1-1-2   | t-1-1   | fo-1-2   | fi-1-3   |
       |           | f1-1-1    | f1-1-1  | s1-1-2   | t-1-1   | fo-1-4   | fi-1-5   |
       |           | f1-1-3    | f1-1-3  | s1-1-2   | t-1-5   | fo-1-3   | fi-1-1   |
@@ -799,8 +801,8 @@ Feature: Multi-Column Sorting
       | -         | f1        | f1      | s1       | t1      | fo1      | fi1      |
       | -         | f1-1      | f1-1    | s1-1     | t1-1    | fo1-1    | fi1-1    |
       |           | f1-1-3    | f1-1-3  | s1-1-2   | t1-1-5  | fo1-1-3  | fi1-1-1  |
-      |           | f1-1-f10  | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
-      |           | f1-1-f11  | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
+      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
+      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
       |           | f1-1-2    | f1-1-2  | s1-1-1   | t1-1-3  | fo1-1-1  | fi1-1-2  |
       |           | f1-1-4    | f1-1-4  | s1-1-2   | t1-1-1  | fo1-1-2  | fi1-1-3  |
       |           | f1-1-1    | f1-1-1  | s1-1-3   | t1-1-2  | fo1-1-5  | fi1-1-4  |
@@ -933,8 +935,8 @@ Feature: Multi-Column Sorting
       | -         | f1        | f1      | s1       | t1      | fo1      | fi1      |
       | -         | f1-1      | f1-1    | s1-1     | t1-1    | fo1-1    | fi1-1    |
       |           | f1-1-2    | f1-1-2  | s1-1-1   | t-1-3   | fo-1-1   | fi-1-2   |
-      |           | f1-1-f10  | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
-      |           | f1-1-f11  | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
+      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
+      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
       |           | f1-1-1    | f1-1-1  | s1-1-2   | t-1-1   | fo-1-4   | fi-1-5   |
       |           | f1-1-4    | f1-1-4  | s1-1-2   | t-1-1   | fo-1-2   | fi-1-3   |
       |           | f1-1-3    | f1-1-3  | s1-1-2   | t-1-5   | fo-1-3   | fi-1-1   |
@@ -951,19 +953,20 @@ Feature: Multi-Column Sorting
       |           | f1-1-5    | f1-1-5 | s1-1-3   | t1-1-2 | fo1-1-5 | fi1-1-4 |
     And The "Activity" column sort indicator should be "desc"
     And The "Status" column sort indicator should be "asc"
+    And There should be 6 sections loaded
 
     Given Prepare the grid with no existing sorting column for "lazily load":
       | groupName                                                             | id                         | activity                   | status                     | use                         | sector                      |
       | accountSection[1]-accountType[1]-accountCode[1,2,3,4,5,6,7,8,9,10,11] | f[1,2,3,4,5,6,7,8,9,10,11] | s[2,1,2,2,3,6,7,8,9,10,11] | t[1,3,5,1,2,6,7,8,9,10,11] | fo[4,1,3,2,5,6,7,8,9,10,11] | fi[5,2,1,3,4,6,7,8,9,10,11] |
     And Click "expand" for row "f1"
     And Click "expand" for row "f1-1"
-    And The grid sorted as "ASC" by "Activity, Status" columns:
+    And The grid sorted as "ASC" by "Activity, Status, Use" columns:
       | indicator | groupName | Id      | Activity | Status  | Use      | Sector   |
       | -         | f1        | f1      | s1       | t1      | fo1      | fi1      |
       | -         | f1-1      | f1-1    | s1-1     | t1-1    | fo1-1    | fi1-1    |
       |           | f1-1-2    | f1-1-2  | s1-1-1   | t1-1-3  | fo1-1-1  | fi1-1-2  |
-      |           | f1-1-f10  | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
-      |           | f1-1-f11  | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
+      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
+      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
       |           | f1-1-1    | f1-1-1  | s1-1-2   | t1-1-1  | fo1-1-4  | fi1-1-5  |
       |           | f1-1-4    | f1-1-4  | s1-1-2   | t1-1-1  | fo1-1-2  | fi1-1-3  |
       |           | f1-1-3    | f1-1-3  | s1-1-2   | t1-1-5  | fo1-1-3  | fi1-1-1  |
@@ -975,10 +978,11 @@ Feature: Multi-Column Sorting
       | -         | f1-1      | f1-1    | s1-1     | t1-1    | fo1-1    | fi1-1    |
       |           | f1-1-1    | f1-1-1  | s1-1-2   | t1-1-1  | fo1-1-4  | fi1-1-5  |
       |           | f1-1-4    | f1-1-4  | s1-1-2   | t1-1-1  | fo1-1-2  | fi1-1-3  |
-      |           | f1-1-f10  | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
-      |           | f1-1-f11  | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
+      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
+      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
       |           | f1-1-5    | f1-1-5  | s1-1-3   | t1-1-2  | fo1-1-5  | fi1-1-4  |
       |           | f1-1-2    | f1-1-2  | s1-1-1   | t1-1-3  | fo1-1-1  | fi1-1-2  |
       |           | f1-1-3    | f1-1-3  | s1-1-2   | t1-1-5  | fo1-1-3  | fi1-1-1  |
     And The "Activity" column sort indicator should be "none"
     And The "Status" column sort indicator should be "asc"
+    And There should be 7 sections loaded
