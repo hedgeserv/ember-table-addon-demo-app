@@ -544,6 +544,7 @@ def start_mb(step):
 @step('The default loading indicator should display on (\d+) items$')
 def check_default_loading_indicator(step, num):
     with AssertContextManager(step):
+        time.sleep(0.01)
         indicator = world.browser.execute_script("return $('.row-loading-indicator.loading')")
         assert_true(step, len(indicator) == int(num))
         bo.start_mb()
