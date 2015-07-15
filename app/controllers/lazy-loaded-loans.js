@@ -71,7 +71,6 @@ export default Ember.Controller.extend({
     },
 
     sortAction: function(sortCondition) {
-      console.log(sortCondition.get('sortName'), sortCondition.get('sortDirect'));
       this.set('sortName', sortCondition.get('sortName'));
       this.set('sortDirect', sortCondition.get('sortDirect'));
     }
