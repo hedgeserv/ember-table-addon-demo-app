@@ -75,6 +75,7 @@ Feature: Multi-Column Sorting
   """
   sort for grouped row with fully load failed, track with defect: https://hedgeserv.leankit.com/Boards/View/200742377/223032857
   """
+
   Scenario: Regular click when no existing sorting should sort ascending and then descending on column with grouped row fully load
     Given Prepare the grid with no existing sorting column for "fully load":
       | groupName        | id     | activity | isGroupRow |
@@ -379,95 +380,115 @@ Feature: Multi-Column Sorting
 #    And The "Activity" column sort indicator should be "none"
 #    Then There should be 6 sections loaded
 
-  @wip
+  @complete
   Scenario: Data sorted on a single column regular click on different column changes sort to that column with no grouped row
-    Given Prepare the grid with no existing sorting column for "fully load":
-      | groupName | id | activity | status | isGroupRow |
-      | group2    | f2 | s3       | t1     | False      |
-      | group1    | f1 | s1       | t3     | False      |
-      | group4    | f4 | s4       | t5     | False      |
-      | group3    | f3 | s2       | t4     | False      |
-      | group5    | f5 | s5       | t2     | False      |
-    And The grid sorted as "ASC" by "Activity" column:
-      | indicator | groupName | Id | Activity | Status |
-      | +         | group1    | f1 | s1       | t3     |
-      | +         | group3    | f3 | s2       | t4     |
-      | +         | group2    | f2 | s3       | t1     |
-      | +         | group4    | f4 | s4       | t5     |
-      | +         | group5    | f5 | s5       | t2     |
-    When Click to sort as "ASC" for column "Status"
-    Then I see grouped rows:
-      | indicator | groupName | Id | Activity | Status |
-      | +         | group2    | f2 | s3       | t1     |
-      | +         | group5    | f5 | s5       | t2     |
-      | +         | group1    | f1 | s1       | t3     |
-      | +         | group3    | f3 | s2       | t4     |
-      | +         | group4    | f4 | s4       | t5     |
+    Given There are 200 loans in chunk size 50
+    And Presenting "column sort"
+    And Drag scroll bar to "bottom"
+    And Drag scroll bar to "top"
+    And Click to sort as "ASC" for column "Activity"
+    When Click to sort as "ASC" for column "status"
+    Then I see rows:
+      | Id  | Activity     | status    |
+      | 0   | activity-0   | status0   |
+      | 1   | activity-1   | status1   |
+      | 10  | activity-10  | status10  |
+      | 100 | activity-100 | status100 |
+      | 101 | activity-101 | status101 |
+      | 102 | activity-102 | status102 |
     And The "Activity" column sort indicator should be "none"
-    And The "Status" column sort indicator should be "asc"
+    And The "status" column sort indicator should be "asc"
 
-  Scenario: Data sorted on a single column regular click on different column changes sort to that column with grouped row fully load
-    Given Prepare the grid with no existing sorting column for "fully load":
-      | groupName   | id   | activity | status | isGroupRow |
-      | group1      | f1   | s1       | t1     | True       |
-      | group1-chd2 | f1-2 | s1-3     | t1-1   | False      |
-      | group1-chd1 | f1-1 | s1-1     | t1-3   | False      |
-      | group1-chd4 | f1-4 | s1-4     | t1-5   | False      |
-      | group1-chd3 | f1-3 | s1-2     | t1-4   | False      |
-      | group1-chd5 | f1-5 | s1-5     | t1-2   | False      |
-      | group2      | f2   | s2       | t2     | True       |
-    And Click "expand" for row "group1"
-    And The grid sorted as "ASC" by "Activity" column:
-      | indicator | groupName | Id   | Activity | Status |
-      | -         | group1    | f1   | s1       | t1     |
-      |           | group1-1  | f1-1 | s1-1     | t1-3   |
-      |           | group1-3  | f1-3 | s1-2     | t1-4   |
-      |           | group1-2  | f1-2 | s1-3     | t1-1   |
-      |           | group1-4  | f1-4 | s1-4     | t1-5   |
-      |           | group1-5  | f1-5 | s1-5     | t1-2   |
-      | +         | group2    | f2   | s2       | t2     |
-    When Click to sort as "ASC" for column "Status"
-    Then I see grouped rows:
-      | indicator | groupName | Id   | Activity | Status |
-      | -         | group1    | f1   | s1       | t1     |
-      |           | group1-2  | f1-2 | s1-3     | t1-1   |
-      |           | group1-5  | f1-5 | s1-5     | t1-2   |
-      |           | group1-1  | f1-1 | s1-1     | t1-3   |
-      |           | group1-3  | f1-3 | s1-2     | t1-4   |
-      |           | group1-4  | f1-4 | s1-4     | t1-5   |
-      | +         | group2    | f2   | s2       | t2     |
-    And The "Activity" column sort indicator should be "none"
-    And The "Status" column sort indicator should be "asc"
+#  Scenario: Data sorted on a single column regular click on different column changes sort to that column with grouped row fully load
+#    Given Prepare the grid with no existing sorting column for "fully load":
+#      | groupName   | id   | activity | status | isGroupRow |
+#      | group1      | f1   | s1       | t1     | True       |
+#      | group1-chd2 | f1-2 | s1-3     | t1-1   | False      |
+#      | group1-chd1 | f1-1 | s1-1     | t1-3   | False      |
+#      | group1-chd4 | f1-4 | s1-4     | t1-5   | False      |
+#      | group1-chd3 | f1-3 | s1-2     | t1-4   | False      |
+#      | group1-chd5 | f1-5 | s1-5     | t1-2   | False      |
+#      | group2      | f2   | s2       | t2     | True       |
+#    And Click "expand" for row "group1"
+#    And The grid sorted as "ASC" by "Activity" column:
+#      | indicator | groupName | Id   | Activity | Status |
+#      | -         | group1    | f1   | s1       | t1     |
+#      |           | group1-1  | f1-1 | s1-1     | t1-3   |
+#      |           | group1-3  | f1-3 | s1-2     | t1-4   |
+#      |           | group1-2  | f1-2 | s1-3     | t1-1   |
+#      |           | group1-4  | f1-4 | s1-4     | t1-5   |
+#      |           | group1-5  | f1-5 | s1-5     | t1-2   |
+#      | +         | group2    | f2   | s2       | t2     |
+#    When Click to sort as "ASC" for column "Status"
+#    Then I see grouped rows:
+#      | indicator | groupName | Id   | Activity | Status |
+#      | -         | group1    | f1   | s1       | t1     |
+#      |           | group1-2  | f1-2 | s1-3     | t1-1   |
+#      |           | group1-5  | f1-5 | s1-5     | t1-2   |
+#      |           | group1-1  | f1-1 | s1-1     | t1-3   |
+#      |           | group1-3  | f1-3 | s1-2     | t1-4   |
+#      |           | group1-4  | f1-4 | s1-4     | t1-5   |
+#      | +         | group2    | f2   | s2       | t2     |
+#    And The "Activity" column sort indicator should be "none"
+#    And The "Status" column sort indicator should be "asc"
 
-  Scenario: Data sorted on a single column regular click on differentj column changes sort to that column with grouped row partial load
-    Given Prepare the grid with no existing sorting column for "lazily load":
-      | groupName                                                             | id                         | activity                   | status                     |
-      | accountSection[1]-accountType[1]-accountCode[1,3,2,4,5,6,7,8,9,10,11] | f[1,3,2,4,5,6,7,8,9,10,11] | s[1,2,3,4,5,6,7,8,9,10,11] | t[3,4,1,5,2,6,7,8,9,10,11] |
-    And Click "expand" for row "f1"
-    And Click "expand" for row "f1-1"
-    And The grid sorted as "ASC" by "Activity" column:
-      | indicator | groupName | Id      | Activity | Status  |
-      | -         | f1        | f1      | s1       | t1      |
-      | -         | f1-1      | f1-1    | s1-1     | t1-1    |
-      |           | f1-1-1    | f1-1-1  | s1-1-1   | t1-1-3  |
-      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 |
-      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 |
-      |           | f1-1-3    | f1-1-3  | s1-1-2   | t1-1-4  |
-      |           | f1-1-2    | f1-1-2  | s1-1-3   | t1-1-1  |
-    When Click to sort as "ASC" for column "Status"
-    Then I see grouped rows:
-      | indicator | groupName | Id      | Activity | Status  |
-      | -         | 1         | f1      | s1       | t1      |
-      | -         | f1-1      | f1-1    | s1-1     | t1-1    |
-      |           | f1-1-2    | f1-1-2  | s1-1-3   | t1-1-1  |
-      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 |
-      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 |
-      |           | f1-1-5    | f1-1-5  | s1-1-5   | t1-1-2  |
-      |           | f1-1-1    | f1-1-1  | s1-1-1   | t1-1-3  |
-    And The "Activity" column sort indicator should be "none"
-    And The "Status" column sort indicator should be "asc"
-    And There should be 5 sections loaded
+#  Scenario: Data sorted on a single column regular click on differentj column changes sort to that column with grouped row partial load
+#    Given Prepare the grid with no existing sorting column for "lazily load":
+#      | groupName                                                             | id                         | activity                   | status                     |
+#      | accountSection[1]-accountType[1]-accountCode[1,3,2,4,5,6,7,8,9,10,11] | f[1,3,2,4,5,6,7,8,9,10,11] | s[1,2,3,4,5,6,7,8,9,10,11] | t[3,4,1,5,2,6,7,8,9,10,11] |
+#    And Click "expand" for row "f1"
+#    And Click "expand" for row "f1-1"
+#    And The grid sorted as "ASC" by "Activity" column:
+#      | indicator | groupName | Id      | Activity | Status  |
+#      | -         | f1        | f1      | s1       | t1      |
+#      | -         | f1-1      | f1-1    | s1-1     | t1-1    |
+#      |           | f1-1-1    | f1-1-1  | s1-1-1   | t1-1-3  |
+#      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 |
+#      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 |
+#      |           | f1-1-3    | f1-1-3  | s1-1-2   | t1-1-4  |
+#      |           | f1-1-2    | f1-1-2  | s1-1-3   | t1-1-1  |
+#    When Click to sort as "ASC" for column "Status"
+#    Then I see grouped rows:
+#      | indicator | groupName | Id      | Activity | Status  |
+#      | -         | 1         | f1      | s1       | t1      |
+#      | -         | f1-1      | f1-1    | s1-1     | t1-1    |
+#      |           | f1-1-2    | f1-1-2  | s1-1-3   | t1-1-1  |
+#      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 |
+#      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 |
+#      |           | f1-1-5    | f1-1-5  | s1-1-5   | t1-1-2  |
+#      |           | f1-1-1    | f1-1-1  | s1-1-1   | t1-1-3  |
+#    And The "Activity" column sort indicator should be "none"
+#    And The "Status" column sort indicator should be "asc"
+#    And There should be 5 sections loaded
 
+#  Scenario: Data sorted on a single column regular click on differentj column changes sort to that column with grouped row partial load
+#    Given Prepare the grid with no existing sorting column for "lazily load":
+#      | groupName                                                             | id                         | activity                   | status                     |
+#      | accountSection[1]-accountType[1]-accountCode[1,3,2,4,5,6,7,8,9,10,11] | f[1,3,2,4,5,6,7,8,9,10,11] | s[1,2,3,4,5,6,7,8,9,10,11] | t[3,4,1,5,2,6,7,8,9,10,11] |
+#    And Click "expand" for row "f1"
+#    And Click "expand" for row "f1-1"
+#    And The grid sorted as "ASC" by "Activity" column:
+#      | indicator | groupName | Id      | Activity | Status  |
+#      | -         | f1        | f1      | s1       | t1      |
+#      | -         | f1-1      | f1-1    | s1-1     | t1-1    |
+#      |           | f1-1-1    | f1-1-1  | s1-1-1   | t1-1-3  |
+#      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 |
+#      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 |
+#      |           | f1-1-3    | f1-1-3  | s1-1-2   | t1-1-4  |
+#      |           | f1-1-2    | f1-1-2  | s1-1-3   | t1-1-1  |
+#    When Click to sort as "ASC" for column "Status"
+#    Then I see grouped rows:
+#      | indicator | groupName | Id      | Activity | Status  |
+#      | -         | 1         | f1      | s1       | t1      |
+#      | -         | f1-1      | f1-1    | s1-1     | t1-1    |
+#      |           | f1-1-2    | f1-1-2  | s1-1-3   | t1-1-1  |
+#      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 |
+#      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 |
+#      |           | f1-1-5    | f1-1-5  | s1-1-5   | t1-1-2  |
+#      |           | f1-1-1    | f1-1-1  | s1-1-1   | t1-1-3  |
+#    And The "Activity" column sort indicator should be "none"
+#    And The "Status" column sort indicator should be "asc"
+#    And There should be 5 sections loaded
 
   @wip
   Scenario: Data sorted on a single column control/command click on different column adds the column to the sort then regular click different column with no grouped row
