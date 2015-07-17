@@ -13,8 +13,13 @@ export default Ember.Mixin.create({
       return ColumnDefinition.create({
         columnWidth: c[2],
         headerCellName: c[1],
+        sortBy: function(prev, next){
+          var prevStr = this.getCellContent(prev).toString();
+          var nextStr = this.getCellContent(next).toString();
+          return prevStr.localeCompare(nextStr);
+        },
         getCellContent: function(row) {
-          return row.get(c[0]);
+          return Ember.get(row, c[0]);
         }
       });
     });
