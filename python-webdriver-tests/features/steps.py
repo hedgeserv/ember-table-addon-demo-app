@@ -393,6 +393,13 @@ def verify_grouped_rows(step):
         verify_grouped_row(index, step.hashes[index])
 
 
+@step('I see rows:$')
+def verify_grouped_rows(step):
+    for index in range(0, len(step.hashes)):
+        for field in step.hashes[index]:
+            verify_cell_content(index, field, step.hashes[index][field])
+
+
 def verify_grouped_row(index, row):
     indicator = row['indicator']
     if indicator == '-':
@@ -542,12 +549,18 @@ def start_mb(step):
 
 
 @step('The default loading indicator should display on (\d+) items$')
-def check_default_loading_indicator(step, num):
+def check_default_loading_indicator(step, num, timeout=5):
     with AssertContextManager(step):
-        time.sleep(0.01)
-        indicator = world.browser.execute_script("return $('.row-loading-indicator.loading')")
-        assert_true(step, len(indicator) == int(num))
-        bo.start_mb()
+        try:
+            start = time.time()
+            while time.time() - start < timeout:
+                indicator = world.browser.execute_script("return $('.row-loading-indicator.loading')")
+                if len(indicator) == int(num):
+                    return
+                time.sleep(0.2)
+            raise AssertionError
+        finally:
+            bo.start_mb()
 
 
 @step('The custom loading indicator should display on (\d+) items$')

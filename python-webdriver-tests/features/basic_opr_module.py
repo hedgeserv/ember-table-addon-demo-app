@@ -203,6 +203,6 @@ def command_ctrl_with_click(browser, col_name, command_or_ctrl):
     element = browser.execute_script(
         "return $('.ember-table-header-container .ember-table-content:contains(" + col_name + ")').parent().parent()")
     if command_or_ctrl == "command":
-        chains.key_down(Keys.COMMAND).click(element).perform()
+        chains.key_down(Keys.COMMAND).click(element[0]).perform()
     elif command_or_ctrl == "control":
-        chains.key_down(Keys.CONTROL).click(element).perform()
+        chains.key_down(Keys.CONTROL).click(element[0]).perform()
