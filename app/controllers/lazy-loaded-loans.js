@@ -34,7 +34,9 @@ export default Ember.Controller.extend({
       columnWidth: 100,
       headerCellName: 'status',
       sortBy: function(prev, next){
-        return prev.get('status').charCodeAt() - next.get('status').charCodeAt();
+        var prevStr = this.getCellContent(prev).toString();
+        var nextStr = this.getCellContent(next).toString();
+        return prevStr.localeCompare(nextStr);
       },
       getCellContent: function (row) {
         return row.get('status');

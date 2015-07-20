@@ -198,8 +198,15 @@ def check_loaded_chunk(step, num):
 
 
 @step('There should be (\d+) sections loaded')
-def get_loaded_section(step, num):
-    assert_true(step, len(get_mb_request()) == int(num))
+def get_loaded_section(step, num, timeout=3):
+    try:
+        start = time.time()
+        while time.time() - start < timeout:
+            if len(get_mb_request()) == int(num):
+                return
+            time.sleep(0.01)
+    except AssertionError, e:
+        raise e
 
 
 @step(
@@ -560,7 +567,8 @@ def check_default_loading_indicator(step, num, timeout=5):
                 time.sleep(0.2)
             raise AssertionError
         finally:
-            bo.start_mb()
+            if int(num) != 0:
+                bo.start_mb()
 
 
 @step('The custom loading indicator should display on (\d+) items$')
