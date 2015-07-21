@@ -8,4 +8,8 @@ MBImposter.prototype.pushStub = function(stub){
 	this.stubs.push(stub);
 };
 
+MBImposter.prototype.pushStubs = function(stubs){
+	this.stubs = this.stubs.concat(stubs);
+};
+
 module.exports = MBImposter;
