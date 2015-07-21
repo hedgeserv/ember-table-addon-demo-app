@@ -1,21 +1,18 @@
 import Ember from 'ember';
-import ColumnDefinition from 'ember-table/models/column-definition';
 import LazyArray from 'ember-table/models/lazy-array';
 import ThreeColumnsMixin from '../mixins/three-columns-mixin';
-export default Ember.Controller.extend(ThreeColumnsMixin, {
 
+export default Ember.Controller.extend(ThreeColumnsMixin, {
   queryParams:['totalCount'],
-  totalCount:100,
   sortName: null,
   sortDirect: null,
 
   model: function () {
     var self = this;
-    var totalCount = this.get('totalCount');
     return LazyArray.create({
       chunkSize: 50,
       totalCount: 200,
-      callback: function (pageIndex, query) {
+      callback: function (pageIndex) {
         var params = {section: pageIndex + 1};
         var sortName = self.get('sortName');
         if(sortName){
@@ -28,6 +25,14 @@ export default Ember.Controller.extend(ThreeColumnsMixin, {
       }
     });
   }.property(),
+
+  columnsMetadata: [
+    ["id", "Id", 20, function(prev, next){ 
+      return Ember.get(prev, 'id') - Ember.get(next, 'id');
+    }],
+    ["activity", "Activity", 150],
+    ["status", "status", 150]
+  ],
 
   actions: {
     apply:function(){
