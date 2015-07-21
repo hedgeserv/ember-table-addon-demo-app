@@ -9,7 +9,7 @@ Feature: Multi-Column Sorting
     And Presenting "column sort"
     And Drag scroll bar to "bottom"
     And Drag scroll bar to "top"
-    When Click to sort as "ASC" for column "Activity"
+    When Click to sort as "ASC" for column "Id"
     Then I see rows:
       | Id | Activity   | status  |
       | 0  | activity-0 | status0 |
@@ -18,14 +18,14 @@ Feature: Multi-Column Sorting
       | 3  | activity-3 | status3 |
       | 4  | activity-4 | status4 |
       | 5  | activity-5 | status5 |
-    And The "Activity" column sort indicator should be "asc"
+    And The "Id" column sort indicator should be "asc"
 
     Given There are 200 loans in chunk size 50
     And Presenting "column sort"
     And Drag scroll bar to "bottom"
     And Drag scroll bar to "top"
-    And Click to sort as "ASC" for column "Activity"
-    When Click to sort as "DESC" for column "Activity"
+    And Click to sort as "ASC" for column "Id"
+    When Click to sort as "DESC" for column "Id"
     Then I see rows:
       | Id  | Activity     | status    |
       | 199 | activity-199 | status199 |
@@ -34,15 +34,15 @@ Feature: Multi-Column Sorting
       | 196 | activity-196 | status196 |
       | 195 | activity-195 | status195 |
       | 194 | activity-194 | status194 |
-    And The "Activity" column sort indicator should be "desc"
+    And The "Id" column sort indicator should be "desc"
 
     Given There are 200 loans in chunk size 50
     And Presenting "column sort"
     And Drag scroll bar to "bottom"
     And Drag scroll bar to "top"
-    And Click to sort as "ASC" for column "Activity"
-    And Click to sort as "DESC" for column "Activity"
-    When Click to sort as "ASC" for column "Activity"
+    And Click to sort as "ASC" for column "Id"
+    And Click to sort as "DESC" for column "Id"
+    When Click to sort as "ASC" for column "Id"
     Then I see rows:
       | Id | Activity   | status  |
       | 0  | activity-0 | status0 |
@@ -51,13 +51,13 @@ Feature: Multi-Column Sorting
       | 3  | activity-3 | status3 |
       | 4  | activity-4 | status4 |
       | 5  | activity-5 | status5 |
-    And The "Activity" column sort indicator should be "asc"
+    And The "Id" column sort indicator should be "asc"
 
     Given There are 200 loans in chunk size 50
     And Presenting "column sort"
     And Drag scroll bar to "bottom"
     And Drag scroll bar to "top"
-    When "command" click to sort as "ASC" for column "Activity"
+    When "command" click to sort as "ASC" for column "Id"
     Then I see rows:
       | Id | Activity   | status  |
       | 0  | activity-0 | status0 |
@@ -74,9 +74,9 @@ Feature: Multi-Column Sorting
     And Presenting "column sort"
     And Drag scroll bar to "bottom"
     And Drag scroll bar to "top"
-    And Click to sort as "ASC" for column "Activity"
-    And Click to sort as "DESC" for column "Activity"
-    When "command" click to sort as "un-sort" for column "Activity"
+    And Click to sort as "ASC" for column "Id"
+    And Click to sort as "DESC" for column "Id"
+    When "command" click to sort as "un-sort" for column "Id"
     Then I see rows:
       | Id | Activity   | status  |
       | 0  | activity-0 | status0 |
@@ -85,7 +85,7 @@ Feature: Multi-Column Sorting
       | 3  | activity-3 | status3 |
       | 4  | activity-4 | status4 |
       | 5  | activity-5 | status5 |
-    And The "Activity" column sort indicator should be "none"
+    And The "Id" column sort indicator should be "none"
 
   @complete
   Scenario: Regular click when no existing sorting should sort ascending and then descending on column with grouped row fully load
@@ -363,7 +363,7 @@ Feature: Multi-Column Sorting
     And Presenting "column sort"
     And Drag scroll bar to "bottom"
     And Drag scroll bar to "top"
-    When "command" click to sort as "ASC" for column "Activity"
+    When "command" click to sort as "ASC" for column "Id"
     Then I see rows:
       | Id | Activity   | status  |
       | 0  | activity-0 | status0 |
@@ -372,7 +372,7 @@ Feature: Multi-Column Sorting
       | 3  | activity-3 | status3 |
       | 4  | activity-4 | status4 |
       | 5  | activity-5 | status5 |
-    And The "Activity" column sort indicator should be "asc"
+    And The "Id" column sort indicator should be "asc"
 
   @wip
   Scenario: Control/Command click when no existing sorting should sort ascending and then descending on column with grouped row fully load
