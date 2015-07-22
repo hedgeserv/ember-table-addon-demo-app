@@ -1,71 +1,67 @@
 var helper = require('./helper');
+var extend = require('util')._extend;
 var MBStub = require('./m-b-stub');
 var stubs = [];
-var i, j, k, iIdx, jIdx, kIdx;
+var totalCount = 200;
+var pageSize = 50;
+var loans = helper.loadAllLoans().slice(0, totalCount);
+var url = '/loans'
+var singleSortColumns = ['id'];
+var multiColumns = ['activity', 'status'];
+var sortDirects = ['asc', 'desc'];
 
-// prepare unsort data
-var bodyContent = [];
-for (i = 1; i <= 5; i++) {
-  iIdx = (i + 2) % 5
-  for (j = 1; j <= 5; j++) {
-    jIdx = (j + 3) % 5
-    for (k = 1; k <= 5; k++) {
-      kIdx = (k + 4) % 5
-      bodyContent.push({
-        id: ((iIdx * 10) + jIdx) * 10 + kIdx,
-        activity: 'activity-' + jIdx,
-        status: 'status-' + kIdx
-      })
-    }
-  }
-};
-
-var chunkSize = 25;
-var content;
-
-var splitContentToStubs = function(content, query) {
-  var subStubs = helper.πsplitToChunks(content, chunkSize).map(function(chunkData, index) {
-    var localQuery = helper.clone(query || {});
-    localQuery.section = index + 1;
-    var stub = new MBStub({
-      path: '/loans',
-      query: localQuery
-    });
-    stub.setBody({
-      "meta": {
-        "total": content.length,
-        "page": index + 1,
-        "page_size": chunkSize,
-        "date": new Date()
-      },
-      loans: chunkData
-    });
-    return stub;
+// set sorted stubs
+var sortColumns = helper.product(multiColumns, multiColumns, true);
+sortColumns.push(singleSortColumns);
+sortColumns.forEach(function (sortNames){
+  var sortConditions = sortNames.map(function(sortName){
+    return {sortName: sortName};
   });
-  stubs = stubs.concat(subStubs);
-};
-
-// unsort
-content = bodyContent;
-splitContentToStubs(content);
-
-
-// id => asc
-['id', 'activity', 'status'].forEach(function(sortName) {
-  var content = bodyContent.slice().sort(function(prev, next) {
-    var prevStr = prev[sortName].toString();
-    var nextStr = next[sortName].toString();
-    return prevStr.localeCompare(nextStr);
+  var directs = sortNames.length === 1 ? [['asc'], ['desc']] : helper.product(sortDirects, sortDirects);
+  directs.forEach(function(subDirects){
+    var conditions = sortConditions.map(function(condition, idx){
+      var sortCondition = helper.clone(condition);
+      sortCondition['sortDirect'] = subDirects[idx];
+      return sortCondition;
+    });
+    var sortedloans = helper.multiSort(loans , conditions);
+    var localQuery = helper.sortConditionsToQuery(conditions);
+    helper.concat(stubs, createStubs(sortedloans, localQuery));
   });
-
-  splitContentToStubs(content, {
-    'sortNames[0]': sortName,
-    'sortDirect[0]': 'asc'
-  })
-
 });
 
 
+// set unsort stubs
+helper.concat(stubs, createStubs(loans, {}));
 
 
 module.exports = stubs;
+
+function createStubs(loans, query){
+  return helper.splitToChunks(loans, pageSize).map(function(chunkData, index) {
+    var pageIndex = index + 1;
+    var localQuery = extend({"section": pageIndex}, query);
+    var stub = createStub(localQuery);
+    stub.setBody({
+      "meta": createMeta(pageIndex),
+      "loans": chunkData
+    });
+    return stub;
+  });
+}
+
+function createStub(query) {
+  return new MBStub({
+    "query": query,
+    "path": url
+  });
+}
+
+function createMeta(pageIndex) {
+  return {
+    "total": totalCount,
+    "page": pageIndex,
+    "page_size": pageSize,
+    "date": new Date()
+  }
+}

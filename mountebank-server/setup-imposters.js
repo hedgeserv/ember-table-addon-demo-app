@@ -2,80 +2,41 @@ var http = require('http');
 var extend = require('util')._extend;
 var format = require('util').format;
 var helper = require('./helper');
+
+// MountBank Models
 var MBStub = require('./m-b-stub');
+var MB = require('./mb');
+var MBImposter = require('./m-b-imposter');
 
-stubLoans(loadAllLoans());
+var PORT = 5555;
+var mountBank = new MB();
 
-function loadAllLoans() {
-  var allLoans = [1, 2, 3, 4, 5, 6, 7].map(function(index) {
-    return loadJsonFile(index + '.json');
-  }).reduce(function(previous, current){
-    return previous.concat(current.loans);
-  }, []);
-  return allLoans;
-}
+// init imposter
+var imposter = new MBImposter(PORT);
 
-function stubLoans(allLoans) {
-  var options = {
-    host: 'localhost',
-    port: 2525,
-    path: '/imposters'  ,
-    method: 'POST',
-    header: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
-  };
-  var imposter = JSON.stringify({
-    "port": 5555,
-    "protocol": "http",
-    "name": "loans",
-    "stubs": makeStubs(allLoans)
-  });
+// Lazy loaded loans
+var lazyLoadStubs = require('./stubs-for-lazy-load');
+imposter.pushStubs(lazyLoadStubs);
 
-  var req = http.request(options, function(res) {
-    res.setEncoding('utf8');
-  });
-  req.write(imposter);
-  req.end();
-}
+//TODO: Will remove when finish refactor setUp mountBank
+var loans = helper.loadAllLoans();
+imposter.pushStubs(makeStubs(loans));
+
+// Fully loaded loans
+var fullyLoansStub = require('./stub-for-fully-loans');
+imposter.pushStub(fullyLoansStub);
+
+// send http request to mountbank
+mountBank.setImposter(imposter);
+
+// end
 
 function makeStubs(allLoans) {
   var stubs = [];
   var pageSize = 50;
-  // stubs.push(makeGroupDataStub(allLoans));
-  // makeSortedLoans(allLoans.slice(0, 1000), pageSize, stubs);
-  // stubs = stubs.concat(makePagedStubs(allLoans.slice(0, 200), pageSize, "loans", "/loans"));
-  // stubs.push(makeAllLoansStub(allLoans));
+  stubs.push(makeGroupDataStub(allLoans));
   stubs = stubs.concat(makeNestedGroupingStubs());
   return stubs;
-}
-
-function makeSortedLoans(allLoans, pageSize, stubs) {
-  loans = allLoans.slice(0, 200);
-  var sortFunctionMap = {'id': intCompare};
-  var columns = ['activity', 'status'];
-  var sortColumns = helper.product(columns, columns, true);
-  sortColumns.push(['id']);
-  var sortDirects = ['asc', 'desc'];
-  sortColumns.forEach(function(sortNames){
-    var sortConditions = sortNames.map(function(sortName){
-      return {sortName: sortName};
-    });
-    var directs = sortNames.length === 1 ? [['asc'], ['desc']] : helper.product(sortDirects, sortDirects);
-    directs.forEach(function(subDirects){
-      var conditions = sortConditions.map(function(condition, idx){
-        var sortCondition = helper.clone(condition);
-        sortCondition['sortDirect'] = subDirects[idx];
-        return sortCondition;
-      })
-      var sortedloans = multiSort(loans , conditions);
-      var localStubs = makeMultiColumnsSortedPageLoans(sortedloans, pageSize, 'loans', '/loans', conditions);
-      localStubs.forEach(function(stub){
-        stubs.push(stub);
-      });
-    });
-  });       
 }
 
 function makeMultiColumnsSortedPageLoans(loans, pageSize, contentKey, path, sortConditions){
@@ -110,15 +71,9 @@ function makePerPageStub(allRecords, pageIndex, pageSize, contentKey, path, quer
     }
   };
   body[contentKey] = records;
-  var theQuery = cloneObject(query);
+  var theQuery = helper.clone(query);
   theQuery["section"] = pageIndex.toString();
   return makeStub(body, path, theQuery);
-}
-
-function makeAllLoansStub(allLoans) {
-  return makeLoansStub({
-    "loans": allLoans
-  });
 }
 
 function stringCompare(prev, next) {
@@ -170,12 +125,12 @@ function makeGroupDataStub(allLoans) {
 }
 
 function makeNestedGroupingStubs() {
-  var records = loadJsonFile('three-levels-of-grouping.json');
+  var records = helper.loadJsonFile('three-levels-of-grouping.json');
   for(var i=0; i<20; i++) {
-    records[0].children[2].children.push(cloneObject(records[0].children[2].children[0]));
+    records[0].children[2].children.push(helper.clone(records[0].children[2].children[0]));
   }
   for (var i=0; i< 20; i++) {
-    records[0].children.push(cloneObject(records[0].children[2]));
+    records[0].children.push(helper.clone(records[0].children[2]));
   }
 
   generateRecordId(records, 0);
@@ -208,7 +163,7 @@ function makeNestedGroupingStubs() {
             sortCondition['sortName'] = sortNameMap[sortCondition['sortName']];
             return sortCondition;
           });
-          var localStubs = makeMultiColumnsSortedPageLoans(multiSort(localLoans, sortConditions), 10, "chunkedGroups", url, conditions);
+          var localStubs = makeMultiColumnsSortedPageLoans(helper.multiSort(localLoans, sortConditions), 10, "chunkedGroups", url, conditions);
           stubs = stubs.concat(localStubs);
         });
       });
@@ -223,7 +178,7 @@ function doMakeNestedStubs(theRecord, resourceNames, parentQuery, url) {
   if (theRecord.children) {
     stubs = stubs.concat(makePagedStubs(noChildren(theRecord.children), 10, "chunkedGroups", url, parentQuery));
     theRecord.children.forEach(function(value) {
-      var theQuery = cloneObject(parentQuery);
+      var theQuery = helper.clone(parentQuery);
       var tempUrl = url;
       if (tempUrl !== '/chunkedGroups'){
         tempUrl += '/' + value.id;
@@ -245,13 +200,9 @@ function noChildren(obj) {
 }
 
 function doRemoveChildren(obj) {
-  var clone = cloneObject(obj);
+  var clone = helper.clone(obj);
   clone.children = [];
   return clone;
-}
-
-function cloneObject(obj) {
-  return JSON.parse(JSON.stringify(obj));
 }
 
 function generateRecordId(records, parentId) {
@@ -275,51 +226,6 @@ function makeStub(body, path, query) {
   });
   stub.setBody(body);
   return stub;
-  // var predicate = {
-  //   "deepEquals": {
-  //     "method": "GET",
-  //     "path": path
-  //   }
-  // };
-  // if (query) {
-  //   extend(predicate["deepEquals"], {query: query});
-  // }
-  // return {
-  //   "responses": [{
-  //     "is": {
-  //       "headers": {
-  //         "Content-Type": "application/json",
-  //         "Access-Control-Allow-Origin": "*"
-  //       },
-  //       "body": JSON.stringify(body)
-  //     }
-  //   }],
-  //   "predicates": [predicate]
-  // };
 }
 
-function loadJsonFile(fileName) {
-  var fs = require('fs');
-  return JSON.parse(fs.readFileSync(__dirname + '/../datasets/' + fileName));
-}
-
-function multiSort(loans, sortConditions){
-  var sortStatesMap = {'asc': 1, 'desc': -1};
-  var sortFn = function (prev, next) {
-    for (var i = 0; i < sortConditions.length; i++) {
-      var sortCondition = sortConditions[i];
-      var sortState = sortStatesMap[sortCondition.sortDirect];
-      var singleColumnCompareResult = sortState * compare(prev, next, sortCondition.sortName);
-      if (singleColumnCompareResult !== 0) {
-        return singleColumnCompareResult;
-      }
-    }
-    return 0;
-  };
-  return loans.slice().sort(sortFn);
-}
-
-function compare(prev, next, key){
-  return (prev[key] + '').localeCompare('' + next[key]);
-}
 
