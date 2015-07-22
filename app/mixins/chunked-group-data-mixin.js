@@ -4,11 +4,10 @@ import LazyGroupRowArray from 'ember-table/models/lazy-group-row-array';
 export default Ember.Mixin.create({
   sortName: null,
   sortDirect: null,
-
   model: function () {
     var self = this;
     var groupingMetadata = this.get('groupingMetadata');
-    var tableContent = LazyGroupRowArray.create({
+    return LazyGroupRowArray.create({
       loadChildren: function (chunkIndex, parentQuery) {
         var theQuery = {};
         Ember.setProperties(theQuery, parentQuery);
@@ -33,22 +32,11 @@ export default Ember.Mixin.create({
       },
       groupingMetadata: groupingMetadata
     });
-    return tableContent;
   },
 
   actions: {
-    sortAction: function (sortConditions, sortingColumns) {
-     var sortQuery = {};
-      if (sortingColumns.get('isNotEmpty')) {
-        //TODO: change to multiple sortQueries when group sort data is ready
-        sortQuery = sortingColumns.map(function (column) {
-          return {
-            sortName: column.get('contentPath'),
-            sortDirect: column.get('sortDirect')
-          };
-        })[0];
-      }
-      this.set('sortQuery', sortQuery);
+    sortAction: function (sortingColumns) {
+      this.set('sortingColumns', sortingColumns);
     }
   },
 

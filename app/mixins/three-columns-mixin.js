@@ -13,6 +13,7 @@ export default Ember.Mixin.create({
       return ColumnDefinition.create({
         columnWidth: c[2],
         headerCellName: c[1],
+        contentPath: c[0],
         sortBy: c[3] || defaultSortFn,
         getCellContent: function(row) {
           return Ember.get(row, c[0]);
@@ -20,7 +21,7 @@ export default Ember.Mixin.create({
       });
     });
   }.property(),
-  
+
   columnsMetadata: [
       ["id",        "Id",         20],
       ["activity",  "Activity",   150],

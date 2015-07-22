@@ -1,8 +1,9 @@
 import Ember from 'ember';
 import LazyArray from 'ember-table/models/lazy-array';
 import ThreeColumnsMixin from '../mixins/three-columns-mixin';
+import SortQueryMixin from '../mixins/sort-query-mixin';
 
-export default Ember.Controller.extend(ThreeColumnsMixin, {
+export default Ember.Controller.extend(ThreeColumnsMixin, SortQueryMixin, {
   queryParams:['totalCount'],
   sortName: null,
   sortDirect: null,
@@ -14,10 +15,10 @@ export default Ember.Controller.extend(ThreeColumnsMixin, {
       totalCount: 200,
       callback: function (pageIndex) {
         var params = {section: pageIndex + 1};
-        var sortName = self.get('sortName');
-        if(sortName){
-          params['sortDirects[0]'] = self.get('sortDirect');
-          params['sortNames[0]'] = sortName;
+        var sortQuery = self.get('sortQuery');
+        if(sortQuery){
+          params['sortDirects[0]'] = sortQuery.sortDirect;
+          params['sortNames[0]'] = sortQuery.sortName;
         }
         return self.store.find('loan', params).then(function (data) {
           return data.get('content');
@@ -27,7 +28,7 @@ export default Ember.Controller.extend(ThreeColumnsMixin, {
   }.property(),
 
   columnsMetadata: [
-    ["id", "Id", 20, function(prev, next){ 
+    ["id", "Id", 20, function(prev, next){
       return Ember.get(prev, 'id') - Ember.get(next, 'id');
     }],
     ["activity", "Activity", 150],
@@ -39,9 +40,8 @@ export default Ember.Controller.extend(ThreeColumnsMixin, {
       window.location.reload(true);
     },
 
-    sortAction: function(sortCondition) {
-      this.set('sortName', sortCondition.get('sortName'));
-      this.set('sortDirect', sortCondition.get('sortDirect'));
+    sortAction: function(sortingColumns) {
+      this.set('sortingColumns', sortingColumns);
     }
   }
 });
