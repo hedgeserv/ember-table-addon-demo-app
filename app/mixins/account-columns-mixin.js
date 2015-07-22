@@ -22,6 +22,7 @@ export default Ember.Mixin.create({
     return columnTitleAndNames.map(function (titleAndName) {
       return ColumnDefinition.create({
         headerCellName: titleAndName[0],
+        contentPath: titleAndName[1],
         getCellContent: function (row) {
           return row.get(titleAndName[1]);
         },
