@@ -66,7 +66,7 @@ Feature: Multi-Column Sorting
       | 3  | activity-3 | status3 |
       | 4  | activity-4 | status4 |
       | 5  | activity-5 | status5 |
-    And The "Activity" column sort indicator should be "asc"
+    And The "Id" column sort indicator should be "asc"
 
   @complete
   Scenario: command click to remove a sort on column with grouped row fully load

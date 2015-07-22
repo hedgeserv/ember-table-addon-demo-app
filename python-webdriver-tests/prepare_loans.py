@@ -31,12 +31,12 @@ class MountebankStub:
         loans_in_asc = generate_loans(total_count)
         loans_in_asc.sort(key=lambda x: int(x['id']))
         asc_stubs = make_the_chunk_stubs(loans_in_asc, chunk_size,
-                                         query={'sortName': 'id', 'sortDirect': 'asc'}, path=path)
+                                         query={'sortNames[0]': 'id', 'sortDirects[0]': 'asc'}, path=path)
 
         loans_in_desc = generate_loans(total_count)
         loans_in_desc.sort(reverse=True, key=lambda x: int(x['id']))
         desc_stubs = make_the_chunk_stubs(loans_in_desc, chunk_size,
-                                          query={'sortName': 'id', 'sortDirect': 'desc'}, path=path)
+                                          query={'sortNames[0]': 'id', 'sortDirects[0]': 'desc'}, path=path)
 
         default_loans = generate_loans(total_count)
         default_stubs = make_the_chunk_stubs(default_loans, chunk_size, path=path)

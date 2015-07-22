@@ -1,6 +1,7 @@
 var http = require('http');
 var extend = require('util')._extend;
 var format = require('util').format;
+var helper = require('./helper');
 
 stubLoans(loadAllLoans());
 
@@ -43,30 +44,47 @@ function makeStubs(allLoans) {
   var pageSize = 50;
   stubs.push(makeGroupDataStub(allLoans));
   makeSortedLoans(allLoans.slice(0, 1000), pageSize, stubs);
-  stubs = stubs.concat(makePagedStubs(allLoans, pageSize, "loans", "/loans"));
+  stubs = stubs.concat(makePagedStubs(allLoans.slice(0, 200), pageSize, "loans", "/loans"));
   stubs.push(makeAllLoansStub(allLoans));
   stubs = stubs.concat(makeNestedGroupingStubs());
   return stubs;
 }
 
 function makeSortedLoans(allLoans, pageSize, stubs) {
+  loans = allLoans.slice(0, 200);
   var sortFunctionMap = {'id': intCompare};
-  ['id', 'activity', 'status'].forEach(function (columnName) {
-    var sortFunction = sortFunctionMap[columnName] ? sortFunctionMap[columnName] : stringCompare;
-    var ascLoans = [].concat(allLoans).sort(function (prev, next) {
-      return stringCompare(prev[columnName], next[columnName]);
+  var columns = ['activity', 'status'];
+  var sortColumns = helper.product(columns, columns, true);
+  sortColumns.push(['id']);
+  var sortDirects = ['asc', 'desc'];
+  sortColumns.forEach(function(sortNames){
+    var sortConditions = sortNames.map(function(sortName){
+      return {sortName: sortName};
     });
-    var descLoans = [].concat(allLoans).sort(function (prev, next) {
-      return -1 * sortFunction(prev[columnName], next[columnName]);
+    var directs = sortNames.length === 1 ? [['asc'], ['desc']] : helper.product(sortDirects, sortDirects);
+    directs.forEach(function(subDirects){
+      var conditions = sortConditions.map(function(condition, idx){
+        var sortCondition = helper.clone(condition);
+        sortCondition['sortDirect'] = subDirects[idx];
+        return sortCondition;
+      })
+      var sortedloans = multiSort(loans , conditions);
+      var localStubs = makeMultiColumnsSortedPageLoans(sortedloans, pageSize, 'loans', '/loans', conditions);
+      localStubs.forEach(function(stub){
+        stubs.push(stub);
+      });
     });
-    var pageIndex = 1;
-    while ((pageIndex - 1) * pageSize < allLoans.length) {
-      stubs.push(makeSortedPageLoans(ascLoans, pageIndex, pageSize, columnName, 'asc'));
-      stubs.push(makeSortedPageLoans(descLoans, pageIndex, pageSize, columnName, 'desc'));
-      pageIndex++;
-    }
-  });
+  });       
 }
+
+function makeMultiColumnsSortedPageLoans(loans, pageSize, contentKey, path, sortConditions){
+  var query = sortConditions.reduce(function(res, sortCondition, index){
+    res['sortNames['+index+']'] = sortCondition['sortName'];
+    res['sortDirects['+index+']'] = sortCondition['sortDirect'];
+    return res;
+  }, {});
+  return makePagedStubs(loans, pageSize, contentKey, path, query);
+};
 
 function makePagedStubs(allRecords, pageSize, contentKey, path, query) {
   var stubs = [];
@@ -256,5 +274,25 @@ function makeStub(body, path, query) {
 function loadJsonFile(fileName) {
   var fs = require('fs');
   return JSON.parse(fs.readFileSync(__dirname + '/../datasets/' + fileName));
+}
+
+function multiSort(loans, sortConditions){
+  var sortStatesMap = {'asc': 1, 'desc': -1};
+  var sortFn = function (prev, next) {
+    for (var i = 0; i < sortConditions.length; i++) {
+      var sortCondition = sortConditions[i];
+      var sortState = sortStatesMap[sortCondition.sortDirect];
+      var singleColumnCompareResult = sortState * compare(prev, next, sortCondition.sortName);
+      if (singleColumnCompareResult !== 0) {
+        return singleColumnCompareResult;
+      }
+    }
+    return 0;
+  };
+  return loans.slice().sort(sortFn);
+}
+
+function compare(prev, next, key){
+  return (prev[key] + '').localeCompare('' + next[key]);
 }
 
