@@ -2,6 +2,7 @@ var http = require('http');
 var extend = require('util')._extend;
 var format = require('util').format;
 var helper = require('./helper');
+var MBStub = require('./m-b-stub');
 
 stubLoans(loadAllLoans());
 
@@ -42,10 +43,10 @@ function stubLoans(allLoans) {
 function makeStubs(allLoans) {
   var stubs = [];
   var pageSize = 50;
-  stubs.push(makeGroupDataStub(allLoans));
-  makeSortedLoans(allLoans.slice(0, 1000), pageSize, stubs);
-  stubs = stubs.concat(makePagedStubs(allLoans.slice(0, 200), pageSize, "loans", "/loans"));
-  stubs.push(makeAllLoansStub(allLoans));
+  // stubs.push(makeGroupDataStub(allLoans));
+  // makeSortedLoans(allLoans.slice(0, 1000), pageSize, stubs);
+  // stubs = stubs.concat(makePagedStubs(allLoans.slice(0, 200), pageSize, "loans", "/loans"));
+  // stubs.push(makeAllLoansStub(allLoans));
   stubs = stubs.concat(makeNestedGroupingStubs());
   return stubs;
 }
@@ -182,15 +183,35 @@ function makeNestedGroupingStubs() {
     children: records
   }, ['accountSections', 'accountTypes', 'accountCodes'], {});
 
-  var parentQuery = {};
-  parentQuery["sortName"] = "Id";
+  var columns = ['Beginning DR (Base)', 'Beginning CR (Base)', 'Net Beginning (Base)'];
+  var sortColumns = helper.product(columns, columns, true);
+  sortColumns.push(['id']);
+  var sortDirects = ['asc', 'desc'];
+  var sortNameMap = {
+    'Beginning DR (Base)': 'beginningDr', 
+    'Beginning CR (Base)': 'beginningCr', 
+    'Net Beginning (Base)': 'netBeginning'
+  };
   records[0].children.forEach(function(accountSection) {
     accountSection.children.forEach(function(accountType) {
-      parentQuery["sortDirect"] = "asc";
       var url = "/chunkedGroups/accountSections/" + accountSection['id'] + '/accountTypes/' + accountType['id'] + '/accountCodes';
-      stubs = stubs.concat(makePagedStubs((noChildren(accountType.children)).sort(function(pre, cur){ return pre['id'] - cur['id'];}), 10, "chunkedGroups", url, parentQuery));
-      parentQuery["sortDirect"] = "desc";
-      stubs = stubs.concat(makePagedStubs((noChildren(accountType.children)).sort(function(pre, cur){ return -(pre['id'] - cur['id']);}), 10, "chunkedGroups", url, parentQuery));
+      var localLoans = noChildren(accountType.children);
+      sortColumns.forEach(function(sortNames) {
+        var sortConditions = sortNames.map(function(sortName){
+          return {sortName: sortName};
+        });
+        var directs = sortNames.length === 1 ? [['asc'], ['desc']] : helper.product(sortDirects, sortDirects);
+        directs.forEach(function(subDirects){
+          var conditions = sortConditions.map(function(condition, idx){
+            var sortCondition = helper.clone(condition);
+            sortCondition['sortDirect'] = subDirects[idx];
+            sortCondition['sortName'] = sortNameMap[sortCondition['sortName']];
+            return sortCondition;
+          });
+          var localStubs = makeMultiColumnsSortedPageLoans(multiSort(localLoans, sortConditions), 10, "chunkedGroups", url, conditions);
+          stubs = stubs.concat(localStubs);
+        });
+      });
     });
   });
   return stubs;
@@ -248,27 +269,33 @@ function makeLoansStub(body, query) {
 }
 
 function makeStub(body, path, query) {
-  var predicate = {
-    "deepEquals": {
-      "method": "GET",
-      "path": path
-    }
-  };
-  if (query) {
-    extend(predicate["deepEquals"], {query: query});
-  }
-  return {
-    "responses": [{
-      "is": {
-        "headers": {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*"
-        },
-        "body": JSON.stringify(body)
-      }
-    }],
-    "predicates": [predicate]
-  };
+  var stub = new MBStub({
+    "query": query,
+    "path": path
+  });
+  stub.setBody(body);
+  return stub;
+  // var predicate = {
+  //   "deepEquals": {
+  //     "method": "GET",
+  //     "path": path
+  //   }
+  // };
+  // if (query) {
+  //   extend(predicate["deepEquals"], {query: query});
+  // }
+  // return {
+  //   "responses": [{
+  //     "is": {
+  //       "headers": {
+  //         "Content-Type": "application/json",
+  //         "Access-Control-Allow-Origin": "*"
+  //       },
+  //       "body": JSON.stringify(body)
+  //     }
+  //   }],
+  //   "predicates": [predicate]
+  // };
 }
 
 function loadJsonFile(fileName) {
