@@ -2,6 +2,7 @@ import requests
 import json
 from group_meta_data import GroupMetadata
 from mountebank_imposter import StubFactory, Predicate
+import operator
 
 
 class MountebankServer:
@@ -36,25 +37,64 @@ def stub_loans_in_chunk(total_count, chunk_size, path="/loans"):
     return stubs
 
 
-def stub_loans_in_chunk_and_sortable(total_count, chunk_size, path="/loans"):
-    loans_in_asc = generate_loans(total_count)
-    loans_in_asc.sort(key=lambda x: int(x['id']))
-    asc_stubs = StubFactory.make_chunk_loan_stubs(loans_in_asc, chunk_size,
-                                                  Predicate(path, {'sortNames[0]': 'id', 'sortDirects[0]': 'asc'}))
+class SortCriteria:
+    def __init__(self, content=[]):
+        self.content = content
 
-    loans_in_desc = generate_loans(total_count)
-    loans_in_desc.sort(reverse=True, key=lambda x: int(x['id']))
-    desc_stubs = StubFactory.make_chunk_loan_stubs(loans_in_desc, chunk_size,
-                                                   Predicate(path, {'sortNames[0]': 'id', 'sortDirects[0]': 'desc'}))
+    def append_criteria(self, name, direction):
+        return SortCriteria(self.content + [{'sortName': name, 'sortDirect': direction}])
+
+    def sort(self, data):
+        sorted_data = data
+        for s in list(reversed(self.content)):
+            is_reverse = s['sortDirect'] == 'desc'
+            sorted_data = sorted(sorted_data, key=operator.itemgetter(s['sortName']), reverse=is_reverse)
+        return sorted_data
+
+    def to_query(self):
+        index = 0
+        query = {}
+        for item in self.content:
+            name_key = 'sortNames[' + str(index) + ']'
+            direct_key = 'sortDirects[' + str(index) + ']'
+            query[name_key] = item['sortName']
+            query[direct_key] = item['sortDirect']
+            index += 1
+
+        return query
+
+
+def stub_loans_in_chunk_and_sortable(total_count, chunk_size, path="/loans", sort_columns=['id']):
+    stubs = []
+    list_of_criteria = generate_sort_criteria_list(sort_columns)
+    for criteria in list_of_criteria:
+        data = generate_loans(total_count)
+        sorted_data = criteria.sort(data)
+        sorted_stubs = StubFactory.make_chunk_loan_stubs(sorted_data, chunk_size,
+                                                         Predicate(path, criteria.to_query()))
+        stubs.extend(sorted_stubs)
 
     default_loans = generate_loans(total_count)
     default_stubs = StubFactory.make_chunk_loan_stubs(default_loans, chunk_size, Predicate(path))
-
-    stubs = []
-    stubs.extend(asc_stubs)
-    stubs.extend(desc_stubs)
     stubs.extend(default_stubs)
     return stubs
+
+
+def generate_sort_criteria_list(sort_columns):
+    if len(sort_columns) == 0:
+        return []
+
+    column = sort_columns[0]
+    result = [
+        SortCriteria([{'sortName': column, 'sortDirect': 'asc'}]),
+        SortCriteria([{'sortName': column, 'sortDirect': 'desc'}])
+    ]
+    if len(sort_columns) > 1:
+        others = generate_sort_criteria_list(sort_columns[1:])
+        for c in others:
+            result.append(c.append_criteria(column, 'asc'))
+            result.append(c.append_criteria(column, 'desc'))
+    return result
 
 
 def stub_grouped_loans_by_count(count):
@@ -138,7 +178,7 @@ def prepare_loans_in_chunk(total, chunk_size=100):
 
 
 def prepare_sort_in_chunk(total, chunk_size=100):
-    create_imposter(stub_loans_in_chunk_and_sortable(total, chunk_size))
+    create_imposter(stub_loans_in_chunk_and_sortable(total, chunk_size, sort_columns=['id', 'activity', 'status']))
 
 
 def prepare_grouping_data(count):
