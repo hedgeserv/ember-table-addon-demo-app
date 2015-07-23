@@ -4,19 +4,19 @@ import LazyGroupRowArray from 'ember-table/models/lazy-group-row-array';
 export default Ember.Mixin.create({
   sortName: null,
   sortDirect: null,
-
   model: function () {
     var self = this;
     var groupingMetadata = this.get('groupingMetadata');
-    var tableContent = LazyGroupRowArray.create({
-      loadChildren: function (chunkIndex, parentQuery) {
-        var params = {content: parentQuery, groupingMetadata: groupingMetadata};
-        Ember.setProperties(params.content, {section: chunkIndex + 1});
-        var sortName = self.get('sortName');
-        if(sortName){
-          params.content.sortDirect = self.get('sortDirect');
-          params.content.sortName = sortName;
+    return LazyGroupRowArray.create({
+      loadChildren: function (chunkIndex, parentQuery, sortingColumns) {
+        var theQuery = {};
+        Ember.setProperties(theQuery, parentQuery);
+        theQuery.section = chunkIndex + 1;
+        if (self.isLastLevel(parentQuery)) {
+          var sortQuery = self.makeSortQuery(sortingColumns);
+          Ember.setProperties(theQuery, sortQuery);
         }
+        var params = {content: theQuery, groupingMetadata: groupingMetadata};
         return self.store.find('chunked-group', params).then(function (result) {
           var meta = self.store.metadataFor('chunked-group');
           return {
@@ -30,15 +30,18 @@ export default Ember.Mixin.create({
       },
       groupingMetadata: groupingMetadata
     });
-    return tableContent;
   },
 
   actions: {
-    setSortConditions: function (column) {
-      var columnName = column.get('headerCellName').toLowerCase();
-      this.set('sortName', columnName);
-      this.set('sortDirect', column.get('currentDirect'));
+    sortAction: function (sortingColumns) {
+      this.set('sortingColumns', sortingColumns);
     }
+  },
+
+  isLastLevel: function (parentQuery) {
+    var groupingMetadata = this.get('groupingMetadata');
+    var lastLevelQueryKey = groupingMetadata[groupingMetadata.length - 2].id;
+    return parentQuery.hasOwnProperty(lastLevelQueryKey);
   },
 
   groupingMetadata: [{id: 'accountSection'}, {id: 'accountType'}, {id: 'accountCode'}]
