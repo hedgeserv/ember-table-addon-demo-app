@@ -8,15 +8,13 @@ export default Ember.Mixin.create({
     var self = this;
     var groupingMetadata = this.get('groupingMetadata');
     return LazyGroupRowArray.create({
-      loadChildren: function (chunkIndex, parentQuery) {
+      loadChildren: function (chunkIndex, parentQuery, sortingColumns) {
         var theQuery = {};
         Ember.setProperties(theQuery, parentQuery);
         theQuery.section = chunkIndex + 1;
         if (self.isLastLevel(parentQuery)) {
-          var sortQuery = self.get('sortQuery');
-          if(sortQuery){
-            Ember.setProperties(theQuery, sortQuery);
-          }
+          var sortQuery = self.makeSortQuery(sortingColumns);
+          Ember.setProperties(theQuery, sortQuery);
         }
         var params = {content: theQuery, groupingMetadata: groupingMetadata};
         return self.store.find('chunked-group', params).then(function (result) {

@@ -13,10 +13,10 @@ export default Ember.Controller.extend(ThreeColumnsMixin, SortQueryMixin, {
     return LazyArray.create({
       chunkSize: 50,
       totalCount: 200,
-      callback: function (pageIndex) {
+      callback: function (pageIndex, sortingColumns) {
         var params = {section: pageIndex + 1};
-        var sortQuery = self.get('sortQuery');
-        if(sortQuery){
+        var sortQuery = self.makeSortQuery(sortingColumns);
+        if(sortQuery.hasOwnProperty("sortDirect") && sortQuery.hasOwnProperty("sortName")){
           params['sortDirects[0]'] = sortQuery.sortDirect;
           params['sortNames[0]'] = sortQuery.sortName;
         }
