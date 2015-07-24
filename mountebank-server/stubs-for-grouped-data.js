@@ -1,19 +1,15 @@
 var MBStub = require('./m-b-stub');
 var helper = require('./helper');
 var extend = require('util')._extend;
+var SortConditionProvider = require('./sort-condition-provider');
 var url = '/chunkedGroups';
 var records = helper.loadJsonFile('three-levels-of-grouping.json');
 var stubs = [];
 var pageSize = 10;
 var resourceNames = ['accountSections', 'accountTypes', 'accountCodes'];
-var singleSortColumns = ['id'];
-var multiSortColumns = ['Beginning DR (Base)', 'Beginning CR (Base)', 'Net Beginning (Base)'];
+var sortColumns = ['id', 'beginningDr', 'beginningCr', 'netBeginning'];
 var sortDirects = ['asc', 'desc'];
-var sortNameMap = {
-  'Beginning DR (Base)': 'beginningDr', 
-  'Beginning CR (Base)': 'beginningCr', 
-  'Net Beginning (Base)': 'netBeginning'
-};
+
 for (var i = 0; i < 20; i++) {
   records[0].children[2].children.push(helper.clone(records[0].children[2].children[0]));
 }
@@ -23,31 +19,15 @@ for (var i = 0; i < 20; i++) {
 
 generateRecordId(records, 0);
 
-var sortColumns = helper.product(multiSortColumns, multiSortColumns, true);
-sortColumns.push(singleSortColumns);
+var sortConditionProvider =  new SortConditionProvider(sortColumns);
+
 leafCollections(records[0], function (accountSection, accountType){
 	var localUrl = url + "/accountSections/" + accountSection['id'] + '/accountTypes/' + accountType['id'] + '/accountCodes';
 	var localLoans = removeChildren(accountType.children);
-	sortColumns.forEach(function (sortNames){
-		var sortConditions = sortNames.map(function(sortName){
-      return {"sortName": sortName};
-    });
-    var directs = sortNames.length === 1 ? [['asc'], ['desc']] : helper.product(sortDirects, sortDirects);
-    directs.forEach(function(subDirects){
-      var conditions = sortConditions.map(function(condition, idx){
-        var sortCondition = helper.clone(condition);
-        sortCondition['sortDirect'] = subDirects[idx];
-        return sortCondition;
-      });
-      var sortedLoans = helper.multiSort(localLoans, conditions);
-      conditions = conditions.map(function(condition){
-      	condition['sortName'] = sortNameMap[condition['sortName']] || condition['sortName'];
-      	return condition;
-      });
-      var localQuery = helper.sortConditionsToQuery(conditions);
-      var localStubs = createchunkedStubs(localUrl, sortedLoans, localQuery);
-      helper.concat(stubs, localStubs);
-    });
+	sortConditionProvider.forEach(function (sortCondition){
+		var sortedLoans = sortCondition.sort(localLoans);
+		var localStubs = createchunkedStubs(localUrl, sortedLoans, sortCondition.toQuery());
+		helper.concat(stubs, localStubs);
 	});
 });
 

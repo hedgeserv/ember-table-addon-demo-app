@@ -98,20 +98,10 @@ exports.sortConditionsToQuery = function(sortConditions){
   }, {});
 }
 
-exports.concat = function(firstArr, secondArr){
+var concat = function(firstArr, secondArr){
 	secondArr.forEach(function (item){
 		firstArr.push(item);
 	});
-}
-
-// exports.chunkedData = function (loans, query, setStub){
-// 	return splitToChunks(loans, pageSize).map(function(chunkData, index) {
-//     var pageIndex = index + 1;
-//     var localQuery = extend({"section": pageIndex}, query);
-//     return setStub(chunkData, localQuery);
-//   });
-// }
-
-
-
+};
+exports.concat = concat;
 
