@@ -7,11 +7,11 @@ var pageSize = 50;
 var loans = helper.loadAllLoans().slice(0, totalCount);
 var url = '/loans'
 var singleSortColumns = ['id'];
-var multiColumns = ['activity', 'status'];
+var multiSortColumns = ['activity', 'status'];
 var sortDirects = ['asc', 'desc'];
 
 // set sorted stubs
-var sortColumns = helper.product(multiColumns, multiColumns, true);
+var sortColumns = helper.product(multiSortColumns, multiSortColumns, true);
 sortColumns.push(singleSortColumns);
 sortColumns.forEach(function (sortNames){
   var sortConditions = sortNames.map(function(sortName){
@@ -36,6 +36,9 @@ helper.concat(stubs, createStubs(loans, {}));
 
 
 module.exports = stubs;
+
+
+// private function
 
 function createStubs(loans, query){
   return helper.splitToChunks(loans, pageSize).map(function(chunkData, index) {

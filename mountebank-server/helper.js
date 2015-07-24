@@ -1,6 +1,6 @@
 var fs = require('fs');
 
-exports.splitToChunks = function (body, chunkSize) {
+var splitToChunks = function (body, chunkSize) {
   var chunkNumber = body.length / chunkSize;
   var chunks = [];
   var startIndex = 0;
@@ -12,6 +12,7 @@ exports.splitToChunks = function (body, chunkSize) {
   }
   return chunks;
 };
+exports.splitToChunks = splitToChunks;
 
 exports.clone = function(obj){
 	var keys = Object.keys(obj);
@@ -102,6 +103,14 @@ exports.concat = function(firstArr, secondArr){
 		firstArr.push(item);
 	});
 }
+
+// exports.chunkedData = function (loans, query, setStub){
+// 	return splitToChunks(loans, pageSize).map(function(chunkData, index) {
+//     var pageIndex = index + 1;
+//     var localQuery = extend({"section": pageIndex}, query);
+//     return setStub(chunkData, localQuery);
+//   });
+// }
 
 
 
