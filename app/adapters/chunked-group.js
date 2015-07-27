@@ -7,10 +7,9 @@ export default DS.RESTAdapter.extend({
   host: ENV.loansServerHost,
 
   findQuery: function(store, type, options) {
-    var url = this.buildURL(type.typeKey, options, null, 'findQuery');
-    var urlSections = [url];
+    var query = options || {};
+    var urlSections = [];
     var groupingMetadata = options.groupingMetadata || [];
-    var query = options.content || {};
     for (var i=0; i< groupingMetadata.length; i++){
       var groupingKey = groupingMetadata[i].id;
       if(groupingKey){
@@ -23,6 +22,9 @@ export default DS.RESTAdapter.extend({
         break;
       }
     }
+    delete options.groupingMetadata;
+    var baseUrl = this.buildURL(type.typeKey, options, null, 'findQuery');
+    urlSections.insertAt(0, baseUrl);
     return this.ajax(urlSections.join('/'), 'GET', {data: query});
   }
 });
