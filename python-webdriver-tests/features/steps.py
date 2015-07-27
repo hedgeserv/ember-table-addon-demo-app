@@ -377,6 +377,14 @@ def check_sort_indicator(step, column_name, sort):
             assert_true(step, options.get(sort) in class_content)
 
 
+@step('The "(.*?)" column sort order is (\d+)$')
+def check_sort_column_queue(step, col_name, queue_num):
+    with AssertContextManager(step):
+        queue = world.browser.execute_script(
+            "return $('.ember-table-header-container .ember-table-content:contains(" + col_name + ") .column-sort-indicator span').text().trim()")
+        assert_true(step, str(queue) == str(queue_num))
+
+
 @step('I have the following grouped loans in MounteBank:')
 def prepare_grouped_loans_in_mb(step):
     with AssertContextManager(step):
@@ -475,7 +483,8 @@ def do_find_col_index(name, in_fixed_block):
     for i in range(0, col_count):
         headerName = world.browser.execute_script(
             " return $('.ember-table-header-container " + block_selector +
-            " .ember-table-table-row > div .ember-table-header-cell:eq(" + str(i) + ") .ember-table-content-container > span').text().trim()")
+            " .ember-table-table-row > div .ember-table-header-cell:eq(" + str(
+                i) + ") .ember-table-content-container > span').text().trim()")
         if name in headerName:
             return i
 
