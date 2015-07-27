@@ -1,64 +1,24 @@
 import Ember from 'ember';
-import ColumnDefinition from 'ember-table/models/column-definition';
 import LazyArray from 'ember-table/models/lazy-array';
+import ThreeColumnsMixin from '../mixins/three-columns-mixin';
+import SortQueryMixin from '../mixins/sort-query-mixin';
 
-export default Ember.Controller.extend({
-
+export default Ember.Controller.extend(ThreeColumnsMixin, SortQueryMixin, {
   queryParams:['totalCount'],
-  totalCount:100,
   sortName: null,
   sortDirect: null,
 
-  columns: function () {
-    var idColumn, activityColumn, statusColumn;
-    idColumn = ColumnDefinition.create({
-      columnWidth: 20,
-      textAlign: 'text-align-left',
-      headerCellName: 'Id',
-      sortBy: function(prev, next){
-        return prev.get('id') - next.get('id');
-      },
-      getCellContent: function(row) {
-        return row.get('id');
-      }
-    });
-    activityColumn = ColumnDefinition.create({
-      columnWidth: 150,
-      textAlign: 'text-align-left',
-      headerCellName: 'Activity',
-      getCellContent: function (row) {
-        return row.get('activity');
-      }
-    });
-    statusColumn = ColumnDefinition.create({
-      columnWidth: 100,
-      headerCellName: 'status',
-      sortBy: function(prev, next){
-        var prevStr = this.getCellContent(prev).toString();
-        var nextStr = this.getCellContent(next).toString();
-        return prevStr.localeCompare(nextStr);
-      },
-      getCellContent: function (row) {
-        return row.get('status');
-      }
-    });
-
-    return [idColumn, activityColumn, statusColumn];
-  }.property(),
-
   model: function () {
     var self = this;
-    var totalCount = this.get('totalCount');
     return LazyArray.create({
       chunkSize: 50,
-      totalCount: totalCount,
-      callback: function (pageIndex, query) {
+      totalCount: 200,
+      callback: function (pageIndex, sortingColumns) {
         var params = {section: pageIndex + 1};
-        Ember.setProperties(params, query);
-        var sortName = self.get('sortName');
-        if(sortName){
-          params.sortDirect = self.get('sortDirect');
-          params.sortName = sortName;
+        var sortQuery = self.makeSortQuery(sortingColumns);
+        if(sortQuery.hasOwnProperty("sortDirect") && sortQuery.hasOwnProperty("sortName")){
+          params['sortDirects[0]'] = sortQuery.sortDirect;
+          params['sortNames[0]'] = sortQuery.sortName;
         }
         return self.store.find('loan', params).then(function (data) {
           return data.get('content');
@@ -67,14 +27,21 @@ export default Ember.Controller.extend({
     });
   }.property(),
 
+  columnsMetadata: [
+    ["id", "Id", 20, function(prev, next){
+      return Ember.get(prev, 'id') - Ember.get(next, 'id');
+    }],
+    ["activity", "Activity", 150],
+    ["status", "status", 150]
+  ],
+
   actions: {
     apply:function(){
       window.location.reload(true);
     },
 
-    sortAction: function(sortCondition) {
-      this.set('sortName', sortCondition.get('sortName'));
-      this.set('sortDirect', sortCondition.get('sortDirect'));
+    sortAction: function(sortingColumns) {
+      this.set('sortingColumns', sortingColumns);
     }
   }
 });

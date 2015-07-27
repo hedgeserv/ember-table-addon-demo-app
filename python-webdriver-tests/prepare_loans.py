@@ -1,8 +1,11 @@
 import requests
 import json
-import re
+from group_meta_data import GroupMetadata
+from mountebank_imposter import StubFactory, Predicate
+import operator
 
-class MountebankStub:
+
+class MountebankServer:
     def __init__(self):
         self.mb_url = 'http://localhost:2525/imposters/'
 
@@ -17,89 +20,141 @@ class MountebankStub:
         }
         requests.post(self.mb_url, data=json.dumps(params))
 
-    def stub_loans(self, count, path="/loans"):
-        loans = generate_loans(count)
-        stubs = [make_the_stub(loans, path=path)]
-        self.create_imposter(stubs)
 
-    def stub_loans_in_chunk(self, total_count, chunk_size, path="/loans"):
-        loans = generate_loans(total_count)
-        stubs = make_the_chunk_stubs(loans, chunk_size, path=path)
-        self.create_imposter(stubs)
+def create_imposter(stubs):
+    MountebankServer().create_imposter(stubs)
 
-    def stub_loans_in_chunk_and_sortable(self, total_count, chunk_size, path="/loans"):
-        loans_in_asc = generate_loans(total_count)
-        loans_in_asc.sort(key=lambda x: int(x['id']))
-        asc_stubs = make_the_chunk_stubs(loans_in_asc, chunk_size,
-                                         query={'sortName': 'id', 'sortDirect': 'asc'}, path=path)
 
-        loans_in_desc = generate_loans(total_count)
-        loans_in_desc.sort(reverse=True, key=lambda x: int(x['id']))
-        desc_stubs = make_the_chunk_stubs(loans_in_desc, chunk_size,
-                                          query={'sortName': 'id', 'sortDirect': 'desc'}, path=path)
+def stub_loans(count, path="/loans"):
+    loans = generate_loans(count)
+    stubs = [StubFactory.make_loans_stub(loans, path)]
+    return stubs
 
-        default_loans = generate_loans(total_count)
-        default_stubs = make_the_chunk_stubs(default_loans, chunk_size, path=path)
 
-        stubs = []
-        stubs.extend(asc_stubs)
-        stubs.extend(desc_stubs)
-        stubs.extend(default_stubs)
-        self.create_imposter(stubs)
+def stub_loans_in_chunk(total_count, chunk_size, path="/loans"):
+    loans = generate_loans(total_count)
+    stubs = StubFactory.make_chunk_loan_stubs(loans, chunk_size, Predicate(path))
+    return stubs
 
-    def stub_grouped_loans_by_count(self, count):
-        loans = generate_grouped_loans(int(count))
-        stubs = [make_the_stub(loans, query={"group": 'true'})]
-        self.create_imposter(stubs)
 
-    def stub_grouped_loans(self, data):
-        loans = []
-        for item in data:
-            loan = {}
-            for key in item:
-                loan[key] = item[key]
+class SortCriteria:
+    def __init__(self, content=[]):
+        self.content = content
 
-            path = loan['groupName'].split('-')
-            if len(path) == 1:
-                loans.append(loan)
+    def append_criteria(self, name, direction):
+        return SortCriteria(self.content + [{'sortName': name, 'sortDirect': direction}])
+
+    def sort(self, data):
+        sorted_data = data
+        for s in list(reversed(self.content)):
+            is_reverse = s['sortDirect'] == 'desc'
+            sorted_data = sorted(sorted_data, key=operator.itemgetter(s['sortName']), reverse=is_reverse)
+        return sorted_data
+
+    def to_query(self):
+        index = 0
+        query = {}
+        for item in self.content:
+            name_key = 'sortNames[' + str(index) + ']'
+            direct_key = 'sortDirects[' + str(index) + ']'
+            query[name_key] = item['sortName']
+            query[direct_key] = item['sortDirect']
+            index += 1
+
+        return query
+
+
+def stub_loans_in_chunk_and_sortable(total_count, chunk_size, path="/loans", sort_columns=['id']):
+    stubs = []
+    list_of_criteria = generate_sort_criteria_list(sort_columns)
+    for criteria in list_of_criteria:
+        data = generate_loans(total_count)
+        sorted_data = criteria.sort(data)
+        sorted_stubs = StubFactory.make_chunk_loan_stubs(sorted_data, chunk_size,
+                                                         Predicate(path, criteria.to_query()))
+        stubs.extend(sorted_stubs)
+
+    default_loans = generate_loans(total_count)
+    default_stubs = StubFactory.make_chunk_loan_stubs(default_loans, chunk_size, Predicate(path))
+    stubs.extend(default_stubs)
+    return stubs
+
+
+def generate_sort_criteria_list(sort_columns):
+    if len(sort_columns) == 0:
+        return []
+
+    column = sort_columns[0]
+    result = [
+        SortCriteria([{'sortName': column, 'sortDirect': 'asc'}]),
+        SortCriteria([{'sortName': column, 'sortDirect': 'desc'}])
+    ]
+    if len(sort_columns) > 1:
+        others = generate_sort_criteria_list(sort_columns[1:])
+        for c in others:
+            result.append(c.append_criteria(column, 'asc'))
+            result.append(c.append_criteria(column, 'desc'))
+    return result
+
+
+def stub_grouped_loans_by_count(count):
+    loans = generate_grouped_loans(int(count))
+    stubs = [StubFactory.make_group_loans_stub(loans)]
+    return stubs
+
+
+def stub_grouped_loans(data):
+    loans = []
+    for item in data:
+        loan = {}
+        for key in item:
+            loan[key] = item[key]
+
+        path = loan['groupName'].split('-')
+        if len(path) == 1:
+            loans.append(loan)
+        else:
+            parent_loan = find_parent(loans, path)
+            if not ('children' in parent_loan):
+                parent_loan['children'] = []
+            parent_loan['children'].append(loan)
+
+    stubs = [StubFactory.make_group_loans_stub(loans)]
+    return stubs
+
+
+def stub_grand_total_row():
+    rows = [{"id": "1"}]
+    stubs = StubFactory.make_chunk_group_stubs(rows, 1, Predicate("/chunkedGroups"))
+    return stubs
+
+
+def stub_lazy_loaded_grouped_loans(array_of_query_and_body, group_level_names):
+    stubs = []
+    for item in array_of_query_and_body:
+        path = "/chunkedGroups"
+        query = item['query']
+        for group_level_name in group_level_names:
+            path += '/' + group_level_name + 's'
+            if group_level_name in query:
+                path += '/' + str(query[group_level_name])
+                del query[group_level_name]
             else:
-                parent_loan = self.find_parent(loans, path)
-                if not parent_loan.has_key('children'):
-                    parent_loan['children'] = []
-                parent_loan['children'].append(loan)
+                break
+        stubs.extend(StubFactory.make_chunk_group_stubs(item["body"], 10, Predicate(path, query)))
+    return stubs
 
-        stubs = [make_the_stub(loans, query={"group": 'true'})]
-        self.create_imposter(stubs)
 
-    def stub_grand_total_row(self):
-        rows = [{"id": "1"}]
-        stubs = make_the_chunk_stubs(rows, chunk_size=1, path="/chunkedGroups", content_key="chunkedGroups")
-        self.create_imposter(stubs)
+def find_parent(loans, path):
+    loan = find_by_group_name(loans, path[0:1])
+    for depth in range(2, len(path)):
+        loan = find_by_group_name(loan['children'], path[0:depth])
+    return loan
 
-    def stub_lazy_loaded_grouped_loans(self, array_of_query_and_body, grouping_metadata):
-        stubs = []
-        for item in array_of_query_and_body:
-            path = "/chunkedGroups"
-            query = item['query']
-            for groupKey in grouping_metadata:
-                path += '/' + groupKey + 's'
-                if(query.has_key(groupKey)):
-                    path += '/' + str(query[groupKey])
-                    del query[groupKey]
-                else:
-                    break
-            stubs.extend(make_the_chunk_stubs(item["body"], 10, query, path=path, content_key="chunkedGroups"))
-        self.create_imposter(stubs)
 
-    def find_parent(self, loans, path):
-        loan = self.find_by_group_name(loans, path[0:1])
-        for depth in range(2, len(path)):
-            loan = self.find_by_group_name(loan['children'], path[0:depth])
-        return loan
-
-    def find_by_group_name(self, loans, path):
-        group_name = '-'.join(path)
-        return filter(lambda x: x['groupName'] == group_name, loans)[0]
+def find_by_group_name(loans, path):
+    group_name = '-'.join(path)
+    return filter(lambda x: x['groupName'] == group_name, loans)[0]
 
 
 def generate_loans(count):
@@ -114,172 +169,33 @@ def generate_grouped_loans(count):
     return loans
 
 
-def make_response(loans, content_key="loans", meta={}):
-    return {
-        "is": {
-            "headers": {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*"
-            },
-
-            "body": json.dumps({
-                "meta": meta,
-                content_key: loans
-            })
-        }
-    }
-
-
-def make_the_predicate(query=None, path="/loans"):
-    predicate = {
-        "deepEquals": {
-            "method": "GET",
-            "path": path
-        }
-    }
-    if query and len(query):
-        predicate["deepEquals"].update({"query": query})
-
-    return predicate
-
-
-def make_the_stub(loans, query=None, path="/loans", content_key="loans", meta={}):
-    response = make_response(loans, content_key, meta)
-    predicate = make_the_predicate(query, path)
-    return {
-        "responses": [response],
-        "predicates": [predicate]
-    }
-
-
-def make_the_chunk_stubs(all_loans, chunk_size=100, query=None, path="/loans", content_key="loans"):
-    total = len(all_loans)
-    chunks = [all_loans[i:i + chunk_size] for i in range(0, total, chunk_size)]
-    stubs = [make_chunk_stub(c, query,i, path, content_key, total, chunk_size) for i, c in
-             enumerate(chunks)]
-    return stubs
-
-
-def make_chunk_stub(chunk_data, query, chunk_index, path, content_key, total, chunk_size):
-    meta = {"total": total, "page_size": chunk_size, "page": chunk_index + 1}
-    the_query = merge_query(query, {"section": str(chunk_index + 1)})
-    return make_the_stub(chunk_data, the_query, path, content_key, meta)
-
-
-def merge_query(query, more):
-    if query:
-        result = query.copy()
-    else:
-        result = {}
-    result.update(more)
-    return result
-
-
 def prepare_loans(count):
-    mb = MountebankStub()
-    mb.stub_loans(count)
+    create_imposter(stub_loans(count))
 
 
 def prepare_loans_in_chunk(total, chunk_size=100):
-    mb = MountebankStub()
-    mb.stub_loans_in_chunk(total, chunk_size)
+    create_imposter(stub_loans_in_chunk(total, chunk_size))
 
 
 def prepare_sort_in_chunk(total, chunk_size=100):
-    mb = MountebankStub()
-    mb.stub_loans_in_chunk_and_sortable(total, chunk_size)
+    create_imposter(stub_loans_in_chunk_and_sortable(total, chunk_size, sort_columns=['id', 'activity', 'status']))
 
 
 def prepare_grouping_data(count):
-    mb = MountebankStub()
-    mb.stub_grouped_loans_by_count(count)
+    create_imposter(stub_grouped_loans_by_count(count))
 
 
 def prepare_grouped_loans(data):
-    mb = MountebankStub()
-    mb.stub_grouped_loans(data)
+    create_imposter(stub_grouped_loans(data))
 
 
 def prepare_lazy_loaded_grouped_loans(zipped_rows):
-    mb = MountebankStub()
     zipped_row = zipped_rows[0]
-    grouping_metadata = get_grouping_metadata(zipped_row['groupName'])
-    array_of_url_and_body = make_group_rows(zipped_row)
-    mb.stub_lazy_loaded_grouped_loans(array_of_url_and_body, grouping_metadata)
-
-def get_grouping_metadata(group_name):
-    group_names = group_name.split('-')
-    return map(get_group_name, group_names)
-
-def get_group_name(name):
-    return re.search('(.+?)\[\d+\]', name).group(1)
+    group_metadata = GroupMetadata(zipped_row)
+    group_names = group_metadata.get_group_names()
+    array_of_url_and_body = group_metadata.make_group_rows()
+    create_imposter(stub_lazy_loaded_grouped_loans(array_of_url_and_body, group_names))
 
 
 def prepare_grand_total_row():
-    mb = MountebankStub()
-    mb.stub_grand_total_row()
-
-def make_group_rows(zipped_row):
-    zipped_group_name = zipped_row["groupName"]
-    group_levels = zipped_group_name.split('-')
-    normal_order_rows =  make_group_rows_for_one_level({}, "", group_levels, 0, zipped_row)
-    asc_rows = make_group_rows_for_one_level({'sortName': 'id', 'sortDirect': 'asc'}, "", group_levels, 0,
-                                             zipped_row, 'asc')
-    desc_rows = make_group_rows_for_one_level({'sortName': 'id', 'sortDirect': 'desc'}, "", group_levels, 0,
-                                              zipped_row, 'desc')
-    return normal_order_rows + asc_rows + desc_rows
-
-
-def make_group_rows_for_one_level(base_query, base_value, group_levels, group_level_index, zipped_row,
-                                  sort_direction=None):
-    result = []
-    group_level = group_levels[group_level_index]
-    group_name, count = extract_name_count(group_level)
-    query = {}
-    query.update(base_query)
-    id_range = [str(x) for x in range(1, count + 1)]
-    if sort_direction == 'desc':
-        id_range.sort(reverse=True)
-    elif sort_direction == 'asc':
-        id_range.sort()
-
-    body = [make_one_row(zipped_row, base_value, x, base_query, group_name) for x in id_range]
-    current_level_result = {"query": query, "body": body}
-    result.append(current_level_result)
-    if group_level_index < len(group_levels) - 1:
-        for child_index in range(1, count + 1):
-            next_level_result = make_child_group_rows(base_query, base_value, child_index, group_levels, group_name,
-                                                      group_level_index,
-                                                      zipped_row, sort_direction)
-            result.extend(next_level_result)
-
-    return result
-
-
-def make_child_group_rows(base_query, base_value, child_index, group_levels, group_name, group_level_index, zipped_row,
-                          sort_direction=None):
-    next_base_query = base_query.copy()
-    next_base_query.update({group_name: zipped_row["id"] + base_value + str(child_index)})
-    next_base_value = base_value + str(child_index) + "-"
-    next_level_result = make_group_rows_for_one_level(next_base_query, next_base_value, group_levels,
-                                                      group_level_index + 1,
-                                                      zipped_row, sort_direction)
-    return next_level_result
-
-
-def extract_name_count(meta_str):
-    m = re.search('(.+)\[(\d+)\]', meta_str)
-    return m.group(1), int(m.group(2))
-
-def make_one_row(zipped_row, base_value, x, base_query, group_name):
-    result = {}
-    for key in zipped_row:
-        if key != "groupName":
-            result[key] = zipped_row[key] + base_value + str(x)
-    for key in base_query:
-        result[key] = base_query[key]
-    if group_name:
-        result[group_name] = result["id"]
-    return result
-
-
+    create_imposter(stub_grand_total_row())

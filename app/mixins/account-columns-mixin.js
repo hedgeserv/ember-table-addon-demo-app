@@ -9,8 +9,8 @@ export default Ember.Mixin.create({
       ["GL Account Type", "accountType"],
       ["GL Account Code", "accountCode"],
       ["GL Account Description", "glAccountDescription"],
-      ["Beginning DR (Base)", "beginningDR"],
-      ["Beginning CR (Base)", "beginningCR"],
+      ["Beginning DR (Base)", "beginningDr"],
+      ["Beginning CR (Base)", "beginningCr"],
       ["Net Beginning (Base)", "netBeginning"],
       ["Activity DR (Base)", "activityDr"],
       ["Activity CR (Base)", "activityCr"],
@@ -22,6 +22,7 @@ export default Ember.Mixin.create({
     return columnTitleAndNames.map(function (titleAndName) {
       return ColumnDefinition.create({
         headerCellName: titleAndName[0],
+        contentPath: titleAndName[1],
         getCellContent: function (row) {
           return row.get(titleAndName[1]);
         },
