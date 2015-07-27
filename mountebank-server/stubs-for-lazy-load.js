@@ -1,71 +1,56 @@
 var helper = require('./helper');
+var extend = require('util')._extend;
 var MBStub = require('./m-b-stub');
+var SortConditionProvider = require('./sort-condition-provider');
 var stubs = [];
-var i, j, k, iIdx, jIdx, kIdx;
+var totalCount = 200;
+var pageSize = 50;
+var loans = helper.loadAllLoans().slice(0, totalCount);
+var url = '/loans'
+var sortColumns = ['id', 'activity', 'status'];
+var sortDirects = ['asc', 'desc'];
 
-// prepare unsort data
-var bodyContent = [];
-for (i = 1; i <= 5; i++) {
-  iIdx = (i + 2) % 5
-  for (j = 1; j <= 5; j++) {
-    jIdx = (j + 3) % 5
-    for (k = 1; k <= 5; k++) {
-      kIdx = (k + 4) % 5
-      bodyContent.push({
-        id: ((iIdx * 10) + jIdx) * 10 + kIdx,
-        activity: 'activity-' + jIdx,
-        status: 'status-' + kIdx
-      })
-    }
-  }
-};
+var sortConditionProvider =  new SortConditionProvider(sortColumns);
 
-var chunkSize = 25;
-var content;
+sortConditionProvider.forEach(function(sortCondition){
+  var sortedloans = sortCondition.sort(loans);
+  var localStubs = createStubs(sortedloans, sortCondition.toQuery());
+  helper.concat(stubs, localStubs);
+});
 
-var splitContentToStubs = function(content, query) {
-  var subStubs = helper.πsplitToChunks(content, chunkSize).map(function(chunkData, index) {
-    var localQuery = helper.clone(query || {});
-    localQuery.section = index + 1;
-    var stub = new MBStub({
-      path: '/loans',
-      query: localQuery
-    });
+// set unsort stubs
+helper.concat(stubs, createStubs(loans, {}));
+
+module.exports = stubs;
+
+
+// private function
+
+function createStubs(loans, query){
+  return helper.splitToChunks(loans, pageSize).map(function(chunkData, index) {
+    var pageIndex = index + 1;
+    var localQuery = extend({"section": pageIndex}, query);
+    var stub = createStub(localQuery);
     stub.setBody({
-      "meta": {
-        "total": content.length,
-        "page": index + 1,
-        "page_size": chunkSize,
-        "date": new Date()
-      },
-      loans: chunkData
+      "meta": createMeta(pageIndex),
+      "loans": chunkData
     });
     return stub;
   });
-  stubs = stubs.concat(subStubs);
-};
+}
 
-// unsort
-content = bodyContent;
-splitContentToStubs(content);
-
-
-// id => asc
-['id', 'activity', 'status'].forEach(function(sortName) {
-  var content = bodyContent.slice().sort(function(prev, next) {
-    var prevStr = prev[sortName].toString();
-    var nextStr = next[sortName].toString();
-    return prevStr.localeCompare(nextStr);
+function createStub(query) {
+  return new MBStub({
+    "query": query,
+    "path": url
   });
+}
 
-  splitContentToStubs(content, {
-    'sortNames[0]': sortName,
-    'sortDirect[0]': 'asc'
-  })
-
-});
-
-
-
-
-module.exports = stubs;
+function createMeta(pageIndex) {
+  return {
+    "total": totalCount,
+    "page": pageIndex,
+    "page_size": pageSize,
+    "date": new Date()
+  }
+}

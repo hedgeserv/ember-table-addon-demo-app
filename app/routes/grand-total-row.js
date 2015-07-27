@@ -4,7 +4,7 @@ import GrandTotalRow from 'ember-table/models/grand-total-row';
 export default Ember.Route.extend({
   model: function () {
     var self = this;
-    var groupingMetadata = [{id: 'accountSection'}, {id: 'accountType'}];
+    var groupingMetadata = [{id: 'accountSection'}, {id: 'accountType'}, {id: 'accountCode'}];
     var tableContent = GrandTotalRow.create({
       loadChildren: function (chunkIndex, parentQuery) {
         var query = {
