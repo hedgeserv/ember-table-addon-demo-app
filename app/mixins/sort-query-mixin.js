@@ -4,13 +4,13 @@ export default Ember.Mixin.create({
   makeSortQuery: function(sortingColumns) {
     var sortQuery = {};
     if (sortingColumns && sortingColumns.get('isNotEmpty')) {
-      //TODO: change to multiple sortQueries when group sort data is ready
-      sortQuery = sortingColumns.map(function (column) {
-        return {
-          sortName: column.get('contentPath'),
-          sortDirect: column.get('sortDirect')
-        };
-      })[0];
+      sortQuery = sortingColumns.map(function (column){
+        return column;
+      }).reduce(function (query, column, index) {
+        Ember.set(query, 'sortNames[%@]'.fmt(index), column.get('contentPath'));
+        Ember.set(query, 'sortDirects[%@]'.fmt(index), column.get('sortDirect'));
+        return query;
+      }, {});
     }
     return sortQuery;
   }
