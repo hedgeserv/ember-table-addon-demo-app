@@ -29,7 +29,9 @@ export default Ember.Controller.extend(ThreeColumnsMixin, SortQueryMixin, {
       return Ember.get(prev, 'id') - Ember.get(next, 'id');
     }],
     ["activity", "Activity", 150],
-    ["status", "status", 150]
+    ["status", "status", 150],
+    ["use", "Use", 150],
+    ["sector", "Sector", 150]
   ],
 
   actions: {

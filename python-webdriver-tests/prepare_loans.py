@@ -158,8 +158,14 @@ def find_by_group_name(loans, path):
 
 
 def generate_loans(count):
-    return [{"id": i, "activity": "activity-" + str(i), "status": "status" + str(i)} for i in range(count)]
-
+    toHash = lambda x: {
+        "id": x,
+        "activity": "activity-" + str(x),
+        "status": "status" + str(x),
+        "use": "use" + str(x),
+        "sector": "sector" + str(x - x%3)
+    };
+    return map(toHash, range(count))
 
 def generate_grouped_loans(count):
     loans = generate_loans(int(count))

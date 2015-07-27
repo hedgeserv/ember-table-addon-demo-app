@@ -7,7 +7,7 @@ Feature: Indicators for expanding and collapsing grouped rows
   Scenario: Grouping column is presented as first column
     Given There are 5 grouped loans
     When Presenting "grouping column"
-    Then There are 4 columns
+    Then There are 6 columns
     And The index 1 should be "Id" column
     And The index 2 should be "Activity" column
     And The index 3 should be "status" column
@@ -282,7 +282,7 @@ Feature: Indicators for expanding and collapsing grouped rows
     Given Presenting "grouping column with pluggable loading indicator"
     When Click "expand" for the 0 row
     And Click "expand" for the 1 row
-    Then The custom loading indicator should display on 15 items
+    Then The custom loading indicator should display on 11 items
 
   @complete
   Scenario: The default loading indicator should display when partial load children loans
@@ -354,22 +354,22 @@ Feature: Indicators for expanding and collapsing grouped rows
       | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
     And Presenting "grouping column present partial loaded children"
     And I see grouped rows:
-      | indicator | groupName | Id | GL Account Section |
-      | +         | f1        | f1 | f1                 |
-      | +         | f2        | f2 | f2                 |
-      | +         | f3        | f3 | f3                 |
-      | +         | f4        | f4 | f4                 |
-      | +         | f5        | f5 | f5                 |
-      | +         | f6        | f6 | f6                 |
+      | indicator | groupName | Id |
+      | +         | f1        | f1 |
+      | +         | f2        | f2 |
+      | +         | f3        | f3 |
+      | +         | f4        | f4 |
+      | +         | f5        | f5 |
+      | +         | f6        | f6 |
     When Click "expand" for the 0 row
     Then I see grouped rows:
-      | indicator | groupName | Id   | GL Account Section | GL Account Type |
-      | -         | f1        | f1   | f1                 |                 |
-      | +         | f1-1      | f1-1 | f1                 | f1-1            |
-      | +         | f1-2      | f1-2 | f1                 | f1-2            |
-      | +         | f1-3      | f1-3 | f1                 | f1-3            |
-      | +         | f1-4      | f1-4 | f1                 | f1-4            |
-      | +         | f1-5      | f1-5 | f1                 | f1-5            |
+      | indicator | groupName | Id   |
+      | -         | f1        | f1   |
+      | +         | f1-1      | f1-1 |
+      | +         | f1-2      | f1-2 |
+      | +         | f1-3      | f1-3 |
+      | +         | f1-4      | f1-4 |
+      | +         | f1-5      | f1-5 |
 
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                         | id | Beginning DR (Base)
@@ -379,13 +379,13 @@ Feature: Indicators for expanding and collapsing grouped rows
     When Click "expand" for the 1 row
     Then There should be 3 sections loaded
     Then I see grouped rows:
-      | indicator | groupName | Id     | GL Account Section | GL Account Type |
-      | -         | f1        | f1     | f1                 |                 |
-      | -         | f1-1      | f1-1   | f1                 | f1-1            |
-      |           | f1-1-1    | f1-1-1 | f1                 | f1-1            |
-      |           | f1-1-2    | f1-1-2 | f1                 | f1-1            |
-      |           | f1-1-3    | f1-1-3 | f1                 | f1-1            |
-      |           | f1-1-4    | f1-1-4 | f1                 | f1-1            |
+      | indicator | groupName | Id     |
+      | -         | f1        | f1     |
+      | -         | f1-1      | f1-1   |
+      |           | f1-1-1    | f1-1-1 |
+      |           | f1-1-2    | f1-1-2 |
+      |           | f1-1-3    | f1-1-3 |
+      |           | f1-1-4    | f1-1-4 |
 
 
   @complete
