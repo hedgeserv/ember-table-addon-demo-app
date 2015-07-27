@@ -366,7 +366,8 @@ def check_reorder_column(step, index, name):
 def check_sort_indicator(step, column_name, sort):
     with AssertContextManager(step):
         class_content = world.browser.execute_script(
-            "return $('.ember-table-header-container .ember-table-content:contains(" + column_name + ")').parent().parent().attr(\'class\')")
+            "return $('.ember-table-header-container .ember-table-content:contains(" + column_name + ") .column-sort-indicator').attr(\'class\')")
+
         options = {"none": "",
                    "asc": "sort-indicator-icon sort-indicator-icon-up",
                    "desc": "sort-indicator-icon sort-indicator-icon-down", }
@@ -474,8 +475,8 @@ def do_find_col_index(name, in_fixed_block):
     for i in range(0, col_count):
         headerName = world.browser.execute_script(
             " return $('.ember-table-header-container " + block_selector +
-            " .ember-table-table-row > div .ember-table-header-cell:eq(" + str(i) + ") span').text().trim()")
-        if headerName == name:
+            " .ember-table-table-row > div .ember-table-header-cell:eq(" + str(i) + ") .ember-table-content-container > span').text().trim()")
+        if name in headerName:
             return i
 
 
@@ -608,7 +609,7 @@ def check_grouping_column_should_not_scroll(step, column_name):
         for index, col in enumerate(columns):
             name = world.browser.execute_script(
                 "return $('.ember-table-header-container .ember-table-content:eq(" + str(index) + ")').text().trim()")
-            if name == column_name:
+            if column_name in name:
                 num = index
         grouping_column_scroll_left = world.browser.execute_script(
             "return $('.lazy-list-container:eq(" + str(num) + ")').scrollLeft()")
@@ -628,7 +629,7 @@ def check_grouping_fixed_should_not_scroll(step):
 def check_grouping_fixed_num(step, num):
     with AssertContextManager(step):
         grouping_fixed_col_num = world.browser.execute_script(
-            "return $('.ember-table-table-fixed-wrapper > div:eq(0) span').length")
+            "return $('.ember-table-left-table-block:eq(0) .ember-table-header-cell').length")
         assert_true(step, int(num) == int(grouping_fixed_col_num))
 
 
