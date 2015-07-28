@@ -354,7 +354,7 @@ def check_column_width(step, column_name, pixel):
 
 
 @step('The index (\d+) should be "(.*?)" column$')
-def check_reorder_column(step, index, name):
+def check_reorder_column(step, index, name, timeout=5):
     with AssertContextManager(step):
         if name == "GroupingColumn":
             assert_true(step, bo.get_col_name_by_index(world.browser, index) == "")
@@ -377,12 +377,13 @@ def check_sort_indicator(step, column_name, sort):
             assert_true(step, options.get(sort) in class_content)
 
 
-@step('The "(.*?)" column sort order is (\d+)$')
+@step('The "(.*?)" column sort order is "(.*?)"$')
 def check_sort_column_queue(step, col_name, queue_num):
     with AssertContextManager(step):
         queue = world.browser.execute_script(
             "return $('.ember-table-header-container .ember-table-content:contains(" + col_name + ") .column-sort-indicator span').text().trim()")
-        assert_true(step, str(queue) == str(queue_num))
+        assert_true(step, str(queue) == str(queue_num)) if str(queue_num) != "blank" else assert_true(step,
+                                                                                                      str(queue) == "")
 
 
 @step('I have the following grouped loans in MounteBank:')
@@ -663,6 +664,7 @@ def prepare_no_sort_col(step, fully_or_partial):
             prepare_lazy_loaded_grouped_loans(step.hashes)
             step.given('Presenting "grouping column present partial loaded children"')
 
+
 @step('The grid sorted as "(.*?)" by "(.*?)" column:')
 def prepare_asc_sort_col(step, asc_or_desc, col_name):
     with AssertContextManager(step):
@@ -679,10 +681,10 @@ def prepare_asc_sort_col(step, asc_or_desc, col_name):
         """.format(name=col_name, sort=str(asc_or_desc).lower()))
 
 
-@step('The grid sorted as "(.*?)" by "(.*?)" columns:')
+@step('The grid sorted as "(.*?)" by "(.*?)" columns')
 def prepare_asc_sort_col(step, asc_or_desc, cols_name):
     with AssertContextManager(step):
-        columns = str(cols_name).strip()
+        columns = cols_name.split(",")
         for index in range(0, columns.__len__()):
             if not asc_or_desc == "none":
                 times = 1 if asc_or_desc == "ASC" else 2
@@ -691,10 +693,8 @@ def prepare_asc_sort_col(step, asc_or_desc, cols_name):
                     Given "command" click to sort as "{sort}" for column "{name}"
                     """.format(sort=asc_or_desc, name=columns[index].strip()))
             step.behave_as("""
-                Then The "{name}" column sort indicator should be "{sort}"
-            """.format(name=columns[index], sort=str(asc_or_desc).lower()))
-        for index in range(0, len(step.hashes)):
-            verify_grouped_row(index, step.hashes[index])
+                        Then The "{name}" column sort indicator should be "{sort}"
+                    """.format(name=columns[index], sort=str(asc_or_desc).lower()))
 
 
 @step('The grouped row "(.*?)" should not wrap')

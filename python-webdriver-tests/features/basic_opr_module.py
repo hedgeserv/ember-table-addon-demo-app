@@ -164,9 +164,16 @@ def get_col_width_by_index(browser, index):
         "return $('.ember-table-header-container .ember-table-content:eq(" + str(index) + ")').parent().width()")
 
 
-def get_col_name_by_index(browser, index):
-    elements = browser.execute_script("return $('.ember-table-content-container')")
+def get_col_name_by_index(browser, index, timeout=5):
     list = []
+
+    start = time.time()
+    while time.time() - start < timeout:
+        elements = browser.execute_script("return $('.ember-table-content-container')")
+        if len(elements) != 0:
+            break
+        time.sleep(0.5)
+
     for i in range(0, len(elements)):
         column = browser.execute_script(
             "return $('.ember-table-content-container .ember-table-content:eq(" + str(i) + ")').text()")
@@ -203,6 +210,6 @@ def command_ctrl_with_click(browser, col_name, command_or_ctrl):
     element = browser.execute_script(
         "return $('.ember-table-header-container .ember-table-content:contains(" + col_name + ")').parent().parent()")
     if command_or_ctrl == "command":
-        chains.key_down(Keys.COMMAND).click(element[0]).release().perform()
+        chains.key_down(Keys.COMMAND).click(element[0]).key_up(Keys.COMMAND).perform()
     elif command_or_ctrl == "control":
-        chains.key_down(Keys.CONTROL).click(element[0]).release().perform()
+        chains.key_down(Keys.CONTROL).click(element[0]).key_up(Keys.COMMAND).perform()
