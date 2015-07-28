@@ -228,7 +228,7 @@ Feature: Multi-Column Sorting
     And Click "expand" for row "group1"
     And Click "expand" for row "group1-chd1"
     And Click to sort as "ASC" for column "Activity"
-    When click to sort as "ASC" for column "Id"
+    When Click to sort as "ASC" for column "Id"
     Then I see grouped rows:
       | indicator | groupName        | Id     | Activity |
       | -         | group1           | f1     | s1       |
@@ -622,7 +622,7 @@ Feature: Multi-Column Sorting
     And Click "expand" for row "f1"
     And Click "expand" for row "f1-1"
     And Click to sort as "ASC" for column "Id"
-    And Click to sort as "ASC" for column "GL Account Section"
+    And Click to sort as "ASC" for column "Beginning DR (Base)"
     When Click to sort as "ASC" for column "Id"
     Then I see grouped rows:
       | indicator | groupName | Id      |

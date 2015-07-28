@@ -16,10 +16,7 @@ export default Ember.Controller.extend(ThreeColumnsMixin, SortQueryMixin, {
       callback: function (pageIndex, sortingColumns) {
         var params = {section: pageIndex + 1};
         var sortQuery = self.makeSortQuery(sortingColumns);
-        if(sortQuery.hasOwnProperty("sortDirect") && sortQuery.hasOwnProperty("sortName")){
-          params['sortDirects[0]'] = sortQuery.sortDirect;
-          params['sortNames[0]'] = sortQuery.sortName;
-        }
+        Ember.setProperties(params, sortQuery);
         return self.store.find('loan', params).then(function (data) {
           return data.get('content');
         });
@@ -32,7 +29,9 @@ export default Ember.Controller.extend(ThreeColumnsMixin, SortQueryMixin, {
       return Ember.get(prev, 'id') - Ember.get(next, 'id');
     }],
     ["activity", "Activity", 150],
-    ["status", "status", 150]
+    ["status", "status", 150],
+    ["use", "Use", 150],
+    ["sector", "Sector", 150]
   ],
 
   actions: {

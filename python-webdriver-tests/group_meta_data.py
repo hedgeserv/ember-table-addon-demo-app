@@ -50,9 +50,9 @@ class GroupLevel:
         rows = [GroupRow(self, parent_row, x) for x in id_range]
         query = parent_row.get_query()
         if sort_direction == 'asc':
-            query.update({'sortName': 'id', 'sortDirect': 'asc'})
+            query.update({'sortNames[0]': 'id', 'sortDirects[0]': 'asc'})
         elif sort_direction == 'desc':
-            query.update({'sortName': 'id', 'sortDirect': 'desc'})
+            query.update({'sortNames[0]': 'id', 'sortDirects[0]': 'desc'})
         rows_values = [row.make_row_values() for row in rows]
         result.append({"query": query, "body": rows_values})
 

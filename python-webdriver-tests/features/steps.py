@@ -663,7 +663,6 @@ def prepare_no_sort_col(step, fully_or_partial):
             prepare_lazy_loaded_grouped_loans(step.hashes)
             step.given('Presenting "grouping column present partial loaded children"')
 
-
 @step('The grid sorted as "(.*?)" by "(.*?)" column:')
 def prepare_asc_sort_col(step, asc_or_desc, col_name):
     with AssertContextManager(step):
