@@ -240,7 +240,6 @@ Feature: Multi-Column Sorting
       | +         | group2           | f2     | s2       |
     And The "Activity" column sort indicator should be "none"
     And The "Id" column sort indicator should be "asc"
-    And The "Id" column sort order is 1
 
   @complete
   Scenario: command click to remove a sort on column with grouped row fully load
