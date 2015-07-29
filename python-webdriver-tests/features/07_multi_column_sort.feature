@@ -635,31 +635,6 @@ Feature: Multi-Column Sorting
 
   @complete
   Scenario: Data sorted on a single column control/command click on different column adds the column to the sort then regular click different column with no grouped row
-#    Given Prepare the grid with no existing sorting column for "fully load":
-#      | groupName | id | activity | status | use | sector | isGroupRow |
-#      | group1    | f1 | s2       | t1     | fo4 | fi5    | True       |
-#      | group2    | f2 | s1       | t3     | fo1 | fi2    | True       |
-#      | group3    | f3 | s2       | t5     | fo3 | fi1    | True       |
-#      | group4    | f4 | s2       | t1     | fo2 | fi3    | True       |
-#      | group5    | f5 | s3       | t2     | fo5 | fi4    | True       |
-#    And The grid sorted as "ASC" by "Activity" column:
-#      | indicator | groupName | Id | Activity | Status | Use | Sector |
-#      | +         | group2    | f2 | s1       | t3     | fo1 | fi2    |
-#      | +         | group1    | f1 | s2       | t1     | fo4 | fi5    |
-#      | +         | group3    | f3 | s2       | t5     | fo3 | fi1    |
-#      | +         | group4    | f4 | s2       | t1     | fo2 | fi3    |
-#      | +         | group5    | f5 | s3       | t2     | fo5 | fi4    |
-#    When "command" click to sort as "ASC" for column "Status"
-#    Then I see grouped rows:
-#      | indicator | groupName | Id | Activity | Status | Use | Sector |
-#      | +         | group2    | f2 | s1       | t3     | fo1 | fi2    |
-#      | +         | group1    | f1 | s2       | t1     | fo4 | fi5    |
-#      | +         | group4    | f4 | s2       | t1     | fo2 | fi3    |
-#      | +         | group3    | f3 | s2       | t5     | fo3 | fi1    |
-#      | +         | group5    | f5 | s3       | t2     | fo5 | fi4    |
-#    And The "Activity" column sort indicator should be "asc"
-#    And The "Status" column sort indicator should be "asc"
-
     Given There are 200 loans in chunk size 50
     And Presenting "column sort"
     And Drag scroll bar to "bottom"
@@ -667,72 +642,59 @@ Feature: Multi-Column Sorting
     And Click to sort as "ASC" for column "Activity"
     When "command" click to sort as "ASC" for column "status"
     Then I see rows:
-      | Id  | Activity     | status    |
-      | 0   | activity-0   | status0   |
-      | 1   | activity-1   | status1   |
-      | 10  | activity-10  | status10  |
-      | 100 | activity-100 | status100 |
-      | 101 | activity-101 | status101 |
-      | 102 | activity-102 | status102 |
+      | Id  | Activity     | status    | Use    | Sector    |
+      | 0   | activity-0   | status0   | use0   | sector0   |
+      | 1   | activity-1   | status1   | use1   | sector0   |
+      | 10  | activity-10  | status10  | use10  | sector9   |
+      | 100 | activity-100 | status100 | use100 | sector99  |
+      | 101 | activity-101 | status101 | use101 | sector99  |
+      | 102 | activity-102 | status102 | use102 | sector102 |
     And The "Activity" column sort indicator should be "asc"
     And The "status" column sort indicator should be "asc"
-    And The "Activity" column sort order is 1
-    And The "status" column sort order is 2
+    And The "Activity" column sort order is "1"
+    And The "status" column sort order is "2"
 
-#    Given Prepare the grid with no existing sorting column for "fully load":
-#      | groupName | id | activity | status | use | sector | isGroupRow |
-#      | group1    | f1 | s2       | t1     | fo4 | fi5    | True       |
-#      | group2    | f2 | s1       | t3     | fo1 | fi2    | True       |
-#      | group3    | f3 | s2       | t5     | fo3 | fi1    | True       |
-#      | group4    | f4 | s2       | t1     | fo2 | fi3    | True       |
-#      | group5    | f5 | s3       | t2     | fo5 | fi4    | True       |
-#    And The grid sorted as "ASC" by "Activity, Status" columns:
-#      | indicator | groupName | Id | Activity | Status | Use | Sector |
-#      | +         | group2    | f2 | s1       | t3     | fo1 | fi2    |
-#      | +         | group1    | f1 | s2       | t1     | fo4 | fi5    |
-#      | +         | group4    | f4 | s2       | t1     | fo2 | fi3    |
-#      | +         | group3    | f3 | s2       | t5     | fo3 | fi1    |
-#      | +         | group5    | f5 | s3       | t2     | fo5 | fi4    |
-#    When "command" click to sort as "ASC" for column "Use"
-#    Then I see grouped rows:
-#      | indicator | groupName | Id | Activity | Status | Use | Sector |
-#      | +         | group2    | f2 | s1       | t3     | fo1 | fi2    |
-#      | +         | group4    | f4 | s2       | t1     | fo2 | fi3    |
-#      | +         | group1    | f1 | s2       | t1     | fo4 | fi5    |
-#      | +         | group3    | f3 | s2       | t5     | fo3 | fi1    |
-#      | +         | group5    | f5 | s3       | t2     | fo5 | fi4    |
-#    And The "Activity" column sort indicator should be "asc"
-#    And The "Status" column sort indicator should be "asc"
-#    And The "Use" column sort indicator should be "asc"
-#
-#    Given Prepare the grid with no existing sorting column for "fully load":
-#      | groupName | id | activity | status | use | sector | isGroupRow |
-#      | group1    | f1 | s2       | t1     | fo4 | fi5    | True       |
-#      | group2    | f2 | s1       | t3     | fo1 | fi2    | True       |
-#      | group3    | f3 | s2       | t5     | fo3 | fi1    | True       |
-#      | group4    | f4 | s2       | t1     | fo2 | fi3    | True       |
-#      | group5    | f5 | s3       | t2     | fo5 | fi4    | True       |
-#    And The grid sorted as "ASC" by "Activity, Status, Use" columns:
-#      | indicator | groupName | Id | Activity | Status | Use | Sector |
-#      | +         | group2    | f2 | s1       | t3     | fo1 | fi2    |
-#      | +         | group4    | f4 | s2       | t1     | fo2 | fi3    |
-#      | +         | group1    | f1 | s2       | t1     | fo4 | fi5    |
-#      | +         | group3    | f3 | s2       | t5     | fo3 | fi1    |
-#      | +         | group5    | f5 | s3       | t2     | fo5 | fi4    |
-#    When Click to sort as "ASC" for column "Sector"
-#    Then I see grouped rows:
-#      | indicator | groupName | Id | Activity | Status | Use | Sector |
-#      | +         | group3    | f3 | s2       | t5     | fo3 | fi1    |
-#      | +         | group2    | f2 | s1       | t3     | fo1 | fi2    |
-#      | +         | group4    | f4 | s2       | t1     | fo2 | fi3    |
-#      | +         | group1    | f1 | s3       | t2     | fo5 | fi4    |
-#      | +         | group5    | f5 | s2       | t1     | fo4 | fi5    |
-#    And The "Activity" column sort indicator should be "none"
-#    And The "Status" column sort indicator should be "none"
-#    And The "Use" column sort indicator should be "none"
-#    And The "Sector" column sort indicator should be "asc"
+    Given There are 200 loans in chunk size 50
+    And Presenting "column sort"
+    And Drag scroll bar to "bottom"
+    And Drag scroll bar to "top"
+    And The grid sorted as "ASC" by "Activity, status" columns
+    When "command" click to sort as "ASC" for column "Use"
+    Then I see rows:
+      | Id  | Activity     | status    | Use    | Sector    |
+      | 0   | activity-0   | status0   | use0   | sector0   |
+      | 1   | activity-1   | status1   | use1   | sector0   |
+      | 10  | activity-10  | status10  | use10  | sector9   |
+      | 100 | activity-100 | status100 | use100 | sector99  |
+      | 101 | activity-101 | status101 | use101 | sector99  |
+      | 102 | activity-102 | status102 | use102 | sector102 |
+    And The "Activity" column sort indicator should be "asc"
+    And The "status" column sort indicator should be "asc"
+    And The "Use" column sort indicator should be "asc"
+    And The "Activity" column sort order is "1"
+    And The "status" column sort order is "2"
+    And The "Use" column sort order is "3"
 
-  @wip
+    Given There are 200 loans in chunk size 50
+    And Presenting "column sort"
+    And Drag scroll bar to "bottom"
+    And Drag scroll bar to "top"
+    And The grid sorted as "ASC" by "Activity, status, Use" columns
+    When Click to sort as "ASC" for column "Sector"
+    Then I see rows:
+      | Id  | Activity     | status    | Use    | Sector    |
+      | 0   | activity-0   | status0   | use0   | sector0   |
+      | 1   | activity-1   | status1   | use1   | sector0   |
+      | 2   | activity-2   | status2   | use2   | sector0   |
+      | 104 | activity-104 | status104 | use104 | sector102 |
+      | 103 | activity-103 | status103 | use103 | sector102 |
+      | 102 | activity-102 | status102 | use102 | sector102 |
+    And The "Activity" column sort indicator should be "none"
+    And The "status" column sort indicator should be "none"
+    And The "Use" column sort indicator should be "none"
+    And The "Sector" column sort indicator should be "asc"
+
+  @complete
   Scenario: Data sorted on a single column control/command click on different column adds the column to the sort then regular click different column with grouped row fully load
     Given Prepare the grid with no existing sorting column for "fully load":
       | groupName        | id     | activity | status | use     | sector  | isGroupRow |
@@ -746,15 +708,15 @@ Feature: Multi-Column Sorting
     And Click "expand" for row "group1"
     And Click "expand" for row "group1-chd1"
     And The grid sorted as "ASC" by "Activity" column:
-      | indicator | groupName       | Id     | Activity | status | Use     | Sector  |
-      | -         | group1          | f1     | s1       | t1     | fo1     | fi1     |
-      | -         | group1-chd1     | f1-1   | s1-1     | t1-1   | fo1-1   | fi1-1   |
-      |           | group1-chd-chd2 | f1-1-2 | s1-1-1   | t1-1-3 | fo1-1-1 | fi1-1-2 |
-      |           | group1-chd-chd1 | f1-1-1 | s1-1-2   | t1-1-1 | fo1-1-4 | fi1-1-5 |
-      |           | group1-chd-chd3 | f1-1-3 | s1-1-2   | t1-1-5 | fo1-1-3 | fi1-1-1 |
-      |           | group1-chd-chd4 | f1-1-4 | s1-1-2   | t1-1-1 | fo1-1-2 | fi1-1-3 |
-      |           | group1-chd-chd5 | f1-1-5 | s1-1-3   | t1-1-2 | fo1-1-5 | fi1-1-4 |
-    When "command" click to sort as "ASC" for column "Status"
+      | indicator | groupName        | Id     | Activity | status | Use     | Sector  |
+      | -         | group1           | f1     | s1       | t1     | fo1     | fi1     |
+      | -         | group1-chd1      | f1-1   | s1-1     | t1-1   | fo1-1   | fi1-1   |
+      |           | group1-chd1-chd2 | f1-1-2 | s1-1-1   | t1-1-3 | fo1-1-1 | fi1-1-2 |
+      |           | group1-chd1-chd1 | f1-1-1 | s1-1-2   | t1-1-1 | fo1-1-4 | fi1-1-5 |
+      |           | group1-chd1-chd3 | f1-1-3 | s1-1-2   | t1-1-5 | fo1-1-3 | fi1-1-1 |
+      |           | group1-chd1-chd4 | f1-1-4 | s1-1-2   | t1-1-1 | fo1-1-2 | fi1-1-3 |
+      |           | group1-chd1-chd5 | f1-1-5 | s1-1-3   | t1-1-2 | fo1-1-5 | fi1-1-4 |
+    When "command" click to sort as "ASC" for column "status"
     Then I see grouped rows:
       | indicator | groupName        | Id     | Activity | status | Use     | Sector  |
       | -         | group1           | f1     | s1       | t1     | fo1     | fi1     |
@@ -766,6 +728,8 @@ Feature: Multi-Column Sorting
       |           | group1-chd1-chd5 | f1-1-5 | s1-1-3   | t1-1-2 | fo1-1-5 | fi1-1-4 |
     And The "Activity" column sort indicator should be "asc"
     And The "status" column sort indicator should be "asc"
+    And The "Activity" column sort order is "1"
+    And The "status" column sort order is "2"
 
     Given Prepare the grid with no existing sorting column for "fully load":
       | groupName        | id     | activity | status | use     | sector  | isGroupRow |
@@ -777,7 +741,9 @@ Feature: Multi-Column Sorting
       | group1-chd1-chd4 | f1-1-4 | s1-1-2   | t1-1-1 | fo1-1-2 | fi1-1-3 | False      |
       | group1-chd1-chd5 | f1-1-5 | s1-1-3   | t1-1-2 | fo1-1-5 | fi1-1-4 | False      |
     And Click "expand" for row "group1"
-    And The grid sorted as "ASC" by "Activity, status" columns:
+    And Click "expand" for row "group1-chd1"
+    And The grid sorted as "ASC" by "Activity, status" columns
+    And I see grouped rows:
       | indicator | groupName        | Id     | Activity | status | Use     | Sector  |
       | -         | group1           | f1     | s1       | t1     | fo1     | fi1     |
       | -         | group1-chd1      | f1-1   | s1-1     | t1-1   | fo1-1   | fi1-1   |
@@ -799,6 +765,9 @@ Feature: Multi-Column Sorting
     And The "Activity" column sort indicator should be "asc"
     And The "status" column sort indicator should be "asc"
     And The "Use" column sort indicator should be "asc"
+    And The "Activity" column sort order is "1"
+    And The "status" column sort order is "2"
+    And The "Use" column sort order is "3"
 
     Given Prepare the grid with no existing sorting column for "fully load":
       | groupName        | id     | activity | status | use     | sector  | isGroupRow |
@@ -810,7 +779,9 @@ Feature: Multi-Column Sorting
       | group1-chd1-chd4 | f1-1-4 | s1-1-2   | t1-1-1 | fo1-1-2 | fi1-1-3 | False      |
       | group1-chd1-chd5 | f1-1-5 | s1-1-3   | t1-1-2 | fo1-1-5 | fi1-1-4 | False      |
     And Click "expand" for row "group1"
-    And The grid sorted as "ASC" by "Activity, status, Use" columns:
+    And Click "expand" for row "group1-chd1"
+    And The grid sorted as "ASC" by "Activity, status, Use" columns
+    And I see grouped rows:
       | indicator | groupName        | Id     | Activity | status | Use     | Sector  |
       | -         | group1           | f1     | s1       | t1     | fo1     | fi1     |
       | -         | group1-chd1      | f1-1   | s1-1     | t1-1   | fo1-1   | fi1-1   |
@@ -827,8 +798,8 @@ Feature: Multi-Column Sorting
       |           | group1-chd1-chd3 | f1-1-3 | s1-1-2   | t1-1-5 | fo1-1-3 | fi1-1-1 |
       |           | group1-chd1-chd2 | f1-1-2 | s1-1-1   | t1-1-3 | fo1-1-1 | fi1-1-2 |
       |           | group1-chd1-chd4 | f1-1-4 | s1-1-2   | t1-1-1 | fo1-1-2 | fi1-1-3 |
-      |           | group1-chd1-chd1 | f1-1-1 | s1-1-3   | t1-1-2 | fo1-1-5 | fi1-1-4 |
-      |           | group1-chd1-chd5 | f1-1-5 | s1-1-2   | t1-1-1 | fo1-1-4 | fi1-1-5 |
+      |           | group1-chd1-chd5 | f1-1-5 | s1-1-3   | t1-1-2 | fo1-1-5 | fi1-1-4 |
+      |           | group1-chd1-chd1 | f1-1-1 | s1-1-2   | t1-1-1 | fo1-1-4 | fi1-1-5 |
     And The "Activity" column sort indicator should be "none"
     And The "status" column sort indicator should be "none"
     And The "status" column sort indicator should be "none"
@@ -869,8 +840,8 @@ Feature: Multi-Column Sorting
     Given Prepare the grid with no existing sorting column for "lazily load":
       | groupName                                                             | id                         | activity                   | status                     | use                         | sector                      |
       | accountSection[1]-accountType[1]-accountCode[1,2,3,4,5,6,7,8,9,10,11] | f[1,2,3,4,5,6,7,8,9,10,11] | s[2,1,2,2,3,6,7,8,9,10,11] | t[1,3,5,1,2,6,7,8,9,10,11] | fo[4,1,3,2,5,6,7,8,9,10,11] | fi[5,2,1,3,4,6,7,8,9,10,11] |
-    And Click "expand" for row "f1"
     And Click "expand" for row "f1-1"
+    And Click "expand" for row "f1"
     And The grid sorted as "ASC" by "Activity, Status" columns:
       | indicator | groupName | Id      | Activity | Status  | Use      | Sector   |
       | -         | f1        | f1      | s1       | t1      | fo1      | fi1      |
@@ -932,59 +903,48 @@ Feature: Multi-Column Sorting
     And The "Sector" column sort indicator should be "asc"
 
 
-  @wip
+  @complete
   Scenario: Data sorted on a multiple columns regular click on existing column toggles direction for that column then remove column from sort with no grouped row
-    Given Prepare the grid with no existing sorting column for "fully load":
-      | groupName | id | activity | status | use | sector | isGroupRow |
-      | group1    | f1 | s2       | t1     | fo4 | fi5    | True       |
-      | group2    | f2 | s1       | t3     | fo1 | fi2    | True       |
-      | group3    | f3 | s2       | t5     | fo3 | fi1    | True       |
-      | group4    | f4 | s2       | t1     | fo2 | fi3    | True       |
-      | group5    | f5 | s3       | t2     | fo5 | fi4    | True       |
-    And The grid sorted as "ASC" by "Activity, Status" columns:
-      | indicator | groupName | Id | Activity | Status | Use | Sector |
-      | +         | group2    | f2 | s1       | t3     | fo1 | fi2    |
-      | +         | group1    | f1 | s2       | t1     | fo4 | fi5    |
-      | +         | group4    | f4 | s2       | t1     | fo2 | fi3    |
-      | +         | group3    | f3 | s2       | t5     | fo3 | fi1    |
-      | +         | group5    | f5 | s3       | t2     | fo5 | fi4    |
+    Given There are 200 loans in chunk size 50
+    And Presenting "column sort"
+    And Drag scroll bar to "bottom"
+    And Drag scroll bar to "top"
+    And The grid sorted as "ASC" by "Activity, status" columns
     When Click to sort as "DESC" for column "Activity"
-    Then I see grouped rows:
-      | indicator | groupName | Id | Activity | Status | Use | Sector |
-      | +         | group5    | f5 | s3       | t2     | fo5 | fi4    |
-      | +         | group1    | f1 | s2       | t1     | fo4 | fi5    |
-      | +         | group4    | f4 | s2       | t1     | fo2 | fi3    |
-      | +         | group3    | f3 | s2       | t5     | fo3 | fi1    |
-      | +         | group2    | f2 | s1       | t3     | fo1 | fi2    |
+    Then I see rows:
+      | Id | Activity    | status   | Use   | Sector   |
+      | 99 | activity-99 | status99 | use99 | sector99 |
+      | 98 | activity-98 | status98 | use98 | sector96 |
+      | 97 | activity-97 | status97 | use97 | sector96 |
+      | 96 | activity-96 | status96 | use96 | sector96 |
+      | 95 | activity-95 | status95 | use95 | sector93 |
+      | 94 | activity-94 | status94 | use94 | sector93 |
     And The "Activity" column sort indicator should be "desc"
-    And The "Status" column sort indicator should be "asc"
+    And The "status" column sort indicator should be "asc"
+    And The "Activity" column sort order is "1"
+    And The "status" column sort order is "2"
 
-    Given Prepare the grid with no existing sorting column for "fully load":
-      | groupName | id | activity | status | use | sector | isGroupRow |
-      | group1    | f1 | s2       | t1     | fo4 | fi5    | True       |
-      | group2    | f2 | s1       | t3     | fo1 | fi2    | True       |
-      | group3    | f3 | s2       | t5     | fo3 | fi1    | True       |
-      | group4    | f4 | s2       | t1     | fo2 | fi3    | True       |
-      | group5    | f5 | s3       | t2     | fo5 | fi4    | True       |
-    And The grid sorted as "ASC" by "Activity, Status" columns:
-      | indicator | groupName | Id | Activity | Status | Use | Sector |
-      | +         | group2    | f2 | s1       | t3     | fo1 | fi2    |
-      | +         | group1    | f1 | s2       | t1     | fo4 | fi5    |
-      | +         | group4    | f4 | s2       | t1     | fo2 | fi3    |
-      | +         | group3    | f3 | s2       | t5     | fo3 | fi1    |
-      | +         | group5    | f5 | s3       | t2     | fo5 | fi4    |
+    Given There are 200 loans in chunk size 50
+    And Presenting "column sort"
+    And Drag scroll bar to "bottom"
+    And Drag scroll bar to "top"
+    And The grid sorted as "ASC" by "Activity, status, Use" columns
     When "command" click to sort as "remove" for column "Activity"
-    Then I see grouped rows:
-      | indicator | groupName | Id | Activity | Status | Use | Sector |
-      | +         | group1    | f1 | s2       | t1     | fo4 | fi5    |
-      | +         | group4    | f4 | s2       | t1     | fo2 | fi3    |
-      | +         | group5    | f5 | s3       | t2     | fo5 | fi4    |
-      | +         | group2    | f2 | s1       | t3     | fo1 | fi2    |
-      | +         | group3    | f3 | s2       | t5     | fo3 | fi1    |
+    Then I see rows:
+      | Id  | Activity     | status    | Use    | Sector    |
+      | 0   | activity-0   | status0   | use0   | sector0   |
+      | 1   | activity-1   | status1   | use1   | sector0   |
+      | 10  | activity-10  | status10  | use10  | sector9   |
+      | 100 | activity-100 | status100 | use100 | sector99  |
+      | 101 | activity-101 | status101 | use101 | sector99  |
+      | 102 | activity-102 | status102 | use102 | sector102 |
     And The "Activity" column sort indicator should be "none"
-    And The "Status" column sort indicator should be "asc"
+    And The "status" column sort indicator should be "asc"
+    And The "Use" column sort indicator should be "asc"
+    And The "status" column sort order is "1"
+    And The "Use" column sort order is "2"
 
-  @wip
+  @complete
   Scenario: Data sorted on a multiple columns regular click on existing column toggles direction for that column then remove column from sort with grouped row fully load
     Given Prepare the grid with no existing sorting column for "fully load":
       | groupName        | id     | activity | status | use     | sector  | isGroupRow |
@@ -995,7 +955,10 @@ Feature: Multi-Column Sorting
       | group1-chd1-chd3 | f1-1-3 | s1-1-2   | t1-1-5 | fo1-1-3 | fi1-1-1 | False      |
       | group1-chd1-chd4 | f1-1-4 | s1-1-2   | t1-1-1 | fo1-1-2 | fi1-1-3 | False      |
       | group1-chd1-chd5 | f1-1-5 | s1-1-3   | t1-1-2 | fo1-1-5 | fi1-1-4 | False      |
-    And The grid sorted as "ASC" by "Activity, Status" columns:
+    And Click "expand" for row "group1"
+    And Click "expand" for row "group1-chd1"
+    And The grid sorted as "ASC" by "Activity, status" columns
+    And I see grouped rows:
       | indicator | groupName        | Id     | Activity | status | Use     | Sector  |
       | -         | group1           | f1     | s1       | t1     | fo1     | fi1     |
       | -         | group1-chd1      | f1-1   | s1-1     | t1-1   | fo1-1   | fi1-1   |
@@ -1016,6 +979,8 @@ Feature: Multi-Column Sorting
       |           | group1-chd1-chd2 | f1-1-2 | s1-1-1   | t1-1-3 | fo1-1-1 | fi1-1-2 |
     And The "Activity" column sort indicator should be "desc"
     And The "status" column sort indicator should be "asc"
+    And The "Activity" column sort order is "1"
+    And The "status" column sort order is "2"
 
     Given Prepare the grid with no existing sorting column for "fully load":
       | groupName        | id     | activity | status | use     | sector  | isGroupRow |
@@ -1026,7 +991,10 @@ Feature: Multi-Column Sorting
       | group1-chd1-chd3 | f1-1-3 | s1-1-2   | t1-1-5 | fo1-1-3 | fi1-1-1 | False      |
       | group1-chd1-chd4 | f1-1-4 | s1-1-2   | t1-1-1 | fo1-1-2 | fi1-1-3 | False      |
       | group1-chd1-chd5 | f1-1-5 | s1-1-3   | t1-1-2 | fo1-1-5 | fi1-1-4 | False      |
-    And The grid sorted as "ASC" by "Activity, Status" columns:
+    And Click "expand" for row "group1"
+    And Click "expand" for row "group1-chd1"
+    And The grid sorted as "ASC" by "Activity, status" columns
+    And I see grouped rows:
       | indicator | groupName        | Id     | Activity | status | Use     | Sector  |
       | -         | group1           | f1     | s1       | t1     | fo1     | fi1     |
       | -         | group1-chd1      | f1-1   | s1-1     | t1-1   | fo1-1   | fi1-1   |
@@ -1047,6 +1015,7 @@ Feature: Multi-Column Sorting
       |           | group1-chd1-chd3 | f1-1-3 | s1-1-2   | t1-1-5 | fo1-1-3 | fi1-1-1 |
     And The "Activity" column sort indicator should be "none"
     And The "status" column sort indicator should be "asc"
+    And The "status" column sort order is "blank"
 
   @wip
   Scenario: Data sorted on a single column control/command click on different column adds the column to the sort then regular click different column with grouped row partial load
