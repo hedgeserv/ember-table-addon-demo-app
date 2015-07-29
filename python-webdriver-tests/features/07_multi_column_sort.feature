@@ -829,8 +829,8 @@ Feature: Multi-Column Sorting
   @wip
   Scenario: Data sorted on a single column control/command click on different column adds the column to the sort then regular click different column with grouped row partial load
     Given Prepare the grid with no existing sorting column for "lazily load":
-      | groupName                                                             | id                         | activity                   | status                     | use                         | sector                      |
-      | accountSection[1]-accountType[1]-accountCode[1,2,3,4,5,6,7,8,9,10,11] | f[1,2,3,4,5,6,7,8,9,10,11] | s[2,1,2,2,3,6,7,8,9,10,11] | t[1,3,5,1,2,6,7,8,9,10,11] | fo[4,1,3,2,5,6,7,8,9,10,11] | fi[5,2,1,3,4,6,7,8,9,10,11] |
+| groupName                                                             | id                            | beginningDr                | beginningCr  | use                         | sector                      |
+| accountSection[1]-accountType[1]-accountCode[1,2,3,4,5,6,7,8,9,10,11] | f[1,2,3,4,5,6,7,8,9,10,11]    | s[2,1,2,2,3,6,7,8,9,10,11] | t[11]        | fo[4,1,3,2,5,6,7,8,9,10,11] | fi[5,2,1,3,4,6,7,8,9,10,11] |
     And Click "expand" for row "f1"
     And Click "expand" for row "f1-1"
     And The grid sorted as "ASC" by "Activity" column:

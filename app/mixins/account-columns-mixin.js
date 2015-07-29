@@ -20,7 +20,7 @@ export default Ember.Mixin.create({
         headerCellName: titleAndName[0],
         contentPath: titleAndName[1],
         getCellContent: function (row) {
-          return row.get(titleAndName[1]);
+          return Ember.get(row, titleAndName[1]);
         },
         sortBy: function(prev, next){
           var prevName = prev.get(titleAndName[1]).toUpperCase();

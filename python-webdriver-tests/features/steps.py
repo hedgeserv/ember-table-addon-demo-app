@@ -405,8 +405,14 @@ def prepare_grand_total_row_in_mb(step):
 
 
 @step('I see grouped rows:$')
-def verify_grouped_rows(step):
+def verify_grouped_rows(step, timeout=5):
     for index in range(0, len(step.hashes)):
+        start = time.time()
+        while time.time() - start < timeout:
+            indicator = world.browser.execute_script("return $('.row-loading-indicator.loading')")
+            if len(indicator) == 0:
+                break
+            time.sleep(0.2)
         verify_grouped_row(index, step.hashes[index])
 
 

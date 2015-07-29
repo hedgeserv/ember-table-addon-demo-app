@@ -350,8 +350,8 @@ Feature: Indicators for expanding and collapsing grouped rows
   @complete
   Scenario: The label for grouping column
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                         | id | Beginning DR (Base) |
-      | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
+      | groupName                                         | id    | Beginning DR (Base)    | 
+      | accountSection[30]-accountType[15]-accountCode[4] | f[4]  | s[4]                   |
     And Presenting "grouping column present partial loaded children"
     And I see grouped rows:
       | indicator | groupName | Id |
@@ -372,11 +372,11 @@ Feature: Indicators for expanding and collapsing grouped rows
       | +         | f1-5      | f1-5 |
 
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                         | id | Beginning DR (Base)
-      | accountSection[30]-accountType[15]-accountCode[4] | f  | s
+      | groupName                                         | id    | Beginning DR (Base) |
+      | accountSection[30]-accountType[15]-accountCode[4] | f[4]  | s[4]                |
     And Presenting "grouping column present partial loaded children"
     And Click "expand" for the 0 row
-    When Click "expand" for the 1 row
+    When Click "expand" for row "f1-1"
     Then There should be 3 sections loaded
     Then I see grouped rows:
       | indicator | groupName | Id     |
@@ -391,8 +391,8 @@ Feature: Indicators for expanding and collapsing grouped rows
   @complete
   Scenario: The grant total row for grouping column
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                         | id | Beginning DR (Base)
-      | accountSection[30]-accountType[15]-accountCode[4] | f  | s
+      | groupName                                         | id | Beginning DR (Base) |
+      | accountSection[30]-accountType[15]-accountCode[4] | f  | s                   |
     And I have one grand total row in MounteBank
     When Presenting "grand total row"
     Then I see grouped rows:
@@ -669,8 +669,8 @@ Feature: Indicators for expanding and collapsing grouped rows
   @complete
   Scenario: The error handling when load section in grouping column
     Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                       | id |
-      | accountSection[1]-accountType[1]-accountCode[1] | f  |
+      | groupName                                       | id    |
+      | accountSection[1]-accountType[1]-accountCode[1] | f[1]  |
     And Presenting "grouping column error handling"
     When Click "expand" for the 0 row
     And Click "expand" for the 1 row
