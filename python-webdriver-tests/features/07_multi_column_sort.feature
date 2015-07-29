@@ -613,7 +613,7 @@ Feature: Multi-Column Sorting
       | +         | group2           | f2     | s2       | t2     |
     And The "Activity" column sort indicator should be "asc"
 
-  @complete
+  @wip
   Scenario: Data sorted on a single column regular click on different column more than twice time with grouped row lazily loaded
     Given Prepare the grid with no existing sorting column for "lazily load":
       | groupName                                        | id | activity |
