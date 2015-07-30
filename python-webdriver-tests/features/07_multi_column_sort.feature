@@ -633,6 +633,26 @@ Feature: Multi-Column Sorting
       |           | f1-1-2    | f1-1-2  |
     And The "Id" column sort indicator should be "asc"
 
+  @wip
+  Scenario: Sort column twice time and collapse root row
+    Given Prepare the grid with no existing sorting column for "lazily load":
+      | groupName                                        | id | activity |
+      | accountSection[1]-accountType[1]-accountCode[11] | f  | s        |
+    And Click "expand" for row "f1"
+    And Click "expand" for row "f1-1"
+    And Click to sort as "ASC" for column "Id"
+    And Click to sort as "DESC" for column "Id"
+    When Click "collapse" for row "f1"
+    Then Click "expand" for row "f1"
+    Then I see grouped rows:
+      | indicator | groupName | Id     |
+      | -         | f1        | f1     |
+      | -         | f1-1      | f1-1   |
+      |           | f1-1-9    | f1-1-9 |
+      |           | f1-1-8    | f1-1-8 |
+      |           | f1-1-7    | f1-1-7 |
+      |           | f1-1-6    | f1-1-6 |
+
   @complete
   Scenario: Data sorted on a single column control/command click on different column adds the column to the sort then regular click different column with no grouped row
     Given There are 200 loans in chunk size 50
