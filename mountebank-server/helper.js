@@ -36,7 +36,7 @@ exports.product = function(firstArr, secondArr, uniq){
 
 
 var isNumber =function(value){
-	return !!(value+'').match(/^(-|)\d+$/);
+	return !!(value+'').match(/^(-|\d+|\.)$/);
 };
 
 var compare = function(prev, next, key){
@@ -45,7 +45,7 @@ var compare = function(prev, next, key){
 		next = next[key];
 	}
 	if(isNumber(prev) && isNumber(next)){
-		return prev - next;	
+		return prev - next;
 	}
 	return prev.localeCompare(next);
 }
@@ -82,7 +82,9 @@ exports.loadAllLoans = function() {
   		return {
   			id: loan.id,
   			activity: loan.activity,
-  			status: loan.status
+  			status: loan.status,
+        use: loan.use,
+        sector: loan.sector
   		};
   	});
     return previous.concat(loans);
@@ -105,3 +107,22 @@ var concat = function(firstArr, secondArr){
 };
 exports.concat = concat;
 
+
+function arrayEqual(first, second) {
+  return JSON.stringify(first) == JSON.stringify(second);
+}
+
+var uniq = function (arr) {
+  var result = [];
+  arr.forEach(function (item) {
+    var has = result.some(function (i) {
+      return arrayEqual(i, item);
+    });
+    if(!has){
+      result.push(item);
+    }
+  });
+  return result;
+};
+
+module.exports.uniq = uniq;
