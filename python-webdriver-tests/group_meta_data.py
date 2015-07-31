@@ -1,13 +1,11 @@
 import re
-from sort_criteria import SortCriteria
+from sort_condition_provider import SortConditionProvider
 
 class GroupMetadata:
     def __init__(self, zipped_row):
         self.levels = []
-        self.parse_meta_str(zipped_row["groupName"])
-
         self.column_value_prefixes = zipped_row.copy()
-        self.column_value_prefixes.pop("groupName")
+        self.parse_meta_str(self.column_value_prefixes.pop("groupName"))
 
     def make_group_rows(self):
         first_group_level = self.get_group_level(0)
@@ -71,23 +69,30 @@ class GroupLevel:
         return self.group_metadata.get_group_level(self.level_index + 1)
 
     def get_query(self, group_name):
-        id_key = self.group_metadata.get_column_value_prefixes()["id"]
-        return {self.level_name:  self.handle_prefixes(id_key, 0)[0]+ group_name}
+        return {self.level_name:  group_name}
 
     def make_column_values(self, path, index=None):
         prefixes = self.group_metadata.get_column_value_prefixes()
-        path = path + '-' if path else ''
         result = {}
         for key in prefixes:
-            prev_key, value = self.handle_prefixes(prefixes[key], index)
-            result[key] = prev_key + path + str(value)
+            prefix = self.get_prefix(prefixes[key])
+            value = self.handle_prefixes(prefixes[key], index)
+            local_path = path[:]
+            local_path.append(value)
+            if(prefix):
+                result[key] = prefix + '-'.join([str(i) for i in local_path])
+            else:
+                result[key] = reduce(lambda res, i: res*100 + i, local_path, 0)
         result[self.level_name] = result["id"]
         return result
 
     def handle_prefixes(self, key, index):
-        res = re.search('\[(.*?)\]', key)
-        name = key.replace(res.group(0), '') if res else key
-        return  name, index
+        return index
+
+    def get_prefix(self, value):
+        search = re.match('^(.*?)(\[|$)', value)
+        return search.group(1) if search else None
+
 
 class LastGroupLevel(GroupLevel):
 
@@ -130,9 +135,9 @@ class LastGroupLevel(GroupLevel):
         if(res):
             val = res.group(1)
             values = range(1, int(val) + 1) if val.isalnum() else [int(i) for i in val.split(',')]
-            return  key.replace(res.group(0), ''), values[index - 1]
+            return values[index - 1]
         else:
-            return key, index
+            return index
 
     def next_group_level(self):
         return None
@@ -143,20 +148,21 @@ class LastGroupLevel(GroupLevel):
 
 class GroupRow:
     def __init__(self, group_level, parent_row, index):
-        self.index = index + 1 if isinstance(index, int) else None
+        self.index = index + 1
         self.group_level = group_level
         self.parent_row = parent_row
 
     def get_query(self):
         result = {}
-        result.update(self.group_level.get_query(self.get_path()))
+        value = reduce(lambda res, i: res * 100 + i, self.get_path(), 0)
+        result.update(self.group_level.get_query(value))
         result.update(self.parent_row.get_query())
 
         return result
 
     def get_path(self):
-        parent_path = self.parent_row.get_path()
-        path = parent_path + '-' + str(self.index) if parent_path else str(self.index)
+        path = self.parent_row.get_path()
+        path.append(self.index)
         return path
 
     def make_row_values(self):
@@ -179,55 +185,5 @@ class VirtualTopRow(GroupRow):
         return {}
 
     def get_path(self):
-        return ''
+        return []
 
-
-class SortConditionProvider:
-
-    def __init__(self, columns):
-        self.columns = list(columns)
-
-    def product_names(self):
-        items = []
-        for i in range(len(self.columns)):
-            items = items + self.product(items, self.columns, True)
-
-        return self.uniq(items)
-
-    def add_directs(self, names):
-
-        sort_directs = ['asc', 'desc']
-        all_directs = []
-        sortConditions = []
-        for i in range(len(names)):
-            all_directs = self.product(all_directs, sort_directs)
-        for directs in all_directs:
-            sortCondition = [{"sortName": names[idx], "sortDirect": direct} for idx, direct in enumerate(directs)]
-            sortConditions.append(sortCondition)
-        return sortConditions
-
-    def product(self, first_arr, second_arr, uniq=False):
-        if(not first_arr):
-            return [[i] for i in second_arr]
-        result = []
-        for first in first_arr:
-            for second in second_arr:
-                item = first[:]
-                if(not uniq or not second in item):
-                    item.append(second)
-                    result.append(item)
-        return result
-
-    def uniq(self, arr):
-        result = []
-        for item in arr:
-            if(not item in result):
-                result.append(item)
-        return result
-
-    def all(self):
-        conditions = []
-        names_arr = self.product_names()
-        for names in names_arr:
-            conditions += self.add_directs(names)
-        return [SortCriteria(condition) for condition in conditions];

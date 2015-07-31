@@ -204,7 +204,7 @@ def get_loaded_section(step, num, timeout=3):
         while time.time() - start < timeout:
             if len(get_mb_request()) == int(num):
                 return
-            time.sleep(0.01)
+            time.sleep(0.5)
     except AssertionError, e:
         raise e
 
