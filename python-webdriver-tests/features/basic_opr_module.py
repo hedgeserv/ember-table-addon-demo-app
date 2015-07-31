@@ -213,3 +213,13 @@ def command_ctrl_with_click(browser, col_name, command_or_ctrl):
         chains.key_down(Keys.COMMAND).click(element[0]).key_up(Keys.COMMAND).perform()
     elif command_or_ctrl == "control":
         chains.key_down(Keys.CONTROL).click(element[0]).key_up(Keys.COMMAND).perform()
+
+
+def wait_loading_indicator_disappear(browser, timeout=5):
+    start = time.time()
+    while time.time() - start < timeout:
+        indicator = browser.execute_script("return $('.row-loading-indicator.loading')")
+        if len(indicator) == 0:
+            return
+        time.sleep(0.2)
+    raise AssertionError

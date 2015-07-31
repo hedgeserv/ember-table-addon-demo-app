@@ -199,14 +199,12 @@ def check_loaded_chunk(step, num):
 
 @step('There should be (\d+) sections loaded')
 def get_loaded_section(step, num, timeout=3):
-    try:
-        start = time.time()
-        while time.time() - start < timeout:
-            if len(get_mb_request()) == int(num):
-                return
-            time.sleep(0.5)
-    except AssertionError, e:
-        raise e
+    start = time.time()
+    while time.time() - start < timeout:
+        if len(get_mb_request()) == int(num):
+            return
+        time.sleep(0.5)
+    raise AssertionError
 
 
 @step(
@@ -234,12 +232,14 @@ def check_fields_class_by_css(step):
 @step('Click to sort as "(.*?)" for column "(.*?)"$')
 def click_to_sort_column(step, asc_or_desc, column_name="Id"):
     with AssertContextManager(step):
+        bo.wait_loading_indicator_disappear(world.browser)
         bo.sort_column(world.browser, column_name)
 
 
 @step('"(.*?)" click to sort as "(.*?)" for column "(.*?)"')
 def command_ctrl_click_column(step, command_or_ctrl, asce_or_desc, col_name):
     with AssertContextManager(step):
+        bo.wait_loading_indicator_disappear(world.browser)
         bo.command_ctrl_with_click(world.browser, col_name, command_or_ctrl)
 
 
@@ -676,11 +676,13 @@ def prepare_asc_sort_col(step, asc_or_desc, col_name):
     with AssertContextManager(step):
         if not asc_or_desc == "none":
             times = 1 if asc_or_desc == "ASC" else 2
+            bo.wait_loading_indicator_disappear(world.browser)
             for i in range(0, times):
                 step.behave_as("""
                 Given Click to sort as "{sort}" for column "{name}"
                 """.format(sort=asc_or_desc, name=col_name))
         for index in range(0, len(step.hashes)):
+            bo.wait_loading_indicator_disappear(world.browser)
             verify_grouped_row(index, step.hashes[index])
         step.behave_as("""
             Then The "{name}" column sort indicator should be "{sort}"
@@ -690,10 +692,12 @@ def prepare_asc_sort_col(step, asc_or_desc, col_name):
 @step('The grid sorted as "(.*?)" by "(.*?)" columns')
 def prepare_asc_sort_col(step, asc_or_desc, cols_name):
     with AssertContextManager(step):
+        time.sleep(2)
         columns = cols_name.split(",")
         for index in range(0, columns.__len__()):
             if not asc_or_desc == "none":
                 times = 1 if asc_or_desc == "ASC" else 2
+                bo.wait_loading_indicator_disappear(world.browser)
                 for i in range(0, times):
                     step.behave_as("""
                     Given "command" click to sort as "{sort}" for column "{name}"

@@ -7,7 +7,7 @@ let ChunkedGroup = DS.Model.extend({
   glAccountDescription: DS.attr('string'),
   beginningDr: DS.attr(),
   beginningCr: DS.attr(),
-  netBeginning: DS.attr('number'),
+  netBeginning: DS.attr(),
   activityDr: DS.attr('number'),
   activityCr: DS.attr('number'),
   netActivity: DS.attr('number'),

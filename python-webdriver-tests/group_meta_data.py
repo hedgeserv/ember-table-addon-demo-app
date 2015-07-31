@@ -108,7 +108,7 @@ class LastGroupLevel(GroupLevel):
         result.append({"query": query, "body": rows_values})
         children_results = self.expand_next_level(rows, sort_direction)
         result = sum(children_results, result)
-        sortColumns = ["id", "beginningDr", "beginningCr"]
+        sortColumns = ["id", "beginningDr", "beginningCr", "netBeginning"]
         provider = SortConditionProvider(list(set(sortColumns) & set(self.column_names())))
         for sort_criteria in provider.all():
             localQuery = query.copy()
