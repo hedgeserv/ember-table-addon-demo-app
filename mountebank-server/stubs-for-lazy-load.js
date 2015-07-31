@@ -7,7 +7,7 @@ var totalCount = 200;
 var pageSize = 50;
 var loans = helper.loadAllLoans().slice(0, totalCount);
 var url = '/loans'
-var sortColumns = ['id', 'activity', 'status'];
+var sortColumns = ['id', 'status', 'use', 'sector'];
 var sortDirects = ['asc', 'desc'];
 
 var sortConditionProvider =  new SortConditionProvider(sortColumns);
