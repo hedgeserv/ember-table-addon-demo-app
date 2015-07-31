@@ -13,9 +13,6 @@ var sortDirects = ['asc', 'desc'];
 for (var i = 0; i < 20; i++) {
   records[0].children[2].children.push(helper.clone(records[0].children[2].children[0]));
 }
-for (var i = 0; i < 20; i++) {
-  records[0].children.push(helper.clone(records[0].children[2]));
-}
 
 generateRecordId(records, 0);
 
