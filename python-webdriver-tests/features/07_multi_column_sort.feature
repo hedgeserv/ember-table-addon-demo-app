@@ -279,13 +279,13 @@ Feature: Multi-Column Sorting
     And Click "expand" for row "101"
     When Click to sort as "ASC" for column "Id"
     Then I see grouped rows:
-      | indicator | groupName | Id      |
-      | -         | 1         | 1       |
-      | -         | 101       | 101     |
-      |           | 10101     | 10101   |
-      |           | 10102     | 10102   |
-      |           | 10103     | 10103   |
-      |           | 10104     | 10104   |
+      | indicator | groupName | Id    |
+      | -         | 1         | 1     |
+      | -         | 101       | 101   |
+      |           | 10101     | 10101 |
+      |           | 10102     | 10102 |
+      |           | 10103     | 10103 |
+      |           | 10104     | 10104 |
     And The "Id" column sort indicator should be "asc"
 
     Given Prepare the grid with no existing sorting column for "lazily load":
@@ -294,22 +294,22 @@ Feature: Multi-Column Sorting
     And Click "expand" for row "1"
     And Click "expand" for row "101"
     And The grid sorted as "ASC" by "Id" column:
-      | indicator | groupName | Id      |
-      | -         | 1         | 1       |
-      | -         | 101       | 101     |
-      |           | 10101     | 10101   |
-      |           | 10102     | 10102   |
-      |           | 10103     | 10103   |
-      |           | 10104     | 10104   |
+      | indicator | groupName | Id    |
+      | -         | 1         | 1     |
+      | -         | 101       | 101   |
+      |           | 10101     | 10101 |
+      |           | 10102     | 10102 |
+      |           | 10103     | 10103 |
+      |           | 10104     | 10104 |
     When Click to sort as "DESC" for column "Id"
     Then I see grouped rows:
-      | indicator | groupName | Id     |
-      | -         | 1         | 1      |
-      | -         | 101       | 101    |
-      |           | 10111     | 10111  |
-      |           | 10110     | 10110  |
-      |           | 10109     | 10109  |
-      |           | 10108     | 10108  |
+      | indicator | groupName | Id    |
+      | -         | 1         | 1     |
+      | -         | 101       | 101   |
+      |           | 10111     | 10111 |
+      |           | 10110     | 10110 |
+      |           | 10109     | 10109 |
+      |           | 10108     | 10108 |
     And The "Id" column sort indicator should be "desc"
 
     Given Prepare the grid with no existing sorting column for "lazily load":
@@ -318,22 +318,22 @@ Feature: Multi-Column Sorting
     And Click "expand" for row "1"
     And Click "expand" for row "101"
     And The grid sorted as "DESC" by "Id" column:
-      | indicator | groupName | Id     |
-      | -         | 1         | 1      |
-      | -         | 101       | 101    |
-      |           | 10111     | 10111  |
-      |           | 10110     | 10110  |
-      |           | 10109     | 10109  |
-      |           | 10108     | 10108  |
+      | indicator | groupName | Id    |
+      | -         | 1         | 1     |
+      | -         | 101       | 101   |
+      |           | 10111     | 10111 |
+      |           | 10110     | 10110 |
+      |           | 10109     | 10109 |
+      |           | 10108     | 10108 |
     When Click to sort as "ASC" for column "Id"
     Then I see grouped rows:
-      | indicator | groupName | Id      |
-      | -         | 1         | 1       |
-      | -         | 101       | 101     |
-      |           | 10101     | 10101   |
-      |           | 10102     | 10102   |
-      |           | 10103     | 10103   |
-      |           | 10104     | 10104   |
+      | indicator | groupName | Id    |
+      | -         | 1         | 1     |
+      | -         | 101       | 101   |
+      |           | 10101     | 10101 |
+      |           | 10102     | 10102 |
+      |           | 10103     | 10103 |
+      |           | 10104     | 10104 |
 
     Given Prepare the grid with no existing sorting column for "lazily load":
       | groupName                                        | id | Beginning DR (Base) |
@@ -341,22 +341,22 @@ Feature: Multi-Column Sorting
     And Click "expand" for row "1"
     And Click "expand" for row "101"
     And The grid sorted as "DESC" by "Id" column:
-      | indicator | groupName | Id     |
-      | -         | 1         | 1      |
-      | -         | 101       | 101    |
-      |           | 10111     | 10111  |
-      |           | 10110     | 10110  |
-      |           | 10109     | 10109  |
-      |           | 10108     | 10108  |
+      | indicator | groupName | Id    |
+      | -         | 1         | 1     |
+      | -         | 101       | 101   |
+      |           | 10111     | 10111 |
+      |           | 10110     | 10110 |
+      |           | 10109     | 10109 |
+      |           | 10108     | 10108 |
     When "command" click to sort as "un-sort" for column "Id"
     Then I see grouped rows:
-      | indicator | groupName | Id     |
-      | -         | 1         | 1      |
-      | -         | 101       | 101    |
-      |           | 10101     | 10101  |
-      |           | 10102     | 10102  |
-      |           | 10103     | 10103  |
-      |           | 10104     | 10104  |
+      | indicator | groupName | Id    |
+      | -         | 1         | 1     |
+      | -         | 101       | 101   |
+      |           | 10101     | 10101 |
+      |           | 10102     | 10102 |
+      |           | 10103     | 10103 |
+      |           | 10104     | 10104 |
     And The "Id" column sort indicator should be "none"
 
   @complete
@@ -414,41 +414,41 @@ Feature: Multi-Column Sorting
     And Click "expand" for row "101"
     When "command" click to sort as "ASC" for column "Id"
     Then I see grouped rows:
-      | indicator | groupName | Id      |
-      | -         | 1         | 1       |
-      | -         | 101       | 101     |
-      |           | 10101     | 10101   |
-      |           | 10102     | 10102   |
-      |           | 10103     | 10103   |
-      |           | 10104     | 10104   |
+      | indicator | groupName | Id    |
+      | -         | 1         | 1     |
+      | -         | 101       | 101   |
+      |           | 10101     | 10101 |
+      |           | 10102     | 10102 |
+      |           | 10103     | 10103 |
+      |           | 10104     | 10104 |
     And The "Id" column sort indicator should be "asc"
 
-#    Given Prepare the grid with no existing sorting column for "lazily load":
-#      | groupName                                                             | id                         | activity                   |
-#      | accountSection[1]-accountType[1]-accountCode[2,1,4,3,5,6,7,8,9,10,11] | f[2,1,4,3,5,6,7,8,9,10,11] | s[2,1,4,3,5,6,7,8,9,10,11] |
-#    And Click "expand" for row "f1"
-#    And Click "expand" for row "f1-1"
-#    And The grid sorted as "DESC" by "Activity" column:
-#      | indicator | groupName | Id     | Activity |
-#      | -         | f1        | f1     | s1       |
-#      | -         | f1-1      | f1-1   | s1-1     |
-#      |           | f1-1-9    | f1-1-9 | s1-1-9   |
-#      |           | f1-1-8    | f1-1-8 | s1-1-8   |
-#      |           | f1-1-7    | f1-1-7 | s1-1-7   |
-#      |           | f1-1-6    | f1-1-6 | s1-1-6   |
-#      |           | f1-1-5    | f1-1-5 | s1-1-5   |
-#    When "command" click to sort as "no-sort" for column "Activity"
-#    Then I see grouped rows:
-#      | indicator | groupName | Id     | Activity |
-#      | -         | f1        | f1     | s1       |
-#      | -         | f1-1      | f1-1   | s1-1     |
-#      |           | f1-1-2    | f1-1-2 | s1-1-2   |
-#      |           | f1-1-1    | f1-1-1 | s1-1-1   |
-#      |           | f1-1-4    | f1-1-4 | s1-1-4   |
-#      |           | f1-1-3    | f1-1-3 | s1-1-3   |
-#      |           | f1-1-5    | f1-1-5 | s1-1-5   |
-#    And The "Activity" column sort indicator should be "none"
-#    Then There should be 6 sections loaded
+    Given Prepare the grid with no existing sorting column for "lazily load":
+      | groupName                                                             | id                        | beginningDr                |
+      | accountSection[1]-accountType[1]-accountCode[2,1,4,3,5,6,7,8,9,10,11] | [2,1,4,3,5,6,7,8,9,10,11] | s[2,1,4,3,5,6,7,8,9,10,11] |
+    And Click "expand" for row "1"
+    And Click "expand" for row "101"
+    And The grid sorted as "DESC" by "Beginning DR (Base)" column:
+      | indicator | groupName | Id    | Beginning DR (Base) |
+      | -         | 1         | 1     | s1                  |
+      | -         | 101       | 101   | s1-1                |
+      |           | 10109     | 10109 | s1-1-9              |
+      |           | 10108     | 10108 | s1-1-8              |
+      |           | 10107     | 10107 | s1-1-7              |
+      |           | 10106     | 10106 | s1-1-6              |
+      |           | 10105     | 10105 | s1-1-5              |
+    When "command" click to sort as "no-sort" for column "Beginning DR (Base)"
+    Then I see grouped rows:
+      | indicator | groupName | Id    | Beginning DR (Base) |
+      | -         | 1         | 1     | s1                  |
+      | -         | 101       | 101   | s1-1                |
+      |           | 10102     | 10102 | s1-1-2              |
+      |           | 10101     | 10101 | s1-1-1              |
+      |           | 10104     | 10104 | s1-1-4              |
+      |           | 10103     | 10103 | s1-1-3              |
+      |           | 10105     | 10105 | s1-1-5              |
+    And The "Activity" column sort indicator should be "none"
+    Then There should be 5 sections loaded
 
   @complete
   Scenario: Data sorted on a single column regular click on different column changes sort to that column with no grouped row
@@ -507,63 +507,65 @@ Feature: Multi-Column Sorting
     And The "Activity" column sort indicator should be "none"
     And The "status" column sort indicator should be "asc"
 
-#  Scenario: Data sorted on a single column regular click on different column changes sort to that column with grouped row partial load
-#    Given Prepare the grid with no existing sorting column for "lazily load":
-#      | groupName                                                             | id                         | activity                   | status                     |
-#      | accountSection[1]-accountType[1]-accountCode[1,3,2,4,5,6,7,8,9,10,11] | f[1,3,2,4,5,6,7,8,9,10,11] | s[1,2,3,4,5,6,7,8,9,10,11] | t[3,4,1,5,2,6,7,8,9,10,11] |
-#    And Click "expand" for row "f1"
-#    And Click "expand" for row "f1-1"
-#    And The grid sorted as "ASC" by "Activity" column:
-#      | indicator | groupName | Id      | Activity | Status  |
-#      | -         | f1        | f1      | s1       | t1      |
-#      | -         | f1-1      | f1-1    | s1-1     | t1-1    |
-#      |           | f1-1-1    | f1-1-1  | s1-1-1   | t1-1-3  |
-#      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 |
-#      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 |
-#      |           | f1-1-3    | f1-1-3  | s1-1-2   | t1-1-4  |
-#      |           | f1-1-2    | f1-1-2  | s1-1-3   | t1-1-1  |
-#    When Click to sort as "ASC" for column "Status"
-#    Then I see grouped rows:
-#      | indicator | groupName | Id      | Activity | Status  |
-#      | -         | 1         | f1      | s1       | t1      |
-#      | -         | f1-1      | f1-1    | s1-1     | t1-1    |
-#      |           | f1-1-2    | f1-1-2  | s1-1-3   | t1-1-1  |
-#      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 |
-#      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 |
-#      |           | f1-1-5    | f1-1-5  | s1-1-5   | t1-1-2  |
-#      |           | f1-1-1    | f1-1-1  | s1-1-1   | t1-1-3  |
-#    And The "Activity" column sort indicator should be "none"
-#    And The "Status" column sort indicator should be "asc"
-#    And There should be 5 sections loaded
+  @complete
+  Scenario: Data sorted on a single column regular click on different column changes sort to that column with grouped row partial load
+    Given Prepare the grid with no existing sorting column for "lazily load":
+      | groupName                                                             | id                        | beginningDr                | beginningCr                |
+      | accountSection[1]-accountType[1]-accountCode[1,3,2,4,5,6,7,8,9,10,11] | [1,3,2,4,5,6,7,8,9,10,11] | s[1,2,3,4,5,6,7,8,9,10,11] | t[3,4,1,5,2,6,7,8,9,10,11] |
+    And Click "expand" for row "1"
+    And Click "expand" for row "101"
+    And The grid sorted as "ASC" by "Beginning DR (Base)" column:
+      | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) |
+      | -         | 1         | 1     | s1                  | t1                  |
+      | -         | 101       | 101   | s1-1                | t1-1                |
+      |           | 10101     | 10101 | s1-1-1              | t1-1-3              |
+      |           | 10110     | 10110 | s1-1-10             | t1-1-10             |
+      |           | 10111     | 10111 | s1-1-11             | t1-1-11             |
+      |           | 10103     | 10103 | s1-1-2              | t1-1-4              |
+      |           | 10102     | 10102 | s1-1-3              | t1-1-1              |
+    When Click to sort as "ASC" for column "Beginning CR (Base)"
+    Then I see grouped rows:
+      | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) |
+      | -         | 1         | 1     | s1                  | t1                  |
+      | -         | 101       | 101   | s1-1                | t1-1                |
+      |           | 10102     | 10102 | s1-1-3              | t1-1-1              |
+      |           | 10110     | 10110 | s1-1-10             | t1-1-10             |
+      |           | 10111     | 10111 | s1-1-11             | t1-1-11             |
+      |           | 10105     | 10105 | s1-1-5              | t1-1-2              |
+      |           | 10101     | 10101 | s1-1-1              | t1-1-3              |
+    And The "Beginning DR (Base)" column sort indicator should be "none"
+    And The "Beginning CR (Base)" column sort indicator should be "asc"
+    And There should be 5 sections loaded
 
-#  Scenario: Data sorted on a single column regular click on differentj column changes sort to that column with grouped row partial load
-#    Given Prepare the grid with no existing sorting column for "lazily load":
-#      | groupName                                                             | id                         | activity                   | status                     |
-#      | accountSection[1]-accountType[1]-accountCode[1,3,2,4,5,6,7,8,9,10,11] | f[1,3,2,4,5,6,7,8,9,10,11] | s[1,2,3,4,5,6,7,8,9,10,11] | t[3,4,1,5,2,6,7,8,9,10,11] |
-#    And Click "expand" for row "f1"
-#    And Click "expand" for row "f1-1"
-#    And The grid sorted as "ASC" by "Activity" column:
-#      | indicator | groupName | Id      | Activity | Status  |
-#      | -         | f1        | f1      | s1       | t1      |
-#      | -         | f1-1      | f1-1    | s1-1     | t1-1    |
-#      |           | f1-1-1    | f1-1-1  | s1-1-1   | t1-1-3  |
-#      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 |
-#      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 |
-#      |           | f1-1-3    | f1-1-3  | s1-1-2   | t1-1-4  |
-#      |           | f1-1-2    | f1-1-2  | s1-1-3   | t1-1-1  |
-#    When Click to sort as "ASC" for column "Status"
-#    Then I see grouped rows:
-#      | indicator | groupName | Id      | Activity | Status  |
-#      | -         | 1         | f1      | s1       | t1      |
-#      | -         | f1-1      | f1-1    | s1-1     | t1-1    |
-#      |           | f1-1-2    | f1-1-2  | s1-1-3   | t1-1-1  |
-#      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 |
-#      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 |
-#      |           | f1-1-5    | f1-1-5  | s1-1-5   | t1-1-2  |
-#      |           | f1-1-1    | f1-1-1  | s1-1-1   | t1-1-3  |
-#    And The "Activity" column sort indicator should be "none"
-#    And The "Status" column sort indicator should be "asc"
-#    And There should be 5 sections loaded
+  @complete
+  Scenario: Data sorted on a single column regular click on differentj column changes sort to that column with grouped row partial load
+    Given Prepare the grid with no existing sorting column for "lazily load":
+      | groupName                                                             | id                        | beginningDr                | beginningCr                |
+      | accountSection[1]-accountType[1]-accountCode[1,3,2,4,5,6,7,8,9,10,11] | [1,3,2,4,5,6,7,8,9,10,11] | s[1,2,3,4,5,6,7,8,9,10,11] | t[3,4,1,5,2,6,7,8,9,10,11] |
+    And Click "expand" for row "1"
+    And Click "expand" for row "101"
+    And The grid sorted as "ASC" by "Beginning DR (Base)" column:
+      | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) |
+      | -         | 1         | 1     | s1                  | t1                  |
+      | -         | 101       | 101   | s1-1                | t1-1                |
+      |           | 10101     | 10101 | s1-1-1              | t1-1-3              |
+      |           | 10110     | 10110 | s1-1-10             | t1-1-10             |
+      |           | 10111     | 10111 | s1-1-11             | t1-1-11             |
+      |           | 10103     | 10103 | s1-1-2              | t1-1-4              |
+      |           | 10102     | 10102 | s1-1-3              | t1-1-1              |
+    When Click to sort as "ASC" for column "Beginning CR (Base)"
+    Then I see grouped rows:
+      | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) |
+      | -         | 1         | 1     | s1                  | t1                  |
+      | -         | 101       | 101   | s1-1                | t1-1                |
+      |           | 10102     | 10102 | s1-1-3              | t1-1-1              |
+      |           | 10110     | 10110 | s1-1-10             | t1-1-10             |
+      |           | 10111     | 10111 | s1-1-11             | t1-1-11             |
+      |           | 10105     | 10105 | s1-1-5              | t1-1-2              |
+      |           | 10101     | 10101 | s1-1-1              | t1-1-3              |
+    And The "Beginning DR (Base)" column sort indicator should be "none"
+    And The "Beginning CR (Base)" column sort indicator should be "asc"
+    And There should be 5 sections loaded
 
   @complete
   Scenario: Data sorted on a single column regular click on different column more than twice time with no grouped row
@@ -613,24 +615,24 @@ Feature: Multi-Column Sorting
       | +         | group2           | f2     | s2       | t2     |
     And The "Activity" column sort indicator should be "asc"
 
-  @wip
+  @complete
   Scenario: Data sorted on a single column regular click on different column more than twice time with grouped row lazily loaded
     Given Prepare the grid with no existing sorting column for "lazily load":
-      | groupName                                        | id | activity |
-      | accountSection[1]-accountType[1]-accountCode[11] | f  | s        |
-    And Click "expand" for row "f1"
-    And Click "expand" for row "f1-1"
+      | groupName                                        | id | beginningDr |
+      | accountSection[1]-accountType[1]-accountCode[11] |    | s           |
+    And Click "expand" for row "1"
+    And Click "expand" for row "101"
     And Click to sort as "ASC" for column "Id"
     And Click to sort as "ASC" for column "Beginning DR (Base)"
     When Click to sort as "ASC" for column "Id"
     Then I see grouped rows:
-      | indicator | groupName | Id      |
-      | -         | f1        | f1      |
-      | -         | f1-1      | f1-1    |
-      |           | f1-1-1    | f1-1-1  |
-      |           | f1-1-10   | f1-1-10 |
-      |           | f1-1-11   | f1-1-11 |
-      |           | f1-1-2    | f1-1-2  |
+      | indicator | groupName | Id    |
+      | -         | 1         | 1     |
+      | -         | 101       | 101   |
+      |           | 10101     | 10101 |
+      |           | 10102     | 10102 |
+      |           | 10103     | 10103 |
+      |           | 10104     | 10104 |
     And The "Id" column sort indicator should be "asc"
 
   @wip
@@ -826,102 +828,67 @@ Feature: Multi-Column Sorting
     And The "Use" column sort indicator should be "none"
     And The "Sector" column sort indicator should be "asc"
 
-  @wip
+  @complete
   Scenario: Data sorted on a single column control/command click on different column adds the column to the sort then regular click different column with grouped row partial load
     Given Prepare the grid with no existing sorting column for "lazily load":
-| groupName                                                             | id                            | beginningDr                | beginningCr  | use                         | sector                      |
-| accountSection[1]-accountType[1]-accountCode[1,2,3,4,5,6,7,8,9,10,11] | f[1,2,3,4,5,6,7,8,9,10,11]    | s[2,1,2,2,3,6,7,8,9,10,11] | t[11]        | fo[4,1,3,2,5,6,7,8,9,10,11] | fi[5,2,1,3,4,6,7,8,9,10,11] |
-    And Click "expand" for row "f1"
-    And Click "expand" for row "f1-1"
-    And The grid sorted as "ASC" by "Activity" column:
-      | indicator | groupName | Id      | Activity | Status  | Use      | Sector   |
-      | -         | f1        | f1      | s1       | t1      | fo1      | fi1      |
-      | -         | f1-1      | f1-1    | s1-1     | t1-1    | fo1-1    | fi1-1    |
-      |           | f1-1-2    | f1-1-2  | s1-1-1   | t1-1-3  | fo1-1-1  | fi1-1-2  |
-      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
-      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
-      |           | f1-1-1    | f1-1-1  | s1-1-2   | t1-1-1  | fo1-1-4  | fi1-1-5  |
-      |           | f1-1-3    | f1-1-3  | s1-1-2   | t1-1-5  | fo1-1-3  | fi1-1-1  |
-      |           | f1-1-4    | f1-1-4  | s1-1-2   | t1-1-1  | fo1-1-2  | fi1-1-3  |
-    When "command" click to sort as "ASC" for column "Status"
+      | groupName                                                             | id                        | beginningDr                | beginningCr                | netBeginning                |
+      | accountSection[1]-accountType[1]-accountCode[1,2,3,4,5,6,7,8,9,10,11] | [1,2,3,4,5,6,7,8,9,10,11] | s[2,1,2,2,3,6,7,8,9,10,11] | t[1,3,5,1,2,6,7,8,9,10,11] | fo[4,1,3,2,5,6,7,8,9,10,11] |
+    And Click "expand" for row "1"
+    And Click "expand" for row "101"
+    And The grid sorted as "ASC" by "Beginning DR (Base)" column:
+      | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
+      | -         | 1         | 1     | s1                  | t1                  | fo1                  |
+      | -         | 101       | 101   | s1-1                | t1-1                | fo1-1                |
+      |           | 10102     | 10102 | s1-1-1              | t1-1-3              | fo1-1-1              |
+      |           | 10110     | 10110 | s1-1-10             | t1-1-10             | fo1-1-10             |
+      |           | 10111     | 10111 | s1-1-11             | t1-1-11             | fo1-1-11             |
+      |           | 10101     | 10101 | s1-1-2              | t1-1-1              | fo1-1-4              |
+      |           | 10103     | 10103 | s1-1-2              | t1-1-5              | fo1-1-3              |
+    When "command" click to sort as "ASC" for column "Beginning CR (Base)"
     Then I see grouped rows:
-      | indicator | groupName | Id      | Activity | Status  | Use      | Sector   |
-      | -         | f1        | f1      | s1       | t1      | fo1      | fi1      |
-      | -         | f1-1      | f1-1    | s1-1     | t1-1    | fo1-1    | fi1-1    |
-      |           | f1-1-2    | f1-1-2  | s1-1-1   | t1-1-3  | fo1-1-1  | fi1-1-2  |
-      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
-      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
-      |           | f1-1-1    | f1-1-1  | s1-1-2   | t1-1-1  | fo1-1-4  | fi1-1-5  |
-      |           | f1-1-4    | f1-1-4  | s1-1-2   | t1-1-1  | fo1-1-2  | fi1-1-3  |
-      |           | f1-1-3    | f1-1-3  | s1-1-2   | t1-1-5  | fo1-1-3  | fi1-1-1  |
-    And The "Activity" column sort indicator should be "asc"
-    And The "Status" column sort indicator should be "asc"
+      | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
+      | -         | 1         | 1     | s1                  | t1                  | fo1                  |
+      | -         | 101       | 101   | s1-1                | t1-1                | fo1-1                |
+      |           | 10102     | 10102 | s1-1-1              | t1-1-3              | fo1-1-1              |
+      |           | 10110     | 10110 | s1-1-10             | t1-1-10             | fo1-1-10             |
+      |           | 10111     | 10111 | s1-1-11             | t1-1-11             | fo1-1-11             |
+      |           | 10101     | 10101 | s1-1-2              | t1-1-1              | fo1-1-4              |
+      |           | 10104     | 10104 | s1-1-2              | t1-1-1              | fo1-1-2              |
+    And The "Beginning DR (Base)" column sort indicator should be "asc"
+    And The "Beginning CR (Base)" column sort indicator should be "asc"
 
     Given Prepare the grid with no existing sorting column for "lazily load":
-      | groupName                                                             | id                         | activity                   | status                     | use                         | sector                      |
-      | accountSection[1]-accountType[1]-accountCode[1,2,3,4,5,6,7,8,9,10,11] | f[1,2,3,4,5,6,7,8,9,10,11] | s[2,1,2,2,3,6,7,8,9,10,11] | t[1,3,5,1,2,6,7,8,9,10,11] | fo[4,1,3,2,5,6,7,8,9,10,11] | fi[5,2,1,3,4,6,7,8,9,10,11] |
-    And Click "expand" for row "f1-1"
-    And Click "expand" for row "f1"
-    And The grid sorted as "ASC" by "Activity, Status" columns:
-      | indicator | groupName | Id      | Activity | Status  | Use      | Sector   |
-      | -         | f1        | f1      | s1       | t1      | fo1      | fi1      |
-      | -         | f1-1      | f1-1    | s1-1     | t1-1    | fo1-1    | fi1-1    |
-      |           | f1-1-2    | f1-1-2  | s1-1-1   | t1-1-3  | fo1-1-1  | fi1-1-2  |
-      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
-      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
-      |           | f1-1-1    | f1-1-1  | s1-1-2   | t1-1-1  | fo1-1-4  | fi1-1-5  |
-      |           | f1-1-4    | f1-1-4  | s1-1-2   | t1-1-1  | fo1-1-2  | fi1-1-3  |
-      |           | f1-1-3    | f1-1-3  | s1-1-2   | t1-1-5  | fo1-1-3  | fi1-1-1  |
-    When "command" click to sort as "ASC" for column "Use"
+      | groupName                                                             | id                        | beginningDr                | beginningCr                | netBeginning                |
+      | accountSection[1]-accountType[1]-accountCode[1,2,3,4,5,6,7,8,9,10,11] | [1,2,3,4,5,6,7,8,9,10,11] | s[2,1,2,2,3,6,7,8,9,10,11] | t[1,3,5,1,2,6,7,8,9,10,11] | fo[4,1,3,2,5,6,7,8,9,10,11] |
+    And Click "expand" for row "1"
+    And Click "expand" for row "101"
+    And The grid sorted as "ASC" by "Beginning DR (Base), Beginning CR (Base)" columns
+    And I see grouped rows:
+      | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
+      | -         | 1         | 1     | s1                  | t1                  | fo1                  |
+      | -         | 101       | 101   | s1-1                | t1-1                | fo1-1                |
+      |           | 10102     | 10102 | s1-1-1              | t1-1-3              | fo1-1-1              |
+      |           | 10110     | 10110 | s1-1-10             | t1-1-10             | fo1-1-10             |
+      |           | 10111     | 10111 | s1-1-11             | t1-1-11             | fo1-1-11             |
+      |           | 10101     | 10101 | s1-1-2              | t1-1-1              | fo1-1-4              |
+      |           | 10104     | 10104 | s1-1-2              | t1-1-1              | fo1-1-2              |
+    When "command" click to sort as "ASC" for column "Net Beginning (Base)"
     Then I see grouped rows:
-      | indicator | groupName | Id      | Activity | Status  | Use      | Sector   |
-      | -         | f1        | f1      | s1       | t1      | fo1      | fi1      |
-      | -         | f1-1      | f1-1    | s1-1     | t1-1    | fo1-1    | fi1-1    |
-      |           | f1-1-2    | f1-1-2  | s1-1-1   | t1-1-3  | fo1-1-1  | fi1-1-2  |
-      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
-      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
-      |           | f1-1-4    | f1-1-4  | s1-1-2   | t1-1-1  | fo1-1-2  | fi1-1-3  |
-      |           | f1-1-1    | f1-1-1  | s1-1-2   | t1-1-1  | fo1-1-4  | fi1-1-5  |
-      |           | f1-1-3    | f1-1-3  | s1-1-2   | t1-1-5  | fo1-1-3  | fi1-1-1  |
-      |           | f1-1-5    | f1-1-5  | s1-1-3   | t1-1-2  | fo1-1-5  | fi1-1-4  |
-    And The "Activity" column sort indicator should be "asc"
-    And The "Status" column sort indicator should be "asc"
-    And The "Use" column sort indicator should be "asc"
+      | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
+      | -         | 1         | 1     | s1                  | t1                  | fo1                  |
+      | -         | 101       | 101   | s1-1                | t1-1                | fo1-1                |
+      |           | 10102     | 10102 | s1-1-1              | t1-1-3              | fo1-1-1              |
+      |           | 10110     | 10110 | s1-1-10             | t1-1-10             | fo1-1-10             |
+      |           | 10111     | 10111 | s1-1-11             | t1-1-11             | fo1-1-11             |
+      |           | 10104     | 10104 | s1-1-2              | t1-1-1              | fo1-1-2              |
+      |           | 10101     | 10101 | s1-1-2              | t1-1-1              | fo1-1-4              |
+    And The "Beginning DR (Base)" column sort indicator should be "asc"
+    And The "Beginning CR (Base)" column sort indicator should be "asc"
+    And The "Net Beginning (Base)" column sort indicator should be "asc"
     And There should be 6 sections loaded
-
-    Given Prepare the grid with no existing sorting column for "lazily load":
-      | groupName                                                             | id                         | activity                   | status                     | use                         | sector                      |
-      | accountSection[1]-accountType[1]-accountCode[1,2,3,4,5,6,7,8,9,10,11] | f[1,2,3,4,5,6,7,8,9,10,11] | s[2,1,2,2,3,6,7,8,9,10,11] | t[1,3,5,1,2,6,7,8,9,10,11] | fo[4,1,3,2,5,6,7,8,9,10,11] | fi[5,2,1,3,4,6,7,8,9,10,11] |
-    And Click "expand" for row "f1"
-    And Click "expand" for row "f1-1"
-    And The grid sorted as "ASC" by "Activity, Status, Use" columns:
-      | indicator | groupName | Id      | Activity | Status  | Use      | Sector   |
-      | -         | f1        | f1      | s1       | t1      | fo1      | fi1      |
-      | -         | f1-1      | f1-1    | s1-1     | t1-1    | fo1-1    | fi1-1    |
-      |           | f1-1-2    | f1-1-2  | s1-1-1   | t-1-3   | fo-1-1   | fi-1-2   |
-      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
-      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
-      |           | f1-1-4    | f1-1-4  | s1-1-2   | t-1-1   | fo-1-2   | fi-1-3   |
-      |           | f1-1-1    | f1-1-1  | s1-1-2   | t-1-1   | fo-1-4   | fi-1-5   |
-      |           | f1-1-3    | f1-1-3  | s1-1-2   | t-1-5   | fo-1-3   | fi-1-1   |
-      |           | f1-1-5    | f1-1-5  | s1-1-3   | t-1-2   | fo-1-5   | fi-1-4   |
-    When Click to sort as "ASC" for column "Sector"
-    Then I see grouped rows:
-      | indicator | groupName | Id      | Activity | Status  | Use      | Sector   |
-      | -         | f1        | f1      | s1       | t1      | fo1      | fi1      |
-      | -         | f1-1      | f1-1    | s1-1     | t1-1    | fo1-1    | fi1-1    |
-      |           | f1-1-3    | f1-1-3  | s1-1-2   | t1-1-5  | fo1-1-3  | fi1-1-1  |
-      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
-      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
-      |           | f1-1-2    | f1-1-2  | s1-1-1   | t1-1-3  | fo1-1-1  | fi1-1-2  |
-      |           | f1-1-4    | f1-1-4  | s1-1-2   | t1-1-1  | fo1-1-2  | fi1-1-3  |
-      |           | f1-1-1    | f1-1-1  | s1-1-3   | t1-1-2  | fo1-1-5  | fi1-1-4  |
-      |           | f1-1-5    | f1-1-5  | s1-1-2   | t1-1-1  | fo1-1-4  | fi1-1-5  |
-    And The "Activity" column sort indicator should be "none"
-    And The "Status" column sort indicator should be "none"
-    And The "Use" column sort indicator should be "none"
-    And The "Sector" column sort indicator should be "asc"
-
+    And The "Beginning DR (Base)" column sort order is "1"
+    And The "Beginning CR (Base)" column sort order is "2"
+    And The "Net Beginning (Base)" column sort order is "3"
 
   @complete
   Scenario: Data sorted on a multiple columns regular click on existing column toggles direction for that column then remove column from sort with no grouped row
@@ -1037,66 +1004,63 @@ Feature: Multi-Column Sorting
     And The "status" column sort indicator should be "asc"
     And The "status" column sort order is "blank"
 
-  @wip
+  @complete
   Scenario: Data sorted on a single column control/command click on different column adds the column to the sort then regular click different column with grouped row partial load
     Given Prepare the grid with no existing sorting column for "lazily load":
-      | groupName                                                             | id                         | activity                   | status                     | use                         | sector                      |
-      | accountSection[1]-accountType[1]-accountCode[1,2,3,4,5,6,7,8,9,10,11] | f[1,2,3,4,5,6,7,8,9,10,11] | s[2,1,2,2,3,6,7,8,9,10,11] | t[1,3,5,1,2,6,7,8,9,10,11] | fo[4,1,3,2,5,6,7,8,9,10,11] | fi[5,2,1,3,4,6,7,8,9,10,11] |
-    And Click "expand" for row "f1"
-    And Click "expand" for row "f1-1"
-    And The grid sorted as "ASC" by "Activity, Status" columns:
-      | indicator | groupName | Id      | Activity | Status  | Use      | Sector   |
-      | -         | f1        | f1      | s1       | t1      | fo1      | fi1      |
-      | -         | f1-1      | f1-1    | s1-1     | t1-1    | fo1-1    | fi1-1    |
-      |           | f1-1-2    | f1-1-2  | s1-1-1   | t-1-3   | fo-1-1   | fi-1-2   |
-      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
-      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
-      |           | f1-1-1    | f1-1-1  | s1-1-2   | t-1-1   | fo-1-4   | fi-1-5   |
-      |           | f1-1-4    | f1-1-4  | s1-1-2   | t-1-1   | fo-1-2   | fi-1-3   |
-      |           | f1-1-3    | f1-1-3  | s1-1-2   | t-1-5   | fo-1-3   | fi-1-1   |
-      |           | f1-1-5    | f1-1-5  | s1-1-3   | t-1-2   | fo-1-5   | fi-1-4   |
-    When Click to sort as "DESC" for column "Activity"
+      | groupName                                                             | id                        | beginningDr                | beginningCr                | netBeginning                |
+      | accountSection[1]-accountType[1]-accountCode[1,2,3,4,5,6,7,8,9,10,11] | [1,2,3,4,5,6,7,8,9,10,11] | s[2,1,2,2,3,6,7,8,9,10,11] | t[1,3,5,1,2,6,7,8,9,10,11] | fo[4,1,3,2,5,6,7,8,9,10,11] |
+    And Click "expand" for row "1"
+    And Click "expand" for row "101"
+    And The grid sorted as "ASC" by "Beginning DR (Base), Beginning CR (Base)" columns
+    And I see grouped rows:
+      | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
+      | -         | 1         | 1     | s1                  | t1                  | fo1                  |
+      | -         | 101       | 101   | s1-1                | t1-1                | fo1-1                |
+      |           | 10102     | 10102 | s1-1-1              | t1-1-3              | fo1-1-1              |
+      |           | 10110     | 10110 | s1-1-10             | t1-1-10             | fo1-1-10             |
+      |           | 10111     | 10111 | s1-1-11             | t1-1-11             | fo1-1-11             |
+      |           | 10101     | 10101 | s1-1-2              | t1-1-1              | fo1-1-4              |
+      |           | 10104     | 10104 | s1-1-2              | t1-1-1              | fo1-1-2              |
+    When Click to sort as "DESC" for column "Beginning DR (Base)"
     Then I see grouped rows:
-      | indicator | groupName | Id     | Activity | Status | Use     | Sector  |
-      | -         | f1        | f1     | s1       | t1     | fo1     | fi1     |
-      | -         | f1-1      | f1-1   | s1-1     | t1-1   | fo1-1   | fi1-1   |
-      |           | f1-1-9    | f1-1-9 | s1-1-9   | t1-1-9 | fo1-1-9 | fi1-1-9 |
-      |           | f1-1-8    | f1-1-8 | s1-1-8   | t1-1-8 | fo1-1-8 | fi1-1-8 |
-      |           | f1-1-7    | f1-1-7 | s1-1-7   | t1-1-7 | fo1-1-7 | fi1-1-7 |
-      |           | f1-1-6    | f1-1-6 | s1-1-6   | t1-1-6 | fo1-1-6 | fi1-1-6 |
-      |           | f1-1-5    | f1-1-5 | s1-1-3   | t1-1-2 | fo1-1-5 | fi1-1-4 |
-    And The "Activity" column sort indicator should be "desc"
-    And The "Status" column sort indicator should be "asc"
+      | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
+      | -         | 1         | 1     | s1                  | t1                  | fo1                  |
+      | -         | 101       | 101   | s1-1                | t1-1                | fo1-1                |
+      |           | 10109     | 10109 | s1-1-9              | t1-1-9              | fo1-1-9              |
+      |           | 10108     | 10108 | s1-1-8              | t1-1-8              | fo1-1-8              |
+      |           | 10107     | 10107 | s1-1-7              | t1-1-7              | fo1-1-7              |
+      |           | 10106     | 10106 | s1-1-6              | t1-1-6              | fo1-1-6              |
+      |           | 10105     | 10105 | s1-1-3              | t1-1-2              | fo1-1-5              |
+    And The "Beginning DR (Base)" column sort indicator should be "desc"
+    And The "Beginning CR (Base)" column sort indicator should be "asc"
     And There should be 6 sections loaded
 
     Given Prepare the grid with no existing sorting column for "lazily load":
-      | groupName                                                             | id                         | activity                   | status                     | use                         | sector                      |
-      | accountSection[1]-accountType[1]-accountCode[1,2,3,4,5,6,7,8,9,10,11] | f[1,2,3,4,5,6,7,8,9,10,11] | s[2,1,2,2,3,6,7,8,9,10,11] | t[1,3,5,1,2,6,7,8,9,10,11] | fo[4,1,3,2,5,6,7,8,9,10,11] | fi[5,2,1,3,4,6,7,8,9,10,11] |
-    And Click "expand" for row "f1"
-    And Click "expand" for row "f1-1"
-    And The grid sorted as "ASC" by "Activity, Status, Use" columns:
-      | indicator | groupName | Id      | Activity | Status  | Use      | Sector   |
-      | -         | f1        | f1      | s1       | t1      | fo1      | fi1      |
-      | -         | f1-1      | f1-1    | s1-1     | t1-1    | fo1-1    | fi1-1    |
-      |           | f1-1-2    | f1-1-2  | s1-1-1   | t1-1-3  | fo1-1-1  | fi1-1-2  |
-      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
-      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
-      |           | f1-1-1    | f1-1-1  | s1-1-2   | t1-1-1  | fo1-1-4  | fi1-1-5  |
-      |           | f1-1-4    | f1-1-4  | s1-1-2   | t1-1-1  | fo1-1-2  | fi1-1-3  |
-      |           | f1-1-3    | f1-1-3  | s1-1-2   | t1-1-5  | fo1-1-3  | fi1-1-1  |
-      |           | f1-1-5    | f1-1-5  | s1-1-3   | t1-1-2  | fo1-1-5  | fi1-1-4  |
-    When "command" click to sort as "remove" for column "Activity"
+      | groupName                                                             | id                        | beginningDr                | beginningCr                | netBeginning                |
+      | accountSection[1]-accountType[1]-accountCode[1,2,3,4,5,6,7,8,9,10,11] | [1,2,3,4,5,6,7,8,9,10,11] | s[2,1,2,2,3,6,7,8,9,10,11] | t[1,3,5,1,2,6,7,8,9,10,11] | fo[4,1,3,2,5,6,7,8,9,10,11] |
+    And Click "expand" for row "1"
+    And Click "expand" for row "101"
+    And The grid sorted as "ASC" by "Beginning DR (Base), Beginning CR (Base), Net Beginning (Base)" columns:
+      | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
+      | -         | 1         | 1     | s1                  | t1                  | fo1                  |
+      | -         | 101       | 101   | s1-1                | t1-1                | fo1-1                |
+      |           | 10102     | 10102 | s1-1-1              | t1-1-3              | fo1-1-1              |
+      |           | 10110     | 10110 | s1-1-10             | t1-1-10             | fo1-1-10             |
+      |           | 10111     | 10111 | s1-1-11             | t1-1-11             | fo1-1-11             |
+      |           | 10104     | 10104 | s1-1-2              | t1-1-1              | fo1-1-2              |
+      |           | 10101     | 10101 | s1-1-2              | t1-1-1              | fo1-1-4              |
+      |           | 10103     | 10103 | s1-1-2              | t1-1-5              | fo1-1-3              |
+      |           | 10105     | 10105 | s1-1-3              | t1-1-2              | fo1-1-5              |
+    When "command" click to sort as "remove" for column "Beginning DR (Base)"
     Then I see grouped rows:
-      | indicator | groupName | Id      | Activity | Status  | Use      | Sector   |
-      | -         | f1        | f1      | s1       | t1      | fo1      | fi1      |
-      | -         | f1-1      | f1-1    | s1-1     | t1-1    | fo1-1    | fi1-1    |
-      |           | f1-1-1    | f1-1-1  | s1-1-2   | t1-1-1  | fo1-1-4  | fi1-1-5  |
-      |           | f1-1-4    | f1-1-4  | s1-1-2   | t1-1-1  | fo1-1-2  | fi1-1-3  |
-      |           | f1-1-10   | f1-1-10 | s1-1-10  | t1-1-10 | fo1-1-10 | fi1-1-10 |
-      |           | f1-1-11   | f1-1-11 | s1-1-11  | t1-1-11 | fo1-1-11 | fi1-1-11 |
-      |           | f1-1-5    | f1-1-5  | s1-1-3   | t1-1-2  | fo1-1-5  | fi1-1-4  |
-      |           | f1-1-2    | f1-1-2  | s1-1-1   | t1-1-3  | fo1-1-1  | fi1-1-2  |
-      |           | f1-1-3    | f1-1-3  | s1-1-2   | t1-1-5  | fo1-1-3  | fi1-1-1  |
-    And The "Activity" column sort indicator should be "none"
-    And The "Status" column sort indicator should be "asc"
+      | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
+      | -         | 1         | 1     | s1                  | t1                  | fo1                  |
+      | -         | 101       | 101   | s1-1                | t1-1                | fo1-1                |
+      |           | 10104     | 10104 | s1-1-2              | t1-1-1              | fo1-1-2              |
+      |           | 10101     | 10101 | s1-1-2              | t1-1-1              | fo1-1-4              |
+      |           | 10110     | 10110 | s1-1-10             | t1-1-10             | fo1-1-10             |
+      |           | 10111     | 10111 | s1-1-11             | t1-1-11             | fo1-1-11             |
+      |           | 10105     | 10105 | s1-1-3              | t1-1-2              | fo1-1-5              |
+    And The "Beginning DR (Base)" column sort indicator should be "none"
+    And The "Beginning CR (Base)" column sort indicator should be "asc"
     And There should be 7 sections loaded
