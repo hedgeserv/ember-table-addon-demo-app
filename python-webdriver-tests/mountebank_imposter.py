@@ -61,7 +61,7 @@ class ChunkMeta:
         self.chunk_size = chunk_size
 
     def meta_dict(self):
-        return {"total": self.total, "page_size": self.chunk_size, "page": self.chunk_index + 1}
+        return {"total": self.total, "pageSize": self.chunk_size, "page": self.chunk_index + 1}
 
     def chunk_query(self):
         return {"section": str(self.chunk_index + 1)}

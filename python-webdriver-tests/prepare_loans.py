@@ -3,7 +3,6 @@ import json
 from group_meta_data import GroupMetadata
 from mountebank_imposter import StubFactory, Predicate
 from sort_criteria import SortCriteria
-import operator
 
 
 class MountebankServer:

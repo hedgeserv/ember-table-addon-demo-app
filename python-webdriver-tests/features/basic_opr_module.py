@@ -72,7 +72,7 @@ def drag_scroll_to_bottom(browser, offsety):
         drag_scroll_by_css(browser, 0, offsety)
         eles = browser.find_elements_by_css_selector(css)
         value = int(eles[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
-        if value > 243:
+        if value > 242:
             break
         time.sleep(0.5)
 

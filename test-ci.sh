@@ -1,6 +1,6 @@
 #!/bin/sh
+a=$(date '+%s')
 result=1
-
 red=`tput setaf 1`
 green=`tput setaf 2`
 reset=`tput sgr0`
@@ -21,7 +21,7 @@ if [ $? -eq 0 ];then
   sleep 7
   echo "${green}Ember server pid is $var${reset}"
   echo "${green}Run lettuce ...${reset}"
-  lettuce python-webdriver-tests/features --tag complete --with-xunit
+  lettuce python-webdriver-tests/features --tag aa --with-xunit
 
   if [ $? -eq 0 ];then
   result=0
@@ -36,4 +36,5 @@ fi
 echo "${green}Shutdown Mountebank ...${reset}"
 mb stop
 rm temp.xml
+echo "${green}run in $(($(date '+%s') - $a))s.${reset}"
 exit $result

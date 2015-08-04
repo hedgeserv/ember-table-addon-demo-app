@@ -10,9 +10,9 @@ class GroupMetadata:
     def make_group_rows(self):
         first_group_level = self.get_group_level(0)
         normal_order_rows = first_group_level.expand_this_level(VirtualTopRow(), None)
-        asc_rows = first_group_level.expand_this_level(VirtualTopRow(), 'asc')
-        desc_rows = first_group_level.expand_this_level(VirtualTopRow(), 'desc')
-        return normal_order_rows + asc_rows + desc_rows
+        # asc_rows = first_group_level.expand_this_level(VirtualTopRow(), 'asc')
+        # desc_rows = first_group_level.expand_this_level(VirtualTopRow(), 'desc')
+        return normal_order_rows
 
     def parse_meta_str(self, pattern_str):
         levels = pattern_str.split('-')
@@ -110,7 +110,16 @@ class LastGroupLevel(GroupLevel):
         result = sum(children_results, result)
         sortColumns = ["id", "beginningDr", "beginningCr", "netBeginning"]
         provider = SortConditionProvider(list(set(sortColumns) & set(self.column_names())))
-        for sort_criteria in provider.all():
+        sort_criteria_arr = provider.filterBy(
+            "id/asc", "id/desc",
+            "beginningDr/asc", "beginningDr/desc",
+            "beginningCr/asc",
+            "beginningDr/asc beginningCr/asc",
+            "beginningDr/desc beginningCr/asc",
+            "beginningCr/asc netBeginning/asc",
+            "beginningDr/asc beginningCr/asc netBeginning/asc"
+        )
+        for sort_criteria in sort_criteria_arr:
             localQuery = query.copy()
             data = sort_criteria.sort(rows_values[:])
             localQuery.update(sort_criteria.to_query())

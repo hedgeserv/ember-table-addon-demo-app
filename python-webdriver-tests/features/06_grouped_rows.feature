@@ -375,7 +375,7 @@ Feature: Indicators for expanding and collapsing grouped rows
       | groupName                                         | id  | Beginning DR (Base) |
       | accountSection[30]-accountType[15]-accountCode[4] | [4] | [4]                 |
     And Presenting "grouping column present partial loaded children"
-    And Click "expand" for the 0 row
+    And Click "expand" for row "1"
     When Click "expand" for row "101"
     Then There should be 3 sections loaded
     Then I see grouped rows:
@@ -644,16 +644,16 @@ Feature: Indicators for expanding and collapsing grouped rows
 #    When Click to sort as "DESC" for column "Id"
 #    Then There should be 7 sections loaded
 
-  @wip
+  @complete
   Scenario: The grouped row named with long characters shouldn't wrap
-    Given I have the following partial loaded grouped data in MounteBank:
-      | groupName                                       | id | Beginning DR (Base)                            |
-      | accountSection[1]-accountType[2]-accountCode[3] |    | ffffffffffffffffffffffffffffffffffffffffffffff |
-    And Presenting "grouping column present partial loaded children"
-    When Click "expand" for the 0 row
-    And Click "expand" for the 2 row
-    And Click "expand" for the 1 row
-    Then The grouped row "ffffffffffffffffffffffffffffffffffffffffffffff1-1-1" should not wrap
+    Given Prepare the grid with no existing sorting column for "fully load":
+      | groupName                                            | id     | activity | status | isGroupRow |
+      | group1                                               | f1     | s1       | t1     | True       |
+      | group1-chd1                                          | f1-1   | s1-1     | t1-1   | True       |
+      | group1-chd1-chddddddddddddddddddddddddddddddddddddd1 | f1-1-1 | s1-1-1   | t1-1-1 | False      |
+    When Click "expand" for row "group1"
+    And Click "expand" for row "group1-chd1"
+    Then The grouped row "group1-chd1-chddddddddddddddddddddddddddddddddddddd1" should not wrap
 
     Given I have the following grouped loans in MounteBank:
       | groupName   | id   | activity | isGroupRow |
