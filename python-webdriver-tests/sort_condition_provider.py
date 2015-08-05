@@ -13,7 +13,6 @@ class SortConditionProvider:
         return self.uniq(items)
 
     def add_directs(self, names):
-
         sort_directs = ['asc', 'desc']
         all_directs = []
         sortConditions = []
@@ -48,4 +47,20 @@ class SortConditionProvider:
         names_arr = self.product_names()
         for names in names_arr:
             conditions += self.add_directs(names)
-        return [SortCriteria(condition) for condition in conditions];
+        return [SortCriteria(condition) for condition in conditions]
+
+    def filterBy(self, *conditions):
+        sortConditions = []
+        for condition in conditions:
+            filters = []
+            items = condition.split(' ')
+            for item in items:
+                name, direct = item.split('/')
+                if(name in self.columns):
+                    filters.append({"sortName": name, "sortDirect": direct})
+                else:
+                    filters = []
+                    break
+            if(filters):
+                sortConditions.append(filters)
+        return [SortCriteria(condition) for condition in sortConditions]

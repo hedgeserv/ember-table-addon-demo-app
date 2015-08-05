@@ -1,6 +1,6 @@
 #!/bin/sh
+a=$(date '+%s')
 result=1
-
 red=`tput setaf 1`
 green=`tput setaf 2`
 reset=`tput sgr0`
@@ -36,4 +36,5 @@ fi
 echo "${green}Shutdown Mountebank ...${reset}"
 mb stop
 rm temp.xml
+echo "${green}run in $(($(date '+%s') - $a))s.${reset}"
 exit $result

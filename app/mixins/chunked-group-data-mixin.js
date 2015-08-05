@@ -23,7 +23,7 @@ export default Ember.Mixin.create({
             content: result,
             meta: {
               totalCount: meta.total,
-              chunkSize: meta.page_size
+              chunkSize: meta.pageSize
             }
           };
         });

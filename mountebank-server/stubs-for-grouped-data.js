@@ -16,16 +16,16 @@ for (var i = 0; i < 20; i++) {
 
 generateRecordId(records, 0);
 
-var sortConditionProvider =  new SortConditionProvider(sortColumns);
+var sortConditionProvider = new SortConditionProvider(sortColumns);
 
-leafCollections(records[0], function (accountSection, accountType){
-	var localUrl = url + "/accountSections/" + accountSection['id'] + '/accountTypes/' + accountType['id'] + '/accountCodes';
-	var localLoans = removeChildren(accountType.children);
-	sortConditionProvider.forEach(function (sortCondition){
-		var sortedLoans = sortCondition.sort(localLoans);
-		var localStubs = createchunkedStubs(localUrl, sortedLoans, sortCondition.toQuery());
-		helper.concat(stubs, localStubs);
-	});
+leafCollections(records[0], function (accountSection, accountType) {
+  var localUrl = url + "/accountSections/" + accountSection['id'] + '/accountTypes/' + accountType['id'] + '/accountCodes';
+  var localLoans = removeChildren(accountType.children);
+  sortConditionProvider.forEach(function (sortCondition) {
+    var sortedLoans = sortCondition.sort(localLoans);
+    var localStubs = createchunkedStubs(localUrl, sortedLoans, sortCondition.toQuery());
+    helper.concat(stubs, localStubs);
+  });
 });
 
 // unsort grouped stubs
@@ -51,13 +51,13 @@ function generateRecordId(records, parentId) {
 }
 
 function removeChildren(obj) {
-  var doRemoveChildren = function(object) {
+  var doRemoveChildren = function (object) {
     var cloneObject = helper.clone(object);
     cloneObject.children = [];
     return cloneObject;
-  }
+  };
   if (Array.isArray(obj)) {
-    return obj.map(function(x) {
+    return obj.map(function (x) {
       return doRemoveChildren(x);
     });
   }
@@ -68,9 +68,9 @@ function doMakeNestedStubs(theRecord, resourceNames, parentQuery, localUrl) {
   localUrl = localUrl || url;
   var localStubs = [];
   if (theRecord.children) {
-  	var chunkedGroups = removeChildren(theRecord.children);
+    var chunkedGroups = removeChildren(theRecord.children);
     helper.concat(localStubs, createchunkedStubs(localUrl, chunkedGroups, parentQuery));
-    theRecord.children.forEach(function(value) {
+    theRecord.children.forEach(function (value) {
       var theQuery = helper.clone(parentQuery);
       var tempUrl = localUrl;
       if (tempUrl !== url) {
@@ -84,8 +84,8 @@ function doMakeNestedStubs(theRecord, resourceNames, parentQuery, localUrl) {
 }
 
 function createchunkedStubs(path, loans, query) {
-  return helper.splitToChunks(loans, pageSize).map(function(chunkedData, index) {
-  	var pageIndex = index + 1;
+  return helper.splitToChunks(loans, pageSize).map(function (chunkedData, index) {
+    var pageIndex = index + 1;
     var localQuery = extend({"section": pageIndex}, query);
 
     var stub = new MBStub({
@@ -96,7 +96,7 @@ function createchunkedStubs(path, loans, query) {
       "meta": {
         "total": loans.length,
         "page": pageIndex,
-        "page_size": pageSize,
+        "pageSize": pageSize,
         "date": new Date()
       },
       'chunkedGroups': chunkedData
@@ -105,11 +105,11 @@ function createchunkedStubs(path, loans, query) {
   });
 }
 
-function leafCollections(record, callBack){
-	record.children.forEach(function(accountSection) {
-  	accountSection.children.forEach(function(accountType) {
-  		callBack(accountSection, accountType);
-  	});
+function leafCollections(record, callBack) {
+  record.children.forEach(function (accountSection) {
+    accountSection.children.forEach(function (accountType) {
+      callBack(accountSection, accountType);
+    });
   });
 }
 
