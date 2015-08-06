@@ -635,11 +635,11 @@ Feature: Indicators for expanding and collapsing grouped rows
 
 #    Given I have the following partial loaded grouped data in MounteBank:
 #      | groupName                                        | id   | Beginning DR (Base) |
-#      | accountSection[1]-accountType[1]-accountCode[40] |      |                     |
+#      | accountSection[1]-accountType[1]-accountCode[40] | [40] | f[40]               |
 #    And Presenting "grouping column present partial loaded children"
-#    And Click "expand" for the 0 row
-#    And Click "expand" for the 1 row
-#    And Customer drags scroll bar by offset 100 with 2 times and wait loading section
+#    And Click "expand" for row "1"
+#    And Click "expand" for row "101"
+#    And Customer drags scroll bar by offset 110 with 2 times and wait loading section
 #    And Click to sort as "ASC" for column "Id"
 #    When Click to sort as "DESC" for column "Id"
 #    Then There should be 7 sections loaded

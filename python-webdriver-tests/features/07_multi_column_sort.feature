@@ -538,36 +538,6 @@ Feature: Multi-Column Sorting
     And There should be 5 sections loaded
 
   @complete
-  Scenario: Data sorted on a single column regular click on differentj column changes sort to that column with grouped row partial load
-    Given Prepare the grid with no existing sorting column for "lazily load":
-      | groupName                                                             | id                        | beginningDr                | beginningCr                |
-      | accountSection[1]-accountType[1]-accountCode[1,3,2,4,5,6,7,8,9,10,11] | [1,3,2,4,5,6,7,8,9,10,11] | s[1,2,3,4,5,6,7,8,9,10,11] | t[3,4,1,5,2,6,7,8,9,10,11] |
-    And Click "expand" for row "1"
-    And Click "expand" for row "101"
-    And The grid sorted as "ASC" by "Beginning DR (Base)" column:
-      | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) |
-      | -         | 1         | 1     | s1                  | t1                  |
-      | -         | 101       | 101   | s1-1                | t1-1                |
-      |           | 10101     | 10101 | s1-1-1              | t1-1-3              |
-      |           | 10110     | 10110 | s1-1-10             | t1-1-10             |
-      |           | 10111     | 10111 | s1-1-11             | t1-1-11             |
-      |           | 10103     | 10103 | s1-1-2              | t1-1-4              |
-      |           | 10102     | 10102 | s1-1-3              | t1-1-1              |
-    When Click to sort as "ASC" for column "Beginning CR (Base)"
-    Then I see grouped rows:
-      | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) |
-      | -         | 1         | 1     | s1                  | t1                  |
-      | -         | 101       | 101   | s1-1                | t1-1                |
-      |           | 10102     | 10102 | s1-1-3              | t1-1-1              |
-      |           | 10110     | 10110 | s1-1-10             | t1-1-10             |
-      |           | 10111     | 10111 | s1-1-11             | t1-1-11             |
-      |           | 10105     | 10105 | s1-1-5              | t1-1-2              |
-      |           | 10101     | 10101 | s1-1-1              | t1-1-3              |
-    And The "Beginning DR (Base)" column sort indicator should be "none"
-    And The "Beginning CR (Base)" column sort indicator should be "asc"
-    And There should be 5 sections loaded
-
-  @complete
   Scenario: Data sorted on a single column regular click on different column more than twice time with no grouped row
     Given There are 200 loans in chunk size 50
     And Presenting "column sort"
@@ -635,25 +605,25 @@ Feature: Multi-Column Sorting
       |           | 10104     | 10104 |
     And The "Id" column sort indicator should be "asc"
 
-  @wip
+  @complete
   Scenario: Sort column twice time and collapse root row
     Given Prepare the grid with no existing sorting column for "lazily load":
-      | groupName                                        | id | activity |
-      | accountSection[1]-accountType[1]-accountCode[11] | f  | s        |
-    And Click "expand" for row "f1"
-    And Click "expand" for row "f1-1"
+      | groupName                                        | id   |
+      | accountSection[1]-accountType[1]-accountCode[11] | [11] |
+    And Click "expand" for row "1"
+    And Click "expand" for row "101"
     And Click to sort as "ASC" for column "Id"
     And Click to sort as "DESC" for column "Id"
-    When Click "collapse" for row "f1"
-    Then Click "expand" for row "f1"
+    When Click "collapse" for row "1"
+    And Click "expand" for row "1"
     Then I see grouped rows:
-      | indicator | groupName | Id     |
-      | -         | f1        | f1     |
-      | -         | f1-1      | f1-1   |
-      |           | f1-1-9    | f1-1-9 |
-      |           | f1-1-8    | f1-1-8 |
-      |           | f1-1-7    | f1-1-7 |
-      |           | f1-1-6    | f1-1-6 |
+      | indicator | groupName | Id    |
+      | -         | 1         | 1     |
+      | -         | 101       | 101   |
+      |           | 10111     | 10111 |
+      |           | 10110     | 10110 |
+      |           | 10109     | 10109 |
+      |           | 10108     | 10108 |
 
   @complete
   Scenario: Data sorted on a single column control/command click on different column adds the column to the sort then regular click different column with no grouped row
