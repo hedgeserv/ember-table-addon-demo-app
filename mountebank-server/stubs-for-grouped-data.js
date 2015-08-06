@@ -7,7 +7,7 @@ var records = helper.loadJsonFile('three-levels-of-grouping.json');
 var stubs = [];
 var pageSize = 10;
 var resourceNames = ['accountSections', 'accountTypes', 'accountCodes'];
-var sortColumns = ['id', 'beginningDr', 'beginningCr', 'netBeginning'];
+var sortColumns = ['beginningDr', 'beginningCr', 'netBeginning'];
 var sortDirects = ['asc', 'desc'];
 
 for (var i = 0; i < 20; i++) {
@@ -17,15 +17,18 @@ for (var i = 0; i < 20; i++) {
 generateRecordId(records, 0);
 
 var sortConditionProvider = new SortConditionProvider(sortColumns);
+var idSortProvider = new SortConditionProvider(["id"]);
 
 leafCollections(records[0], function (accountSection, accountType) {
   var localUrl = url + "/accountSections/" + accountSection['id'] + '/accountTypes/' + accountType['id'] + '/accountCodes';
   var localLoans = removeChildren(accountType.children);
-  sortConditionProvider.forEach(function (sortCondition) {
+  var makeStubs = function (sortCondition) {
     var sortedLoans = sortCondition.sort(localLoans);
     var localStubs = createchunkedStubs(localUrl, sortedLoans, sortCondition.toQuery());
     helper.concat(stubs, localStubs);
-  });
+  }
+  sortConditionProvider.forEach(makeStubs);
+  idSortProvider.forEach(makeStubs);
 });
 
 // unsort grouped stubs
@@ -112,7 +115,3 @@ function leafCollections(record, callBack) {
     });
   });
 }
-
-
-
-

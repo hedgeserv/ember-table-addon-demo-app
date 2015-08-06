@@ -15,20 +15,21 @@ var mountBank = new MB();
 var imposter = new MBImposter(PORT);
 
 // Grouped data
-//var groupedStubs = require('./stubs-for-grouped-data');
-//imposter.pushStubs(groupedStubs);
+var groupedStubs = require('./stubs-for-grouped-data');
+imposter.pushStubs(groupedStubs);
+
+
+// Grouping column loans
+var groupingColumnStub = require('./stub-for-grouping-column');
+imposter.pushStub(groupingColumnStub);
 
 // Lazy loaded loans
 var lazyLoadStubs = require('./stubs-for-lazy-load');
 imposter.pushStubs(lazyLoadStubs);
 
-// Grouping column loans
-//var groupingColumnStub = require('./stub-for-grouping-column');
-//imposter.pushStub(groupingColumnStub);
-
 // Fully loaded loans
-//var fullyLoansStub = require('./stub-for-fully-loans');
-//imposter.pushStub(fullyLoansStub);
+var fullyLoansStub = require('./stub-for-fully-loans');
+imposter.pushStub(fullyLoansStub);
 
 // send http request to mountbank
 mountBank.setImposter(imposter);
