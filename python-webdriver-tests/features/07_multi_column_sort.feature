@@ -901,7 +901,7 @@ Feature: Multi-Column Sorting
     And The "status" column sort order is "1"
     And The "Use" column sort order is "2"
 
-  @complete
+  @complete1
   Scenario: Data sorted on a multiple columns regular click on existing column toggles direction for that column then remove column from sort with grouped row fully load
     Given Prepare the grid with no existing sorting column for "fully load":
       | groupName        | id     | activity | status | use     | sector  | isGroupRow |
