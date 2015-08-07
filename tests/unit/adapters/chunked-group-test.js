@@ -27,13 +27,11 @@ moduleFor('adapter:chunked-group', 'Unit | Adapter | chunked group', {
   }
 });
 
-// Replace this with your real tests.
 test('only one level', function(assert) {
   ajaxResponse({chunkedGroups: [{id: 1}]});
   this.subject();
   var params = {
-    groupingMetadata: [{id: 'accountSection'}, {id: 'accountType'}],
-    accountSection: 1
+    groupQuery: {key: "accountType", upperGroupings: [["accountSection", {id: 1}]]}
   };
   Ember.run(function () {
     store.find('chunkedGroup', params).then(function () {
@@ -46,9 +44,7 @@ test('three level data', function(assert) {
   ajaxResponse({chunkedGroups: [{id: 1}]});
   this.subject();
   var params = {
-    accountSection: 2,
-    accountType: 3,
-    groupingMetadata: [{id: 'accountSection'}, {id: 'accountType'}, {id: 'accountCode'}]
+    groupQuery: {key: "accountCode", upperGroupings: [["accountSection", {id: 2}], ["accountType", {id: 3}]]}
   };
   Ember.run(function () {
     store.find('chunkedGroup', params).then(function () {
