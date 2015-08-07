@@ -340,7 +340,6 @@ Feature: Indicators for expanding and collapsing grouped rows
     When Customer drags scroll bar by offset 1000 with 1 times and wait loading section
     Then I see grouped rows:
       | indicator | groupName | Id    |
-      |           | 10106     | 10106 |
       |           | 10107     | 10107 |
       |           | 10108     | 10108 |
       |           | 10109     | 10109 |
@@ -617,13 +616,13 @@ Feature: Indicators for expanding and collapsing grouped rows
     When Click to sort as "DESC" for column "Id"
     Then I see grouped rows:
       | indicator | groupName | Id    |
+      |           | 10103     | 10103 |
+      |           | 10102     | 10102 |
       |           | 10101     | 10101 |
       | -         | 102       | 102   |
       |           | 10220     | 10220 |
       |           | 10219     | 10219 |
-      |           | 10104     | 10104 |
-      |           | 10103     | 10103 |
-      |           | 10102     | 10102 |
+
     Then There should be 7 sections loaded
 
     Given I have the following partial loaded grouped data in MounteBank:

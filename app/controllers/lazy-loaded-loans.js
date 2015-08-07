@@ -2,8 +2,12 @@ import Ember from 'ember';
 import LazyArray from 'ember-table/models/lazy-array';
 import ThreeColumnsMixin from '../mixins/three-columns-mixin';
 import SortQueryMixin from '../mixins/sort-query-mixin';
+import tablesMixin from '../mixins/features';
 
-export default Ember.Controller.extend(ThreeColumnsMixin, SortQueryMixin, {
+export default Ember.Controller.extend(ThreeColumnsMixin, SortQueryMixin, tablesMixin, {
+
+  title: "Lazy Loaded Loans",
+
   queryParams:['totalCount'],
   sortName: null,
   sortDirect: null,
@@ -25,7 +29,7 @@ export default Ember.Controller.extend(ThreeColumnsMixin, SortQueryMixin, {
   }.property(),
 
   columnsMetadata: [
-    ["id", "Id", 20, function(prev, next){
+    ["id", "Id", 60, function(prev, next){
       return Ember.get(prev, 'id') - Ember.get(next, 'id');
     }],
     ["activity", "Activity", 150],

@@ -1,7 +1,8 @@
 import Ember from 'ember';
 import ColumnDefinition from 'ember-table/models/column-definition';
+import TableFeatures from '../mixins/features';
 
-export default Ember.Controller.extend({
+export default Ember.Controller.extend(TableFeatures, {
 
   columns: function () {
     var columnTitleAndNames = [

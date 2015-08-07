@@ -438,35 +438,26 @@ def verify_grouped_row(index, row):
 
 
 def is_the_row_expanded(index):
-    return world.browser.execute_script(
-        "return $('.ember-table-body-container .ember-table-left-table-block .ember-table-table-row:eq(" + str(
-            index) + ") .ember-table-cell:eq(0) .grouping-column-indicator').hasClass('unfold')")
-
+    script = ".find('.ember-table-cell:eq(0) .grouping-column-indicator').hasClass('unfold')"
+    return world.browser.execute_script(script_with_row('left', index) + script)
 
 def is_the_leaf_node(index):
-    length = world.browser.execute_script(
-        "return $('.ember-table-body-container .ember-table-left-table-block .ember-table-table-row:eq(" + str(
-            index) + ") .ember-table-cell:eq(0) .grouping-column-indicator:has(div)').length")
+    script = ".find('.ember-table-cell:eq(0) .grouping-column-indicator:has(div)').length"
+    length = world.browser.execute_script(script_with_row('left', index) + script)
     return int(length) == 0
 
-
-def is_the_leaf_node(index):
-    length = world.browser.execute_script(
-        "return $('.ember-table-body-container .ember-table-left-table-block .ember-table-table-row:eq(" + str(
-            index) + ") .ember-table-cell:eq(0) .grouping-column-indicator:has(div)').length")
-    return int(length) == 0
-
+def script_with_row(block, row_index):
+    return "var rows = $('.ember-table-body-container .ember-table-%s-table-block .ember-table-table-row:visible').toArray(); \
+        rows = rows.filter(function(row){ return $(row).offset().top > $('.antiscroll-inner').offset().top - 20}); \
+        rows.sort(function(i, j){ return parseInt(i.style.top) - parseInt(j.style.top) }); \
+        return $(rows[%s])" % (block, row_index)
 
 def verify_cell_content(row_index, name, value):
     col_index, is_fixed = find_col_index(name)
-    block_selector = '.ember-table-right-table-block'
-    if is_fixed:
-        block_selector = '.ember-table-left-table-block'
-
-    col_value = world.browser.execute_script(
-        "return $('.ember-table-body-container " + block_selector + " .ember-table-table-row:eq(" + str(row_index) +
-        ") .ember-table-cell:eq(" + str(col_index) + ") span').text().trim()")
-    assert_true(step, str(col_value) == str(value))
+    block_selector = 'left' if is_fixed else 'right'
+    script = ".find('.ember-table-cell:eq(%s) span').text().trim()" % col_index
+    col_value = world.browser.execute_script(script_with_row(block_selector, row_index) + script)
+    assert_true(step, str(col_value).strip() == str(value).strip())
 
 
 def find_col_index(name):

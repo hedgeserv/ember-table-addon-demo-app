@@ -11,7 +11,7 @@ export default Ember.Mixin.create({
     var columnsMetadata = this.get('columnsMetadata');
     return columnsMetadata.map(function(c) {
       return ColumnDefinition.create({
-        columnWidth: c[2],
+        width: c[2],
         headerCellName: c[1],
         contentPath: c[0],
         sortBy: c[3] || defaultSortFn,
@@ -23,7 +23,7 @@ export default Ember.Mixin.create({
   }.property(),
 
   columnsMetadata: [
-      ["id",        "Id",         20],
+      ["id",        "Id",         60],
       ["activity",  "Activity",   150],
       ["status",    "status",     100]
   ]
