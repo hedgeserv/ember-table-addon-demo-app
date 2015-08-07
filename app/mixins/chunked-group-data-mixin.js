@@ -8,15 +8,17 @@ export default Ember.Mixin.create({
     var self = this;
     var groupingMetadata = this.get('groupingMetadata');
     return LazyGroupRowArray.create({
-      loadChildren: function (chunkIndex, parentQuery, sortingColumns) {
-        var parameters = {};
-        Ember.setProperties(parameters, parentQuery);
+      loadChildren: function (chunkIndex, sortingColumns, groupQuery) {
+        var parameters = {
+          section: chunkIndex + 1,
+          groupQuery: groupQuery
+        };
         parameters.section = chunkIndex + 1;
-        if (self.isLastLevel(parentQuery)) {
+
+        if (self.isLastLevel(groupQuery.key)) {
           var sortQuery = self.makeSortQuery(sortingColumns);
           Ember.setProperties(parameters, sortQuery);
         }
-        parameters.groupingMetadata = groupingMetadata;
         return self.store.find('chunked-group', parameters).then(function (result) {
           var meta = self.store.metadataFor('chunked-group');
           return {
@@ -38,10 +40,10 @@ export default Ember.Mixin.create({
     }
   },
 
-  isLastLevel: function (parentQuery) {
+  isLastLevel: function (groupKey) {
     var groupingMetadata = this.get('groupingMetadata');
-    var lastLevelQueryKey = groupingMetadata[groupingMetadata.length - 2].id;
-    return parentQuery.hasOwnProperty(lastLevelQueryKey);
+    var lastLevelQueryKey = groupingMetadata[groupingMetadata.length - 1].id;
+    return groupKey === lastLevelQueryKey;
   },
 
   groupingMetadata: [{id: 'accountSection'}, {id: 'accountType'}, {id: 'accountCode'}]
