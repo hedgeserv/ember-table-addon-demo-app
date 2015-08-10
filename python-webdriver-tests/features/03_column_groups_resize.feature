@@ -135,3 +135,16 @@ Feature: Column groups resize
     And The "Name" column width should be 149 pixel
     And The "Use" column width should be 149 pixel
     And The "Sector" column width should be 98 pixel
+
+    """link this scenario with defect:https://hedgeserv.leankit.com/Boards/View/200742377/231040959"""
+
+  @wip
+  Scenario: Resize column with smallest width to check the layout
+    Given There are 200 sortable loans in chunk size 50
+    And Presenting "inner column sort"
+    And The "Id" column header height should be 60 pixel
+    When The user drags the "Sector" on column to "left" with 200 pixel
+    And The "Id" column header height should be 60 pixel
+
+
+

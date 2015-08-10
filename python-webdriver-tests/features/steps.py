@@ -353,6 +353,12 @@ def check_column_width(step, column_name, pixel):
             assert_true(step, int(bo.get_col_width(world.browser, column_name)) == int(pixel))
 
 
+@step('The "(.*?)" column header height should be (\d+) pixel$')
+def check_column_header_height(step, column_name, pixel):
+    with AssertContextManager(step):
+        assert_true(step, int(bo.get_col_header_height(world.browser, column_name)) == int(pixel))
+
+
 @step('The index (\d+) should be "(.*?)" column$')
 def check_reorder_column(step, index, name, timeout=5):
     with AssertContextManager(step):
