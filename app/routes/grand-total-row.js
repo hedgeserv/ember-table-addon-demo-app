@@ -1,17 +1,15 @@
 import Ember from 'ember';
-import GrandTotalRow from 'ember-table/models/grand-total-row';
 
 export default Ember.Route.extend({
   model: function () {
     var self = this;
     var groupingMetadata = [{id: 'accountSection'}, {id: 'accountType'}, {id: 'accountCode'}];
-    var tableContent = GrandTotalRow.create({
-      loadChildren: function (chunkIndex, parentQuery) {
+    var tableContent = Ember.Object.create({
+      loadChildren: function (chunkIndex, sortingColumns, groupQuery) {
         var query = {
           section: chunkIndex + 1,
-          groupingMetadata: groupingMetadata
+          groupQuery: groupQuery
         };
-        Ember.setProperties(query, parentQuery);
         return self.store.find('chunked-group', query).then(function (result) {
           var meta = self.store.metadataFor('chunked-group');
           return {
@@ -21,11 +19,6 @@ export default Ember.Route.extend({
               chunkSize: meta.page_size
             }
           };
-        });
-      },
-      loadGrandTotal: function () {
-        return self.store.find('chunked-group', {section: 1}).then(function (result) {
-          return result.get('firstObject');
         });
       },
       groupingMetadata: groupingMetadata,

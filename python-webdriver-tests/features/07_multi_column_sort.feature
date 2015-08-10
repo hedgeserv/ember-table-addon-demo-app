@@ -448,7 +448,7 @@ Feature: Multi-Column Sorting
       |           | 10103     | 10103 | s1-1-3              |
       |           | 10105     | 10105 | s1-1-5              |
     And The "Activity" column sort indicator should be "none"
-    Then There should be 5 sections loaded
+    Then There should be 6 sections loaded
 
   @complete
   Scenario: Data sorted on a single column regular click on different column changes sort to that column with no grouped row

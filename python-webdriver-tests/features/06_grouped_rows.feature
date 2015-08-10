@@ -604,6 +604,7 @@ Feature: Indicators for expanding and collapsing grouped rows
       |           | 10105     | 10105 |
     Then There should be 4 sections loaded
 
+    #TODO: use visible row order instead of dom orders
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                        | id   | Beginning DR (Base) |
       | accountSection[1]-accountType[2]-accountCode[20] | [20] | [20]                |
@@ -611,7 +612,7 @@ Feature: Indicators for expanding and collapsing grouped rows
     And Click "expand" for the 0 row
     And Click "expand" for the 2 row
     And Click "expand" for the 1 row
-    And Customer drags scroll bar by offset 1000 with 1 times and wait loading section
+    And Customer drags scroll bar by offset 60 with 2 times and wait loading section
     And Click to sort as "ASC" for column "Id"
     When Click to sort as "DESC" for column "Id"
     Then I see grouped rows:
@@ -620,7 +621,10 @@ Feature: Indicators for expanding and collapsing grouped rows
       | -         | 102       | 102   |
       |           | 10220     | 10220 |
       |           | 10219     | 10219 |
-    Then There should be 6 sections loaded
+      |           | 10104     | 10104 |
+      |           | 10103     | 10103 |
+      |           | 10102     | 10102 |
+    Then There should be 7 sections loaded
 
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                        | id | Beginning DR (Base) |

@@ -9,20 +9,15 @@ export default DS.RESTAdapter.extend({
   findQuery: function(store, type, options) {
     var query = options || {};
     var urlSections = [];
-    var groupingMetadata = options.groupingMetadata || [];
-    for (var i=0; i< groupingMetadata.length; i++){
-      var groupingKey = groupingMetadata[i].id;
-      if(groupingKey){
-        urlSections.push(Ember.String.pluralize(groupingKey));
-      }
-      if(query[groupingKey]){
-        urlSections.push(query[groupingKey]);
-        delete query[groupingKey];
-      } else {
-        break;
-      }
+    var groupQuery = options.groupQuery;
+    groupQuery.upperGroupings.forEach(function(x) {
+      urlSections.push(x[0] + "s");
+      urlSections.push(Ember.get(x[1], 'id'));
+    });
+    if (groupQuery.key) {
+      urlSections.push(groupQuery.key + "s");
     }
-    delete options.groupingMetadata;
+    delete query.groupQuery;
     var baseUrl = this.buildURL(type.typeKey, options, null, 'findQuery');
     urlSections.insertAt(0, baseUrl);
     return this.ajax(urlSections.join('/'), 'GET', {data: query});
