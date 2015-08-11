@@ -24,6 +24,8 @@ export default Ember.Controller.extend({
         }
       });
     });
-  }.property()
+  }.property(),
+
+  emptyContent: [] //ember-table needs this to be non-null value
 
 });

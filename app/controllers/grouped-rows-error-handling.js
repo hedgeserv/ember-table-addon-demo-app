@@ -4,7 +4,9 @@ import ChunkedGroupDataMixin from '../mixins/chunked-group-data-mixin';
 import SortQueryMixin from '../mixins/sort-query-mixin';
 
 export default Ember.Controller.extend(AccountColumnsMixin, ChunkedGroupDataMixin, SortQueryMixin, {
-  tableContent: Ember.computed(function () {
+  emptyContent: [],
+
+  groupMeta: Ember.computed(function() {
     return this.model();
   }),
 
