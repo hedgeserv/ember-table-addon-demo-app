@@ -603,7 +603,6 @@ Feature: Indicators for expanding and collapsing grouped rows
       |           | 10105     | 10105 |
     Then There should be 4 sections loaded
 
-    #TODO: use visible row order instead of dom orders
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                        | id   | Beginning DR (Base) |
       | accountSection[1]-accountType[2]-accountCode[20] | [20] | [20]                |

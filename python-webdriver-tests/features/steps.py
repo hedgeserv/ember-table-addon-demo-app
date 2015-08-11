@@ -5,6 +5,7 @@ from lettuce import *
 from lettuce_webdriver.util import (assert_true,
                                     AssertContextManager)
 from selenium.webdriver import ActionChains
+from nose.tools import assert_equal
 
 import sys
 import time
@@ -463,7 +464,7 @@ def verify_cell_content(row_index, name, value):
     block_selector = 'left' if is_fixed else 'right'
     script = ".find('.ember-table-cell:eq(%s) span').text().trim()" % col_index
     col_value = world.browser.execute_script(script_with_row(block_selector, row_index) + script)
-    assert_true(step, str(col_value).strip() == str(value).strip())
+    assert_equal(str(col_value).strip(), str(value).strip())
 
 
 def find_col_index(name):
