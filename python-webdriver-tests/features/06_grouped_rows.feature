@@ -531,7 +531,6 @@ Feature: Indicators for expanding and collapsing grouped rows
       |           | 10102     | 10102 |
       |           | 10103     | 10103 |
       |           | 10104     | 10104 |
-      |           | 10105     | 10105 |
     And There should be 4 sections loaded
     And The "Id" column sort indicator should be "asc"
 

@@ -499,7 +499,7 @@ def check_columns_numbers(step, num):
     with AssertContextManager(step):
         col_count = world.browser.execute_script(
             "return $('.ember-table-content-container .ember-table-content').length")
-        assert_true(step, int(col_count) == int(num))
+        assert_equal(int(col_count), int(num))
 
 
 @step('Click "(.*?)" for row "(.*?)"$')
@@ -590,7 +590,7 @@ def check_default_loading_indicator(step, num, timeout=5):
 def check_custom_loading_indicator(step, num):
     with AssertContextManager(step):
         indicator = world.browser.execute_script("return $('.custom-row-loading-indicator.loading')")
-        assert_true(step, len(indicator) == int(num))
+        assert_equal(len(indicator), int(num))
 
 
 @step('The row "(.*?)" indicator should be "(.*?)" with customized$')
@@ -644,7 +644,7 @@ def check_grouping_fixed_num(step, num):
     with AssertContextManager(step):
         grouping_fixed_col_num = world.browser.execute_script(
             "return $('.ember-table-left-table-block:eq(0) .ember-table-header-cell').length")
-        assert_true(step, int(num) == int(grouping_fixed_col_num))
+        assert_equal(int(num), int(grouping_fixed_col_num))
 
 
 @step('The column "(.*?)" should be fixed$')
