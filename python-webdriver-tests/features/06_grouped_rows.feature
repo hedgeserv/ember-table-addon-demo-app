@@ -511,7 +511,6 @@ Feature: Indicators for expanding and collapsing grouped rows
       |           | 10210     | 10210 |
       |           | 10209     | 10209 |
       |           | 10208     | 10208 |
-      |           | 10207     | 10207 |
     And The "Id" column sort indicator should be "desc"
 
   @complete
@@ -550,7 +549,6 @@ Feature: Indicators for expanding and collapsing grouped rows
       |           | 10119     | 10119 |
       |           | 10118     | 10118 |
       |           | 10117     | 10117 |
-      |           | 10116     | 10116 |
     And There should be 5 sections loaded
     And The "Id" column sort indicator should be "desc"
 
@@ -578,7 +576,6 @@ Feature: Indicators for expanding and collapsing grouped rows
       |           | 10119     | 10119 |
       |           | 10118     | 10118 |
       |           | 10117     | 10117 |
-      |           | 10116     | 10116 |
     And There should be 3 sections loaded
 
 
@@ -599,7 +596,6 @@ Feature: Indicators for expanding and collapsing grouped rows
       |           | 10102     | 10102 |
       |           | 10103     | 10103 |
       |           | 10104     | 10104 |
-      |           | 10105     | 10105 |
     Then There should be 4 sections loaded
 
     Given I have the following partial loaded grouped data in MounteBank:
