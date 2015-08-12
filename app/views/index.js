@@ -4,9 +4,6 @@ import TablesMixin from '../mixins/features';
 export default Ember.View.extend(TablesMixin, {
   didInsertElement: function () {
 
-    Ember.$(window).load(function() {
-      Ember.$("body").removeClass("no-trans");
-    });
     //Main slider
     //-----------------------------------------------
 
