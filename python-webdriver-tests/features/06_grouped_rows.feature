@@ -340,7 +340,6 @@ Feature: Indicators for expanding and collapsing grouped rows
     When Customer drags scroll bar by offset 1000 with 1 times and wait loading section
     Then I see grouped rows:
       | indicator | groupName | Id    |
-      |           | 10106     | 10106 |
       |           | 10107     | 10107 |
       |           | 10108     | 10108 |
       |           | 10109     | 10109 |
@@ -512,7 +511,6 @@ Feature: Indicators for expanding and collapsing grouped rows
       |           | 10210     | 10210 |
       |           | 10209     | 10209 |
       |           | 10208     | 10208 |
-      |           | 10207     | 10207 |
     And The "Id" column sort indicator should be "desc"
 
   @complete
@@ -532,7 +530,6 @@ Feature: Indicators for expanding and collapsing grouped rows
       |           | 10102     | 10102 |
       |           | 10103     | 10103 |
       |           | 10104     | 10104 |
-      |           | 10105     | 10105 |
     And There should be 4 sections loaded
     And The "Id" column sort indicator should be "asc"
 
@@ -552,7 +549,6 @@ Feature: Indicators for expanding and collapsing grouped rows
       |           | 10119     | 10119 |
       |           | 10118     | 10118 |
       |           | 10117     | 10117 |
-      |           | 10116     | 10116 |
     And There should be 5 sections loaded
     And The "Id" column sort indicator should be "desc"
 
@@ -580,7 +576,6 @@ Feature: Indicators for expanding and collapsing grouped rows
       |           | 10119     | 10119 |
       |           | 10118     | 10118 |
       |           | 10117     | 10117 |
-      |           | 10116     | 10116 |
     And There should be 3 sections loaded
 
 
@@ -601,10 +596,8 @@ Feature: Indicators for expanding and collapsing grouped rows
       |           | 10102     | 10102 |
       |           | 10103     | 10103 |
       |           | 10104     | 10104 |
-      |           | 10105     | 10105 |
     Then There should be 4 sections loaded
 
-    #TODO: use visible row order instead of dom orders
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                        | id   | Beginning DR (Base) |
       | accountSection[1]-accountType[2]-accountCode[20] | [20] | [20]                |
@@ -617,13 +610,13 @@ Feature: Indicators for expanding and collapsing grouped rows
     When Click to sort as "DESC" for column "Id"
     Then I see grouped rows:
       | indicator | groupName | Id    |
+      |           | 10103     | 10103 |
+      |           | 10102     | 10102 |
       |           | 10101     | 10101 |
       | -         | 102       | 102   |
       |           | 10220     | 10220 |
       |           | 10219     | 10219 |
-      |           | 10104     | 10104 |
-      |           | 10103     | 10103 |
-      |           | 10102     | 10102 |
+
     Then There should be 7 sections loaded
 
     Given I have the following partial loaded grouped data in MounteBank:

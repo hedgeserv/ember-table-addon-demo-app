@@ -136,6 +136,20 @@ Feature: Column groups resize
     And The "Use" column width should be 149 pixel
     And The "Sector" column width should be 98 pixel
 
+  """link this scenario with defect: https://hedgeserv.leankit.com/Boards/View/200742377/231578566"""
+  @wip
+  Scenario: Resize column to smallest width and move the cursor to column header name
+    Given Prepare the grid with no existing sorting column for "fully load":
+      | groupName        | id     | activity | status | use     | sector  | isGroupRow |
+      | group1           | f1     | s1       | t1     | fo1     | fi1     | True       |
+      | group1-chd1      | f1-1   | s1-1     | t1-1   | fo1-1   | fi1-1   | True       |
+      | group1-chd1-chd1 | f1-1-1 | s1-1-2   | t1-1-1 | fo1-1-4 | fi1-1-5 | False      |
+      | group1-chd1-chd2 | f1-1-2 | s1-1-1   | t1-1-3 | fo1-1-1 | fi1-1-2 | False      |
+      | group1-chd1-chd3 | f1-1-3 | s1-1-2   | t1-1-5 | fo1-1-3 | fi1-1-1 | False      |
+      | group1-chd1-chd4 | f1-1-4 | s1-1-2   | t1-1-1 | fo1-1-2 | fi1-1-3 | False      |
+      | group1-chd1-chd5 | f1-1-5 | s1-1-3   | t1-1-2 | fo1-1-5 | fi1-1-4 | False      |
+    When The user drags the "Sector" on column to "left" with 140 pixel
+    Then The "Sector" column sort indicator should be "none"
     """link this scenario with defect:https://hedgeserv.leankit.com/Boards/View/200742377/231040959"""
 
   @wip
@@ -145,6 +159,3 @@ Feature: Column groups resize
     And The "Id" column header height should be 60 pixel
     When The user drags the "Sector" on column to "left" with 200 pixel
     And The "Id" column header height should be 60 pixel
-
-
-

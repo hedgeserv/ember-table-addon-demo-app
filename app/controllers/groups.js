@@ -1,8 +1,9 @@
 import Ember from 'ember';
 import ColumnDefinition from 'ember-table/models/column-definition';
 import ColumnGroupDefinition from 'ember-table/models/column-group-definition';
+import tablesMixin from '../mixins/features';
 
-export default Ember.Controller.extend({
+export default Ember.Controller.extend(tablesMixin, {
 
   title: 'Group',
 
@@ -12,7 +13,7 @@ export default Ember.Controller.extend({
       nameColumn, useColumn, sectorColumn;
 
     idColumn = ColumnDefinition.create({
-      columnWidth: 150,
+      width: 150,
       textAlign: 'text-align-left',
       headerCellName: 'Id',
       groupName: 'word',

@@ -1,4 +1,3 @@
-<h3 class="inline-header">Chunked Grouping Rows</h3>
 <p>
   Id column should just be sorted as single column.
 </p>
@@ -12,8 +11,9 @@
   {{ember-table
 	  hasFooter=false
 	  enableContentSelection=true
-	  content=model
+    content=tableContent
 	  columns=columns
     sortAction='sortAction'
+    groupMeta=model
   }}
 </div>

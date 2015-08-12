@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import LazyGroupRowArray from 'ember-table/models/lazy-group-row-array';
 
 export default Ember.Mixin.create({
   sortName: null,
@@ -7,7 +6,7 @@ export default Ember.Mixin.create({
   model: function () {
     var self = this;
     var groupingMetadata = this.get('groupingMetadata');
-    return LazyGroupRowArray.create({
+    return {
       loadChildren: function (chunkIndex, sortingColumns, groupQuery) {
         var parameters = {
           section: chunkIndex + 1,
@@ -31,7 +30,7 @@ export default Ember.Mixin.create({
         });
       },
       groupingMetadata: groupingMetadata
-    });
+    };
   },
 
   actions: {
