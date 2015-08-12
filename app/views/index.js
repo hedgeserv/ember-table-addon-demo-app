@@ -1,7 +1,7 @@
 import Ember from 'ember';
-import TablesMixin from '../mixins/features';
+import FeaturesMixin from '../mixins/features';
 
-export default Ember.View.extend(TablesMixin, {
+export default Ember.View.extend(FeaturesMixin, {
   afterRenderEvent: function () {
 
     //Revolution Slider
