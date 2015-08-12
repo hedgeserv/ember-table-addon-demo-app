@@ -5,6 +5,7 @@ from lettuce import *
 from lettuce_webdriver.util import (assert_true,
                                     AssertContextManager)
 from selenium.webdriver import ActionChains
+from nose.tools import assert_equal
 
 import sys
 import time
@@ -353,6 +354,12 @@ def check_column_width(step, column_name, pixel):
             assert_true(step, int(bo.get_col_width(world.browser, column_name)) == int(pixel))
 
 
+@step('The "(.*?)" column header height should be (\d+) pixel$')
+def check_column_header_height(step, column_name, pixel):
+    with AssertContextManager(step):
+        assert_true(step, int(bo.get_col_header_height(world.browser, column_name)) == int(pixel))
+
+
 @step('The index (\d+) should be "(.*?)" column$')
 def check_reorder_column(step, index, name, timeout=5):
     with AssertContextManager(step):
@@ -438,35 +445,26 @@ def verify_grouped_row(index, row):
 
 
 def is_the_row_expanded(index):
-    return world.browser.execute_script(
-        "return $('.ember-table-body-container .ember-table-left-table-block .ember-table-table-row:eq(" + str(
-            index) + ") .ember-table-cell:eq(0) .grouping-column-indicator').hasClass('unfold')")
-
+    script = ".find('.ember-table-cell:eq(0) .grouping-column-indicator').hasClass('unfold')"
+    return world.browser.execute_script(script_with_row('left', index) + script)
 
 def is_the_leaf_node(index):
-    length = world.browser.execute_script(
-        "return $('.ember-table-body-container .ember-table-left-table-block .ember-table-table-row:eq(" + str(
-            index) + ") .ember-table-cell:eq(0) .grouping-column-indicator:has(div)').length")
+    script = ".find('.ember-table-cell:eq(0) .grouping-column-indicator:has(div)').length"
+    length = world.browser.execute_script(script_with_row('left', index) + script)
     return int(length) == 0
 
-
-def is_the_leaf_node(index):
-    length = world.browser.execute_script(
-        "return $('.ember-table-body-container .ember-table-left-table-block .ember-table-table-row:eq(" + str(
-            index) + ") .ember-table-cell:eq(0) .grouping-column-indicator:has(div)').length")
-    return int(length) == 0
-
+def script_with_row(block, row_index):
+    return "var rows = $('.ember-table-body-container .ember-table-%s-table-block .ember-table-table-row:visible').toArray(); \
+        rows = rows.filter(function(row){ return $(row).offset().top > $('.antiscroll-inner').offset().top - 20}); \
+        rows.sort(function(i, j){ return parseInt(i.style.top) - parseInt(j.style.top) }); \
+        return $(rows[%s])" % (block, row_index)
 
 def verify_cell_content(row_index, name, value):
     col_index, is_fixed = find_col_index(name)
-    block_selector = '.ember-table-right-table-block'
-    if is_fixed:
-        block_selector = '.ember-table-left-table-block'
-
-    col_value = world.browser.execute_script(
-        "return $('.ember-table-body-container " + block_selector + " .ember-table-table-row:eq(" + str(row_index) +
-        ") .ember-table-cell:eq(" + str(col_index) + ") span').text().trim()")
-    assert_true(step, str(col_value) == str(value))
+    block_selector = 'left' if is_fixed else 'right'
+    script = ".find('.ember-table-cell:eq(%s) span').text().trim()" % col_index
+    col_value = world.browser.execute_script(script_with_row(block_selector, row_index) + script)
+    assert_equal(str(col_value).strip(), str(value).strip())
 
 
 def find_col_index(name):
@@ -501,7 +499,7 @@ def check_columns_numbers(step, num):
     with AssertContextManager(step):
         col_count = world.browser.execute_script(
             "return $('.ember-table-content-container .ember-table-content').length")
-        assert_true(step, int(col_count) == int(num))
+        assert_equal(int(col_count), int(num))
 
 
 @step('Click "(.*?)" for row "(.*?)"$')
@@ -592,7 +590,7 @@ def check_default_loading_indicator(step, num, timeout=5):
 def check_custom_loading_indicator(step, num):
     with AssertContextManager(step):
         indicator = world.browser.execute_script("return $('.custom-row-loading-indicator.loading')")
-        assert_true(step, len(indicator) == int(num))
+        assert_equal(len(indicator), int(num))
 
 
 @step('The row "(.*?)" indicator should be "(.*?)" with customized$')
@@ -646,7 +644,7 @@ def check_grouping_fixed_num(step, num):
     with AssertContextManager(step):
         grouping_fixed_col_num = world.browser.execute_script(
             "return $('.ember-table-left-table-block:eq(0) .ember-table-header-cell').length")
-        assert_true(step, int(num) == int(grouping_fixed_col_num))
+        assert_equal(int(num), int(grouping_fixed_col_num))
 
 
 @step('The column "(.*?)" should be fixed$')

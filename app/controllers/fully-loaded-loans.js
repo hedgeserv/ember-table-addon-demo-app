@@ -1,12 +1,13 @@
 import Ember from 'ember';
 import ColumnDefinition from 'ember-table/models/column-definition';
+import tablesMixin from '../mixins/features';
 
-export default Ember.Controller.extend({
+export default Ember.Controller.extend(tablesMixin, {
 
   columns: function () {
     var idColumn, activityColumn, statusColumn;
     idColumn = ColumnDefinition.create({
-      columnWidth: 20,
+      width: 60,
       textAlign: 'text-align-left',
       headerCellName: 'Id',
       getCellContent: function(row) {
@@ -22,7 +23,7 @@ export default Ember.Controller.extend({
         return row.get('activity');
       }
     });
-    
+
     statusColumn = ColumnDefinition.create({
       columnWidth: 100,
       headerCellName: 'status',

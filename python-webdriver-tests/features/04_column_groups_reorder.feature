@@ -34,12 +34,11 @@ Feature: Column groups reorder
     Given There are 200 sortable loans in chunk size 50
     When Presenting "inner column sort"
     And Drag and hold column "Sector" to "right" with 1 pixel
-    Then The reorder indicator line should be 598 from left
+    Then The reorder indicator line should be 508 from left
 
   @complete
   Scenario: Check reorder column indicator line after reorder
     Given There are 200 sortable loans in chunk size 50
     When Presenting "inner column sort"
-    And Drag and hold column "Sector" to "right" with 300 pixel
-    Then The reorder indicator line should be 898 from left
-
+    And Drag and hold column "Id" to "right" with 300 pixel
+    Then The reorder indicator line should be 358 from left

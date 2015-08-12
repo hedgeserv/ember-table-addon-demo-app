@@ -2,8 +2,9 @@ import Ember from 'ember';
 import ColumnDefinition from 'ember-table/models/column-definition';
 import ColumnGroupDefinition from 'ember-table/models/column-group-definition';
 import LazyArray from 'ember-table/models/lazy-array';
+import tablesMixin from '../mixins/features';
 
-export default Ember.Controller.extend({
+export default Ember.Controller.extend(tablesMixin, {
 
   title: 'Group',
   sortName: null,
@@ -14,7 +15,7 @@ export default Ember.Controller.extend({
       nameColumn, useColumn, sectorColumn;
 
     idColumn = ColumnDefinition.create({
-      columnWidth: 150,
+      width:60,
       textAlign: 'text-align-left',
       headerCellName: 'Id',
       getCellContent: function (row) {

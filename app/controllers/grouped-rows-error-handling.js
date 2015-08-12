@@ -2,9 +2,12 @@ import Ember from 'ember';
 import AccountColumnsMixin from '../mixins/account-columns-mixin';
 import ChunkedGroupDataMixin from '../mixins/chunked-group-data-mixin';
 import SortQueryMixin from '../mixins/sort-query-mixin';
+import TableFeatures from '../mixins/features';
 
-export default Ember.Controller.extend(AccountColumnsMixin, ChunkedGroupDataMixin, SortQueryMixin, {
-  tableContent: Ember.computed(function () {
+export default Ember.Controller.extend(AccountColumnsMixin, ChunkedGroupDataMixin, SortQueryMixin, TableFeatures, {
+  emptyContent: [],
+
+  groupMeta: Ember.computed(function() {
     return this.model();
   }),
 

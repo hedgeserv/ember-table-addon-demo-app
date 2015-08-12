@@ -21,12 +21,13 @@ module.exports = function(environment) {
 
   ENV.contentSecurityPolicy = {
     'default-src': "'none'",
-    'script-src': "'self'",
+    'script-src': "'self' https://www.youtube.com https://s.ytimg.com",
     'font-src': "'self'",
     'connect-src': "'self' http://localhost:5555 http://localhost:2525",
     'img-src': "'self'",
     'style-src': "'self' 'unsafe-inline'",
-    'media-src': "'self'"
+    'media-src': "'self'",
+    'frame-src': "https://www.youtube.com"
   };
 
   ENV.loansServerHost = "http://localhost:5555";

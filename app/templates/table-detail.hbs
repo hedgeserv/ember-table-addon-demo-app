@@ -1,0 +1,35 @@
+<section class="main-container">
+    <div class="container">
+        <div class="row">
+            <!-- sidebar start -->
+            <aside class="col-md-3">
+                <div class="sidebar">
+                    <div class="block clearfix">
+                        <nav>
+                            <ul class="nav nav-pills nav-stacked">
+                            	{{#each tables as |table| }}
+                    				{{#link-to table.link tagName='li' class=table.labelClass href=false}}
+                    					{{#link-to table.link }}{{table.name}}{{/link-to}}
+                    				{{/link-to}}
+                            	{{/each}}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </aside>
+            <!-- sidebar end -->
+            <!-- main start -->
+            <!-- ================ -->
+            <div class="main col-md-9">
+                <!-- page-title start -->
+                <!-- ================ -->
+                <h1 class="page-title">{{title}}</h1>
+                <hr>
+                <!-- page-title end -->
+               {{yield}}
+            </div>
+            <!-- main end -->
+        </div>
+    </div>
+</section>
+<!-- main-container end -->

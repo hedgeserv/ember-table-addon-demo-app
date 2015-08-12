@@ -164,6 +164,11 @@ def get_col_width_by_index(browser, index):
         "return $('.ember-table-header-container .ember-table-content:eq(" + str(index) + ")').parent().width()")
 
 
+def get_col_header_height(browser, col_name):
+    return browser.execute_script(
+        "return $('.ember-table-content-container .ember-table-content:contains(" + col_name + ")').parent().parent().height()")
+
+
 def get_col_name_by_index(browser, index, timeout=5):
     list = []
 

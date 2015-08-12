@@ -1,11 +1,9 @@
-<p>Sort name is {{controller.sortName}}, Sort direct is {{controller.sortDirect}}</p>
-
 <div class="lazy-loaded-table-container height-100-rows">
-  {{ember-table
-  hasFooter=false
-  enableContentSelection=true
-  columns=columns
-  content=model
-  sortAction='sortAction'
-  }}
+    {{ember-table
+    hasFooter=false
+    enableContentSelection=true
+    columns=columns
+    content=model
+    sortAction='sortAction'
+    }}
 </div>
