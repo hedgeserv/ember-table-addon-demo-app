@@ -1,0 +1,26 @@
+<h2>Features</h2>
+<div class="separator-2"></div>
+<p>Sed ut Perspiciatis Unde Omnis Iste Sed ut sit voluptatem accusan tium </p>
+<div class="owl-carousel carousel">
+  {{#each tables as |table index|}}
+      <div class="image-box object-non-visible" data-animation-effect="fadeInLeft"
+           data-effect-delay={{table.delay}}>
+          <div class="overlay-container">
+              <img src="images/portfolio-1.jpg" alt="">
+
+              <div class="overlay">
+                  <div class="overlay-links">
+                    {{#link-to table.link }}<i class="fa fa-link"></i>{{/link-to}}
+                    {{#link-to table.link }}<i class="fa fa-search-plus"></i>{{/link-to}}
+                  </div>
+              </div>
+          </div>
+          <div class="image-box-body">
+              <h3 class="title">{{#link-to table.link}}{{table.name}}{{/link-to}}</h3>
+
+              <p>{{table.description}}</p>
+            {{#link-to table.link class="link"}}Try it{{/link-to}}
+          </div>
+      </div>
+  {{/each}}
+</div>
