@@ -2,7 +2,7 @@ import Ember from 'ember';
 import TablesMixin from '../mixins/features';
 
 export default Ember.View.extend(TablesMixin, {
-  didInsertElement: function () {
+  afterRenderEvent: function () {
 
     //Main slider
     //-----------------------------------------------
