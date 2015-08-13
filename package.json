@@ -38,5 +38,10 @@
   },
   "dependencies": {
     "ember-table": "*"
+  },
+  "ember-addon": {
+    "paths": [
+      "lib/bootstrap-idea"
+    ]
   }
 }
