@@ -10,7 +10,9 @@
 
 (function($){
 	$(document).ready(function(){
-
+    $(window).load(function() {
+      $("body").removeClass("no-trans");
+    });
 
 		//Show dropdown on hover only for desktop devices
 		//-----------------------------------------------

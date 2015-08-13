@@ -2,10 +2,6 @@ import Ember from 'ember';
 
 export default Ember.Mixin.create({
   _tables: [{
-    name: "Fully Loaded Loans",
-    description: "this is a vanilla usage of Ember Table that is slow to load because of a large dataset.i.e.expect this page to load slowly ",
-    link: 'fullyLoadedLoans'
-  }, {
     name: "Lazy Loaded Loans",
     description: "this is a faster experience for the end user because of lazy loading.",
     link: "lazyLoadedLoans"
@@ -48,6 +44,10 @@ export default Ember.Mixin.create({
   }, {
     name: "Grouped rows Error handling",
     link: "groupedRowsErrorHandling"
+  }, {
+    name: "Fully Loaded Loans",
+    description: "this is a vanilla usage of Ember Table that is slow to load because of a large dataset.i.e.expect this page to load slowly ",
+    link: 'fullyLoadedLoans'
   }],
 
   tables: Ember.computed.filter('_tables', function (table, index) {

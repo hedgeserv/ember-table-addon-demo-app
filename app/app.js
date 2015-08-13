@@ -2,6 +2,9 @@ import Ember from 'ember';
 import Resolver from 'ember/resolver';
 import loadInitializers from 'ember/load-initializers';
 import config from './config/environment';
+//make view respond to afterRenderEvent
+/* jshint unused: false */
+import View from './ext/view';
 
 var App;
 
