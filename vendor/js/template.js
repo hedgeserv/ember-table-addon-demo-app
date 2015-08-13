@@ -160,11 +160,12 @@
 
 		// Fixed header
 		//-----------------------------------------------
-		var	headerTopHeight = $(".header-top").outerHeight(),
-		headerHeight = $("header.header.fixed").outerHeight();
+		var	headerTopHeight = $(".header-top").outerHeight();
+		var headerHeight = $("header.header.fixed").outerHeight();
 		$(window).scroll(function() {
+			var hiddenBodyHeight = $('body').height() - $(window).height();
 			if (($(".header.fixed").length > 0)) {
-				if(($(this).scrollTop() > headerTopHeight+headerHeight) && ($(window).width() > 767)) {
+				if(($(this).scrollTop() > headerTopHeight+headerHeight) && ($(window).width() > 767) && (hiddenBodyHeight > $("header.header.fixed").outerHeight())) {
 					$("body").addClass("fixed-header-on");
 					$(".header.fixed").addClass('animated object-visible fadeInDown');
 					if (!($(".header.transparent").length>0)) {
