@@ -13,8 +13,8 @@ export default Ember.Mixin.create({
           groupQuery: groupQuery
         };
         parameters.section = chunkIndex + 1;
-
-        if (self.isLastLevel(groupQuery.key)) {
+        
+        if (self.isLastLevel(groupQuery.key) || self.get('groupingRowAffectedByColumnSort')) {
           var sortQuery = self.makeSortQuery(sortingColumns);
           Ember.setProperties(parameters, sortQuery);
         }
@@ -29,7 +29,8 @@ export default Ember.Mixin.create({
           };
         });
       },
-      groupingMetadata: groupingMetadata
+      groupingMetadata: groupingMetadata,
+      groupingRowAffectedByColumnSort: this.get('groupingRowAffectedByColumnSort')
     };
   },
 
