@@ -44,5 +44,3 @@ script: ./test-ci.sh
 
 notifications:
   slack: hedgeserv:QQblFhv13dIPhqwoXI6qTDzA
-
-
