@@ -1,14 +1,9 @@
 var MBStub = require('./m-b-stub');
 var helper = require('./helper');
-var extend = require('util')._extend;
-var SortConditionProvider = require('./sort-condition-provider');
 var url = '/chunkedGroups';
 var records = helper.loadJsonFile('three-levels-of-grouping.json');
-var stubs = [];
 var pageSize = 10;
 var resourceNames = ['accountSections', 'accountTypes', 'accountCodes'];
-var sortColumns = ['beginningDr', 'beginningCr', 'netBeginning'];
-var sortDirects = ['asc', 'desc'];
 
 for (var i = 0; i < 20; i++) {
   records[0].children[2].children.push(helper.clone(records[0].children[2].children[0]));
@@ -16,29 +11,11 @@ for (var i = 0; i < 20; i++) {
 
 generateRecordId(records, 0);
 
-var sortConditionProvider = new SortConditionProvider(sortColumns);
-var idSortProvider = new SortConditionProvider(["id"]);
-
-leafCollections(records[0], function (accountSection, accountType) {
-  var localUrl = url + "/accountSections/" + accountSection['id'] + '/accountTypes/' + accountType['id'] + '/accountCodes';
-  var localLoans = removeChildren(accountType.children);
-  var makeStubs = function (sortCondition) {
-    var sortedLoans = sortCondition.sort(localLoans);
-    var localStubs = createchunkedStubs(localUrl, sortedLoans, sortCondition.toQuery());
-    helper.concat(stubs, localStubs);
-  }
-  sortConditionProvider.forEach(makeStubs);
-  idSortProvider.forEach(makeStubs);
-});
-
 // unsort grouped stubs
 
-var unsortStubs = doMakeNestedStubs({
+var stubs = doMakeNestedStubs({
   children: records
 }, resourceNames, {});
-
-helper.concat(stubs, unsortStubs);
-
 
 module.exports = stubs;
 
@@ -72,7 +49,7 @@ function doMakeNestedStubs(theRecord, resourceNames, parentQuery, localUrl) {
   var localStubs = [];
   if (theRecord.children) {
     var chunkedGroups = removeChildren(theRecord.children);
-    helper.concat(localStubs, createchunkedStubs(localUrl, chunkedGroups, parentQuery));
+    localStubs.push(createStub(localUrl, chunkedGroups));
     theRecord.children.forEach(function (value) {
       var theQuery = helper.clone(parentQuery);
       var tempUrl = localUrl;
@@ -86,32 +63,17 @@ function doMakeNestedStubs(theRecord, resourceNames, parentQuery, localUrl) {
   return localStubs;
 }
 
-function createchunkedStubs(path, loans, query) {
-  return helper.splitToChunks(loans, pageSize).map(function (chunkedData, index) {
-    var pageIndex = index + 1;
-    var localQuery = extend({"section": pageIndex}, query);
-
-    var stub = new MBStub({
-      "path": path,
-      "query": localQuery
-    });
-    stub.setBody({
-      "meta": {
-        "total": loans.length,
-        "page": pageIndex,
-        "pageSize": pageSize,
-        "date": new Date()
-      },
-      'chunkedGroups': chunkedData
-    });
-    return stub;
+function createStub (path, data){
+  var stub = new MBStub({
+    "path": path
   });
-}
-
-function leafCollections(record, callBack) {
-  record.children.forEach(function (accountSection) {
-    accountSection.children.forEach(function (accountType) {
-      callBack(accountSection, accountType);
-    });
+  stub.setBody({
+    "meta": {
+      "total": data.length,
+      "pageSize": pageSize,
+      "date": new Date()
+    },
+    'chunkedGroups': data
   });
+  return stub;
 }
