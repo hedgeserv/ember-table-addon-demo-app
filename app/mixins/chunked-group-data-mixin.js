@@ -13,7 +13,20 @@ export default Ember.Mixin.create({
           groupQuery: groupQuery
         };
         parameters.section = chunkIndex + 1;
-        
+        var grouperSortDirection = [];
+        groupQuery.upperGroupings.forEach(function(item) {
+          if (item[2]) {
+            grouperSortDirection.push([item[0], item[2]]);
+          }
+        });
+        if (groupQuery.key && groupQuery.sortDirection) {
+          grouperSortDirection.push([groupQuery.key, groupQuery.sortDirection]);
+        }
+
+        grouperSortDirection.forEach(function(item, idx) {
+          parameters['sortNames[' + idx + ']'] = item[0];
+          parameters['sortDirects[' + idx + ']'] = item[1];
+        });
         if (self.isLastLevel(groupQuery.key) || self.get('groupingRowAffectedByColumnSort')) {
           var sortQuery = self.makeSortQuery(sortingColumns);
           Ember.setProperties(parameters, sortQuery);

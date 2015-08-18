@@ -1,5 +1,4 @@
 function (request, response, logger) {
-
   var SortCondition = require("%s/sort-condition");
   var section = request.query.section;
   var resBody = JSON.parse(response.body);
@@ -11,8 +10,19 @@ function (request, response, logger) {
   }
   var sorts = ['sortNames', 'sortDirects'].map(function (name) {
     return getSortItem(request.query, name);
-  })
-  var sortCondition = new SortCondition(sorts[0], sorts[1]);
+  });
+
+  var sortNameMap = {
+    accountSection: 'GL Account Section',
+    accountType: 'GL Account Type',
+    accountCode: 'GL Account Code'
+  };
+  var sortNames = sorts[0].map(function (name) {
+    return sortNameMap[name] || name;
+  });
+  logger.info(JSON.stringify(sorts[0]));
+  logger.info(sortNames);
+  var sortCondition = new SortCondition(sortNames, sorts[1]);
   var sortedBody = sortCondition.sort(body);
   var data = !!section ? getChunkOf(sortedBody, section, meta.pageSize) : sortedBody;
   meta.page = section;
