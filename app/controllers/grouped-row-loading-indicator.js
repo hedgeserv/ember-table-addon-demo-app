@@ -5,5 +5,6 @@ import CustomRowLoadingIndicator from './../views/custom-row-loading-indicator';
 import TableFeatures from '../mixins/features';
 
 export default Ember.Controller.extend(AccountColumnsMixin, TableContentMixin, TableFeatures, {
-  rowLoadingIndicatorView: CustomRowLoadingIndicator
+  rowLoadingIndicatorView: CustomRowLoadingIndicator,
+  title: 'Row Loading Indicator'
 });

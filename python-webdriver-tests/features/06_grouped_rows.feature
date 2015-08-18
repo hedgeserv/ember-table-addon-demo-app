@@ -669,6 +669,6 @@ Feature: Indicators for expanding and collapsing grouped rows
     And Presenting "grouping column error handling"
     When Click "expand" for the 0 row
     And Click "expand" for the 1 row
-    Then The content "Error will be thrown when expand second level rows" should display in page
+    Then The content "Failed to load data" should display in page
     And The content "groupingName:errorName" should display in page
     And The content "chunkIndex:0" should display in page

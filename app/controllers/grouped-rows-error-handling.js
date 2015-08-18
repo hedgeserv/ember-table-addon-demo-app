@@ -5,6 +5,9 @@ import SortQueryMixin from '../mixins/sort-query-mixin';
 import TableFeatures from '../mixins/features';
 
 export default Ember.Controller.extend(AccountColumnsMixin, ChunkedGroupDataMixin, SortQueryMixin, TableFeatures, {
+
+  title: 'Error handling for Grouped rows',
+
   emptyContent: [],
 
   groupMeta: Ember.computed(function() {
