@@ -79,12 +79,12 @@ Feature: Multi-Column Sorting
     When "command" click to sort as "un-sort" for column "Activity"
     Then I see rows:
       | Id | Activity   | status  |
-      | 0  | activity-0 | status0 |
-      | 1  | activity-1 | status1 |
-      | 2  | activity-2 | status2 |
-      | 3  | activity-3 | status3 |
-      | 4  | activity-4 | status4 |
-      | 5  | activity-5 | status5 |
+      | 99  | activity-99 | status99 |
+      | 98  | activity-98 | status98 |
+      | 97  | activity-97 | status97 |
+      | 96  | activity-96 | status96 |
+      | 95  | activity-95 | status95 |
+      | 94  | activity-94 | status94 |
     And The "Activity" column sort indicator should be "none"
 
   @complete
@@ -674,9 +674,9 @@ Feature: Multi-Column Sorting
       | 0   | activity-0   | status0   | use0   | sector0   |
       | 1   | activity-1   | status1   | use1   | sector0   |
       | 2   | activity-2   | status2   | use2   | sector0   |
-      | 104 | activity-104 | status104 | use104 | sector102 |
       | 103 | activity-103 | status103 | use103 | sector102 |
       | 102 | activity-102 | status102 | use102 | sector102 |
+      | 104 | activity-104 | status104 | use104 | sector102 |
     And The "Activity" column sort indicator should be "none"
     And The "status" column sort indicator should be "none"
     And The "Use" column sort indicator should be "none"

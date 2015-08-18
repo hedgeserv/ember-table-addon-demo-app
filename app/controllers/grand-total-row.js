@@ -4,6 +4,8 @@ import TableFeatures from '../mixins/features';
 
 export default Ember.Controller.extend(TableFeatures, {
 
+  title: 'Grand total Row',
+
   columns: function () {
     var columnTitleAndNames = [
       ["Id", "id"],

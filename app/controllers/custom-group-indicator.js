@@ -5,5 +5,6 @@ import GroupedRowIndicatorWithLevel from './../views/grouped-row-indicator-with-
 import TableFeatures from '../mixins/features';
 
 export default Ember.Controller.extend(ThreeColumnsMixin, TableContentMixin, TableFeatures, {
-  indicatorView: GroupedRowIndicatorWithLevel
+  indicatorView: GroupedRowIndicatorWithLevel,
+  title: 'Custom Group Indicator'
 });

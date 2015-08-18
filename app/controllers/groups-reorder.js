@@ -5,7 +5,7 @@ import tablesMixin from '../mixins/features';
 
 export default Ember.Controller.extend(tablesMixin, {
 
-  title: 'Group',
+  title: 'Group Reorder',
 
   columns: function () {
     var idColumn, activityColumn, statusColumn,

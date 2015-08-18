@@ -13,7 +13,7 @@ ctrl_c(){
 
 
 echo "${green}Start Mountebank ...${reset}"
-mb restart --allowCORS &
+mb restart --allowInjection &
 
 echo "${green}Setup Mountebank ...${reset}"
 node mountebank-server/setup-imposters.js

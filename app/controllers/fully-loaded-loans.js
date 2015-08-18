@@ -4,6 +4,8 @@ import tablesMixin from '../mixins/features';
 
 export default Ember.Controller.extend(tablesMixin, {
 
+  title: 'Fully loaded set of loans',
+
   columns: function () {
     var idColumn, activityColumn, statusColumn;
     idColumn = ColumnDefinition.create({
