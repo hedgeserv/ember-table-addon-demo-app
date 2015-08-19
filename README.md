@@ -72,6 +72,11 @@ You will need to install required Python package and download chrome driver
 * `ember build` (development)
 * `ember build --environment production` (production)
 
+### upgrading ember-cli
+
+* please visit: [ember-cli-upgrading](http://www.ember-cli.com/user-guide/#upgrading)
+* and then re-link ember-table `npm link ember-table`
+
 ### Continuous Integration
 #### Run ember tests and python tests
 * `sh test-ci.sh`
