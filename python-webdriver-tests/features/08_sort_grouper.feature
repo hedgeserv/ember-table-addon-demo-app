@@ -3,7 +3,7 @@ Feature: Multi-Column Sorting
   As a user presented with a grid
   I need sorting on grouper
 
-  @wip
+  @complete
   Scenario: grouper should be sorted by column sorting direction
     Given Prepare the grid with no existing sorting column for "grouper":
       | groupName                                           | id |
@@ -12,8 +12,8 @@ Feature: Multi-Column Sorting
     And Click to sort as "DESC" for column "Id"
     Then I see grouped rows:
       | indicator | groupName | Id |
-      | +         | 3         | 2  |
-      | +         | 2         | 3  |
+      | +         | 3         | 3  |
+      | +         | 2         | 2  |
       | +         | 1         | 1  |
 
     Given Prepare the grid with no existing sorting column for "grouper":
@@ -27,27 +27,27 @@ Feature: Multi-Column Sorting
       | +         | 2         | 2     |
       | -         | 3         | 3     |
       | -         | 301       | 301   |
-      | +         | 30103     | 30103 |
-      | +         | 30102     | 30102 |
-      | +         | 30101     | 30101 |
+      |           | 30103     | 30103 |
+      |           | 30102     | 30102 |
+      |           | 30101     | 30101 |
     When Click to sort as "ASC" for column "Id"
     And Click to sort as "DESC" for column "Id"
     Then I see grouped rows:
       | indicator | groupName | Id    |
       | -         | 3         | 3     |
       | -         | 301       | 301   |
-      |           | 30102     | 30103 |
+      |           | 30103     | 30103 |
       |           | 30102     | 30102 |
       |           | 30101     | 30101 |
       | +         | 2         | 2     |
       | +         | 1         | 1     |
 
-  @wip
+  @complete
   Scenario: Sort by first grouper level
     Given Prepare the grid with no existing sorting column for "grouper":
       | groupName                                           | id      |
       | accountSection[3]-accountType[1]-accountCode[3,2,1] | [3,2,1] |
-    When Click grouper "Account Section" to sort as "ASC"
+    When Click grouper "accountSection" to sort as "ASC"
     And Click "expand" for row "3"
     And Click "expand" for row "301"
     Then I see grouped rows:
@@ -56,14 +56,14 @@ Feature: Multi-Column Sorting
       | +         | 2         | 2     |
       | -         | 3         | 3     |
       | -         | 301       | 301   |
-      | +         | 30103     | 30103 |
-      | +         | 30102     | 30102 |
-      | +         | 30101     | 30101 |
+      |           | 30103     | 30103 |
+      |           | 30102     | 30102 |
+      |           | 30101     | 30101 |
 
     Given Prepare the grid with no existing sorting column for "grouper":
       | groupName                                           | id      |
       | accountSection[3]-accountType[2]-accountCode[3,2,1] | [3,2,1] |
-    When Click grouper "Account Section" to sort as "DESC"
+    When Click grouper "accountSection" to sort as "DESC"
     And Click "expand" for row "3"
     And Click "expand" for row "301"
     Then I see grouped rows:
@@ -82,8 +82,8 @@ Feature: Multi-Column Sorting
     Given Prepare the grid with no existing sorting column for "grouper":
       | groupName                                         | id    |
       | accountSection[2]-accountType[2]-accountCode[3,2] | [3,2] |
-    When Click grouper "Account Section" to sort as "DESC"
-    And Click grouper "Account Type" to sort as "ASC"
+    When Click grouper "accountSection" to sort as "DESC"
+    And Click grouper "accountType" to sort as "ASC"
     And Click "expand" for row "2"
     And Click "expand" for row "201"
     Then I see grouped rows:
@@ -98,8 +98,8 @@ Feature: Multi-Column Sorting
     Given Prepare the grid with no existing sorting column for "grouper":
       | groupName                                         | id    |
       | accountSection[2]-accountType[2]-accountCode[1,2] | [1,2] |
-    When Click grouper "Account Section" to sort as "DESC"
-    And Click grouper "Account Type" to sort as "DESC"
+    When Click grouper "accountSection" to sort as "DESC"
+    And Click grouper "accountType" to sort as "DESC"
     And Click "expand" for row "2"
     And Click "expand" for row "202"
     Then I see grouped rows:
@@ -124,8 +124,8 @@ Feature: Multi-Column Sorting
       |           | 20101     | 20101 |
       |           | 20102     | 20102 |
       | +         | 202       | 202   |
-    When Click grouper "Account Section" to sort as "DESC"
-    And Click grouper "Account Type" to sort as "DESC"
+    When Click grouper "accountSection" to sort as "DESC"
+    And Click grouper "accountType" to sort as "DESC"
     And I see grouped rows:
       | indicator | groupName | Id    |
       | -         | 2         | 2     |
@@ -141,9 +141,9 @@ Feature: Multi-Column Sorting
     Given Prepare the grid with no existing sorting column for "grouper":
       | groupName                                         | id    |
       | accountSection[2]-accountType[2]-accountCode[3,2] | [3,2] |
-    When Click grouper "Account Section" to sort as "DESC"
-    And Click grouper "Account Type" to sort as "ASC"
-    And Click grouper "Account Code" to sort as "ASC"
+    When Click grouper "accountSection" to sort as "DESC"
+    And Click grouper "accountType" to sort as "ASC"
+    And Click grouper "accountCode" to sort as "ASC"
     And Click "expand" for row "2"
     And Click "expand" for row "201"
     Then I see grouped rows:
@@ -158,9 +158,9 @@ Feature: Multi-Column Sorting
     Given Prepare the grid with no existing sorting column for "grouper":
       | groupName                                         | id    |
       | accountSection[2]-accountType[2]-accountCode[1,2] | [1,2] |
-    When Click grouper "Account Section" to sort as "DESC"
-    And Click grouper "Account Type" to sort as "DESC"
-    And Click grouper "Account Type" to sort as "DESC"
+    When Click grouper "accountSection" to sort as "DESC"
+    And Click grouper "accountType" to sort as "DESC"
+    And Click grouper "accountCode" to sort as "DESC"
     And Click "expand" for row "2"
     And Click "expand" for row "202"
     Then I see grouped rows:
@@ -171,3 +171,18 @@ Feature: Multi-Column Sorting
       |           | 20201     | 20201 |
       | +         | 201       | 201   |
       | +         | 1         | 1     |
+
+    Given Prepare the grid with no existing sorting column for "grouper":
+      | groupName                                         | id    |
+      | accountSection[2]-accountType[2]-accountCode[1,2] | [1,2] |
+    And Click "expand" for row "2"
+    And Click "expand" for row "1"
+    When Click grouper "accountSection" to sort as "DESC"
+    Then I see grouped rows:
+      | indicator | groupName | Id    |
+      | -         | 2         | 2     |
+      | +         | 202       | 202   |
+      | +         | 201       | 201   |
+      | -         | 1         | 1     |
+      | +         | 102       | 102   |
+      | +         | 101       | 101   |
