@@ -42,7 +42,7 @@ Feature: Multi-Column Sorting
       | +         | 2         | 2     |
       | +         | 1         | 1     |
 
-  @complete
+  @wip
   Scenario: Sort by first grouper level
     Given Prepare the grid with no existing sorting column for "grouper":
       | groupName                                           | id      |
