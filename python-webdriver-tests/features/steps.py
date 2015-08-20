@@ -130,7 +130,8 @@ def list_all_loans(step, url):
             "grouping column with pluggable loading indicator": "http://localhost:4200/grouped-row-loading-indicator",
             "grouping column present partial loaded children": "http://localhost:4200/chunked-grouping-rows",
             "grand total row": "http://localhost:4200/grand-total-row",
-            "grouping column error handling": "http://localhost:4200/grouped-rows-error-handling"
+            "grouping column error handling": "http://localhost:4200/grouped-rows-error-handling",
+            "grouper sort": "http://localhost:4200/sort-by-groupers"
         }
         get_url(world.browser, options.get(url))
 
@@ -448,16 +449,19 @@ def is_the_row_expanded(index):
     script = ".find('.ember-table-cell:eq(0) .grouping-column-indicator').hasClass('unfold')"
     return world.browser.execute_script(script_with_row('left', index) + script)
 
+
 def is_the_leaf_node(index):
     script = ".find('.ember-table-cell:eq(0) .grouping-column-indicator:has(div)').length"
     length = world.browser.execute_script(script_with_row('left', index) + script)
     return int(length) == 0
+
 
 def script_with_row(block, row_index):
     return "var rows = $('.ember-table-body-container .ember-table-%s-table-block .ember-table-table-row:visible').toArray(); \
         rows = rows.filter(function(row){ return $(row).offset().top > $('.antiscroll-inner').offset().top - 20}); \
         rows.sort(function(i, j){ return parseInt(i.style.top) - parseInt(j.style.top) }); \
         return $(rows[%s])" % (block, row_index)
+
 
 def verify_cell_content(row_index, name, value):
     col_index, is_fixed = find_col_index(name)
@@ -667,6 +671,9 @@ def prepare_no_sort_col(step, fully_or_partial):
         elif "lazily" in fully_or_partial:
             prepare_lazy_loaded_grouped_loans(step.hashes)
             step.given('Presenting "grouping column present partial loaded children"')
+        elif "grouper" in fully_or_partial:
+            prepare_lazy_loaded_grouped_loans(step.hashes)
+            step.given('Presenting "grouper sort"')
 
 
 @step('The grid sorted as "(.*?)" by "(.*?)" column:')
@@ -714,3 +721,11 @@ def check_grouped_row_wrap(step, col_name):
             "return $('.grouping-column-cell .ember-table-content:contains(" + col_name + ")').offset().left")
 
         assert_true(step, int(indicator_offset) < int(name_offset))
+
+
+@step('Click grouper "(.*?)"  to sort as "(.*?)"$')
+def click_grouper(step, name, direction):
+    with AssertContextManager(step):
+        element = world.browser.find_element_by_css_selector(".ember-table-header:contains(" + name + ")")
+        while direction not in element.get_attribute("text"):
+            element.click()
