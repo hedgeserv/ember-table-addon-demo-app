@@ -1,0 +1,17 @@
+<h4>Grouping by:</h4>
+<div class="btn-group" role="group" aria-label="...">
+{{#each grouper in groupingMetadata}}
+    <button type="button" class="btn btn-sm btn-default sort-grouper" {{action 'sortGrouper' grouper}}>{{grouper.id}} - {{grouper.sortDirection}}</button>
+{{/each}}
+</div>
+
+<div class="lazy-loaded-table-container" style="height:600px">
+  {{ember-table
+  hasFooter=false
+  enableContentSelection=true
+  content=tableContent
+  columns=columns
+  sortAction='sortAction'
+  groupMeta=model
+  }}
+</div>
