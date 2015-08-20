@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/hedgeserv/ember-table-addon-demo-app.svg?branch=master)](https://travis-ci.org/hedgeserv/ember-table-addon-demo-app)
 
-Demo app for [our fork](https://github.com/hedgeserv/ember-table) of [Addepar's](https://github.com/Addepar/ember-table) `ember-table` 
+Demo app for [our fork](https://github.com/hedgeserv/ember-table) of [Addepar's](https://github.com/Addepar/ember-table) `ember-table`
 
 ## Build Prerequisites
 
@@ -13,7 +13,7 @@ You can run `install-dependencies.sh [Path]` instead of manual installation
 Parameter [Path]:
 
 * If you use it by local, path should equal your project parent path. Such as "~/GitHubProject/HedgeServ" (Note: ember-table and ember-table-addon-demo-app should in same folder)
-         
+
 * If you use it by Jenkins, path should equal Jenkins project parent path. Such as "/Users/hedgebeijing/.jenkins/workspace"
 
 ### Build manual
@@ -74,8 +74,16 @@ You will need to install required Python package and download chrome driver
 
 ### upgrading ember-cli
 
-* please visit: [ember-cli-upgrading](http://www.ember-cli.com/user-guide/#upgrading)
-* and then re-link ember-table `npm link ember-table`
+* `npm uninstall -g ember-cli`
+* `npm cache clean`
+* `bower cache clean`
+* `npm install -g ember-cli@1.13.8`
+* `rm -rf node_modules bower_components dist tmp`
+* `npm install`
+* `bower isntall`
+* re-link ember-table `npm link ember-table`
+
+* please refer to: [ember-cli-upgrading](http://www.ember-cli.com/user-guide/#upgrading)
 
 ### Continuous Integration
 #### Run ember tests and python tests
@@ -83,7 +91,7 @@ You will need to install required Python package and download chrome driver
 
 #### Travis and Jenkins
 * TBD: update .travis.yml to install ember-table-addon as npm link first
-* TBD: verify compatibility with Jenkins 
+* TBD: verify compatibility with Jenkins
 * TBD: integrate python webdriver tests
 
 ### Deploying
@@ -97,7 +105,6 @@ TBD.
 * Development Browser Extensions
   * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
   * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
-  * 
+  *
 
 ## Developer Tips
-
