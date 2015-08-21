@@ -1,5 +1,5 @@
 import json
-
+import os
 
 class Response:
     def __init__(self, data, content_key, meta=None):
@@ -13,6 +13,8 @@ class Response:
         self.meta = meta
 
     def to_mountebank(self):
+        path = os.getcwd() + "/mountebank-server"
+        injection = open(path + "/sort-behaviors.js").read() % path
         return {
             "is": {
                 "headers": {
@@ -24,6 +26,9 @@ class Response:
                     "meta": self.meta,
                     self.content_key: self.data
                 })
+            },
+            "_behaviors": {
+                "decorate": injection
             }
         }
 
@@ -117,3 +122,17 @@ class StubFactory:
     @staticmethod
     def make_chunk_group_stubs(data, chunk_size, predicate):
         return StubFactory.make_chunk_stubs(data, "chunkedGroups", chunk_size, predicate)
+
+    @staticmethod
+    def make_group_stub(data, path, pageSize=10):
+        meta = {"total": len(data), "pageSize": pageSize}
+        response = Response(data, "chunkedGroups", meta)
+        predicate = Predicate(path);
+        return Stub(response, predicate).to_mountebank()
+
+    @staticmethod
+    def make_loans_stub(data, path, pageSize=10):
+        meta = {"total": len(data), "pageSize": pageSize}
+        response = Response(data, "loans", meta)
+        predicate = Predicate(path);
+        return Stub(response, predicate).to_mountebank()

@@ -1,7 +1,7 @@
 import requests
 import json
 from group_meta_data import GroupMetadata
-from mountebank_imposter import StubFactory, Predicate
+from mountebank_imposter import StubFactory, Predicate, Stub
 from sort_criteria import SortCriteria
 
 
@@ -30,11 +30,10 @@ def stub_loans(count, path="/loans"):
     stubs = [StubFactory.make_loans_stub(loans, path)]
     return stubs
 
-
 def stub_loans_in_chunk(total_count, chunk_size, path="/loans"):
     loans = generate_loans(total_count)
-    stubs = StubFactory.make_chunk_loan_stubs(loans, chunk_size, Predicate(path))
-    return stubs
+    stub = StubFactory.make_loans_stub(loans, path, chunk_size)
+    return [stub]
 
 def stub_loans_in_chunk_and_sortable(total_count, chunk_size, path="/loans", sort_columns=['id']):
     stubs = []
@@ -113,7 +112,7 @@ def stub_lazy_loaded_grouped_loans(array_of_query_and_body, group_level_names):
                 del query[group_level_name]
             else:
                 break
-        stubs.extend(StubFactory.make_chunk_group_stubs(item["body"], 10, Predicate(path, query)))
+        stubs.append(StubFactory.make_group_stub(item["body"], path))
     return stubs
 
 

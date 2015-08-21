@@ -17,7 +17,7 @@ Feature: Column sort
 
   @complete
   Scenario: Sort individual column with partial loaded data
-    Given There are 200 sortable loans in chunk size 50
+    Given There are 200 loans in chunk size 50
     When Presenting "column sort"
     Then There should be 1 sections loaded
     When Customer drags scroll bar by offset 60 with 1 times
@@ -31,7 +31,7 @@ Feature: Column sort
 
   @complete
   Scenario: The inner column should be sortable
-    Given There are 200 sortable loans in chunk size 50
+    Given There are 200 loans in chunk size 50
     When Presenting "inner column sort"
     Then The "Status" column sort indicator should be "none"
     When Click to sort as "ASC" for column "Status"
@@ -42,7 +42,7 @@ Feature: Column sort
 
   @complete
   Scenario: The grouped column shouldn't be sortable
-    Given There are 200 sortable loans in chunk size 50
+    Given There are 200 loans in chunk size 50
     When Presenting "inner column sort"
     Then The "Group1" column sort indicator should be "none"
     When Click to sort as "ASC" for column "Group1"
@@ -51,7 +51,7 @@ Feature: Column sort
 
   @complete
   Scenario: Check sort indicator on column
-    Given There are 200 sortable loans in chunk size 50
+    Given There are 200 loans in chunk size 50
     When Presenting "column sort"
     Then The "Id" column sort indicator should be "none"
     When Click to sort as "ASC" for column "Id"

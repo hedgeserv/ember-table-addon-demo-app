@@ -107,13 +107,6 @@ def there_are_loans_in_chunk(step, total_count, chunk_size):
     with AssertContextManager(step):
         prepare_loans_in_chunk(int(total_count), int(chunk_size))
 
-
-@step('There are (\d+) sortable loans in chunk size (\d+)$')
-def prepare_loans_as_asc(step, total_count, chunk_size):
-    with AssertContextManager(step):
-        prepare_sort_in_chunk(int(total_count), int(chunk_size))
-
-
 @step('Presenting "(.*?)"')
 def list_all_loans(step, url):
     with AssertContextManager(step):
