@@ -131,7 +131,7 @@ def list_all_loans(step, url):
             "grouping column present partial loaded children": "http://localhost:4200/chunked-grouping-rows",
             "grand total row": "http://localhost:4200/grand-total-row",
             "grouping column error handling": "http://localhost:4200/grouped-rows-error-handling",
-            "grouper sort": "http://localhost:4200/sort-by-groupers"
+            "grouper sort": "http://localhost:4200/sort-by-grouper"
         }
         get_url(world.browser, options.get(url))
 
@@ -723,9 +723,11 @@ def check_grouped_row_wrap(step, col_name):
         assert_true(step, int(indicator_offset) < int(name_offset))
 
 
-@step('Click grouper "(.*?)"  to sort as "(.*?)"$')
+@step('Click grouper "(.*?)" to sort as "(.*?)"$')
 def click_grouper(step, name, direction):
     with AssertContextManager(step):
-        element = world.browser.find_element_by_css_selector(".ember-table-header:contains(" + name + ")")
-        while direction not in element.get_attribute("text"):
-            element.click()
+        element = world.browser.execute_script("return $('.sort-grouper:contains(" + name + ")')")
+        while direction.lower() not in world.browser.execute_script(
+                                "return $('.sort-grouper:contains(" + name + ")').text()"):
+            element[0].click()
+            break
