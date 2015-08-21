@@ -2,7 +2,6 @@ import requests
 import json
 from group_meta_data import GroupMetadata
 from mountebank_imposter import StubFactory, Predicate, Stub
-from sort_criteria import SortCriteria
 
 
 class MountebankServer:
@@ -25,47 +24,10 @@ def create_imposter(stubs):
     MountebankServer().create_imposter(stubs)
 
 
-def stub_loans(count, path="/loans"):
+def stub_loans(count, chunk_size=None, path="/loans"):
     loans = generate_loans(count)
-    stubs = [StubFactory.make_loans_stub(loans, path)]
-    return stubs
-
-def stub_loans_in_chunk(total_count, chunk_size, path="/loans"):
-    loans = generate_loans(total_count)
     stub = StubFactory.make_loans_stub(loans, path, chunk_size)
     return [stub]
-
-def stub_loans_in_chunk_and_sortable(total_count, chunk_size, path="/loans", sort_columns=['id']):
-    stubs = []
-    list_of_criteria = generate_sort_criteria_list(sort_columns)
-    for criteria in list_of_criteria:
-        data = generate_loans(total_count)
-        sorted_data = criteria.sort(data)
-        sorted_stubs = StubFactory.make_chunk_loan_stubs(sorted_data, chunk_size,
-                                                         Predicate(path, criteria.to_query()))
-        stubs.extend(sorted_stubs)
-
-    default_loans = generate_loans(total_count)
-    default_stubs = StubFactory.make_chunk_loan_stubs(default_loans, chunk_size, Predicate(path))
-    stubs.extend(default_stubs)
-    return stubs
-
-
-def generate_sort_criteria_list(sort_columns):
-    if len(sort_columns) == 0:
-        return []
-
-    column = sort_columns[0]
-    result = [
-        SortCriteria([{'sortName': column, 'sortDirect': 'asc'}]),
-        SortCriteria([{'sortName': column, 'sortDirect': 'desc'}])
-    ]
-    if len(sort_columns) > 1:
-        others = generate_sort_criteria_list(sort_columns[1:])
-        for c in others:
-            result.append(c.append_criteria(column, 'asc'))
-            result.append(c.append_criteria(column, 'desc'))
-    return result
 
 
 def stub_grouped_loans_by_count(count):
@@ -96,8 +58,8 @@ def stub_grouped_loans(data):
 
 def stub_grand_total_row():
     rows = [{"id": "1"}]
-    stubs = StubFactory.make_chunk_group_stubs(rows, 1, Predicate("/chunkedGroups"))
-    return stubs
+    stub = StubFactory.make_group_stub(rows)
+    return [stub]
 
 
 def stub_lazy_loaded_grouped_loans(array_of_query_and_body, group_level_names):
@@ -151,11 +113,7 @@ def prepare_loans(count):
 
 
 def prepare_loans_in_chunk(total, chunk_size=100):
-    create_imposter(stub_loans_in_chunk(total, chunk_size))
-
-
-def prepare_sort_in_chunk(total, chunk_size=100):
-    create_imposter(stub_loans_in_chunk_and_sortable(total, chunk_size, sort_columns=['id', 'activity', 'status']))
+    create_imposter(stub_loans(total, chunk_size))
 
 
 def prepare_grouping_data(count):

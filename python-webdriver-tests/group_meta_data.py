@@ -2,13 +2,6 @@ import re
 import os
 from sort_condition_provider import SortConditionProvider
 
-def p(*values):
-    print "\n\n"
-    for v in values:
-        print(v)
-    print "\n\n"
-
-
 class GroupMetadata:
     def __init__(self, zipped_row):
         self.levels = []

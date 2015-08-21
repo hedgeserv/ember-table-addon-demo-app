@@ -15,7 +15,6 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 from prepare_loans import prepare_loans
 from prepare_loans import prepare_loans_in_chunk
-from prepare_loans import prepare_sort_in_chunk
 from prepare_loans import prepare_grouping_data
 from prepare_loans import prepare_grouped_loans
 from prepare_loans import prepare_lazy_loaded_grouped_loans
