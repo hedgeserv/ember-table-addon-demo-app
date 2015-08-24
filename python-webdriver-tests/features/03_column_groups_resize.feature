@@ -154,7 +154,7 @@ Feature: Column groups resize
 
   @wip
   Scenario: Resize column with smallest width to check the layout
-    Given There are 200 sortable loans in chunk size 50
+    Given There are 200 loans in chunk size 50
     And Presenting "inner column sort"
     And The "Id" column header height should be 60 pixel
     When The user drags the "Sector" on column to "left" with 200 pixel

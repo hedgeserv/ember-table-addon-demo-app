@@ -5,7 +5,7 @@ Feature: Column groups reorder
 
   @complete
   Scenario: Dragging an inner column header should reorder that column within the group
-    Given There are 200 sortable loans in chunk size 50
+    Given There are 200 loans in chunk size 50
     When Presenting "column reorder"
     Then The index 1 should be "Id" column
     And Reorder an inner column "Id" header to "right" with 300 pixel
@@ -14,7 +14,7 @@ Feature: Column groups reorder
 
   @complete
   Scenario: Dragging the column group header to neighbor of next should reorder with entire group
-    Given There are 200 sortable loans in chunk size 50
+    Given There are 200 loans in chunk size 50
     When Presenting "inner column sort"
     Then The index 1 should be "Group1" column
     And Reorder an inner column "Group1" header to "right" with 450 pixel
@@ -22,7 +22,7 @@ Feature: Column groups reorder
 
   @complete
   Scenario: Dragging the column group header to neighbor should reorder with entire group
-    Given There are 200 sortable loans in chunk size 50
+    Given There are 200 loans in chunk size 50
     When Presenting "inner column sort"
     Then The index 1 should be "Group1" column
     And Reorder an inner column "Group1" header to "right" with 300 pixel
@@ -31,14 +31,14 @@ Feature: Column groups reorder
 
   @complete
   Scenario: Check reorder column indicator line before reorder
-    Given There are 200 sortable loans in chunk size 50
+    Given There are 200 loans in chunk size 50
     When Presenting "inner column sort"
     And Drag and hold column "Sector" to "right" with 1 pixel
     Then The reorder indicator line should be 508 from left
 
   @complete
   Scenario: Check reorder column indicator line after reorder
-    Given There are 200 sortable loans in chunk size 50
+    Given There are 200 loans in chunk size 50
     When Presenting "inner column sort"
     And Drag and hold column "Id" to "right" with 300 pixel
     Then The reorder indicator line should be 358 from left

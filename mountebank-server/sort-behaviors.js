@@ -20,8 +20,6 @@ function (request, response, logger) {
   var sortNames = sorts[0].map(function (name) {
     return sortNameMap[name] || name;
   });
-  logger.info(JSON.stringify(sorts[0]));
-  logger.info(sortNames);
   var sortCondition = new SortCondition(sortNames, sorts[1]);
   var sortedBody = sortCondition.sort(body);
   var data = !!section ? getChunkOf(sortedBody, section, meta.pageSize) : sortedBody;

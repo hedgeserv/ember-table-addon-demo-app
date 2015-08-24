@@ -1,5 +1,5 @@
 import json
-
+import os
 
 class Response:
     def __init__(self, data, content_key, meta=None):
@@ -13,6 +13,8 @@ class Response:
         self.meta = meta
 
     def to_mountebank(self):
+        path = os.getcwd() + "/mountebank-server"
+        injection = open(path + "/sort-behaviors.js").read() % path
         return {
             "is": {
                 "headers": {
@@ -24,6 +26,9 @@ class Response:
                     "meta": self.meta,
                     self.content_key: self.data
                 })
+            },
+            "_behaviors": {
+                "decorate": injection
             }
         }
 
@@ -84,36 +89,21 @@ class StubFactory:
         pass
 
     @staticmethod
-    def make_loans_stub(loans, path):
-        response = Response(loans, "loans")
-        predicate = Predicate(path)
-        return Stub(response, predicate).to_mountebank()
-
-    @staticmethod
     def make_group_loans_stub(loans):
         response = Response(loans, "loans")
         predicate = Predicate("/loans", {"group": "true"})
         return Stub(response, predicate).to_mountebank()
 
     @staticmethod
-    def make_chunk_stubs(data, content_key, chunk_size, predicate):
-        stubs = []
-        total = len(data)
-        chunk_index = 0
-        for i in range(0, total, chunk_size):
-            chunk_data = data[i:i + chunk_size]
-            chunk_meta = ChunkMeta(total, chunk_index, chunk_size)
-            chunk_response = Response(chunk_data, content_key, chunk_meta.meta_dict())
-            new_predicate = predicate.merge_query(chunk_meta.chunk_query())
-            chunk_stub = Stub(chunk_response, new_predicate).to_mountebank()
-            stubs.append(chunk_stub)
-            chunk_index += 1
-        return stubs
+    def make_group_stub(data, path='/chunkedGroups', pageSize=10):
+        meta = {"total": len(data), "pageSize": pageSize}
+        response = Response(data, "chunkedGroups", meta)
+        predicate = Predicate(path);
+        return Stub(response, predicate).to_mountebank()
 
     @staticmethod
-    def make_chunk_loan_stubs(data, chunk_size, predicate):
-        return StubFactory.make_chunk_stubs(data, "loans", chunk_size, predicate)
-
-    @staticmethod
-    def make_chunk_group_stubs(data, chunk_size, predicate):
-        return StubFactory.make_chunk_stubs(data, "chunkedGroups", chunk_size, predicate)
+    def make_loans_stub(data, path, pageSize=None):
+        meta = {"total": len(data), "pageSize": pageSize} if pageSize else None
+        response = Response(data, "loans", meta)
+        predicate = Predicate(path);
+        return Stub(response, predicate).to_mountebank()

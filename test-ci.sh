@@ -6,7 +6,7 @@ green=`tput setaf 2`
 reset=`tput sgr0`
 
 echo "${green}Start Mountebank ...${reset}"
-mb --allowCORS &
+mb --allowCORS --allowInjection &
 sleep 1
 
 echo "${green}Run ember test ...${reset}"

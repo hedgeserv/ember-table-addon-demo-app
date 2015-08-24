@@ -808,7 +808,7 @@ Feature: Multi-Column Sorting
       |           | 10102     | 10102 | s1-1-1              | t1-1-3              | fo1-1-1              |
       |           | 10110     | 10110 | s1-1-10             | t1-1-10             | fo1-1-10             |
       |           | 10111     | 10111 | s1-1-11             | t1-1-11             | fo1-1-11             |
-      |           | 10101     | 10101 | s1-1-2              | t1-1-1              | fo1-1-4              |
+      |           | 10104     | 10104 | s1-1-2              | t1-1-1              | fo1-1-2              |
     When "command" click to sort as "ASC" for column "Beginning CR (Base)"
     Then I see grouped rows:
       | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
@@ -817,7 +817,7 @@ Feature: Multi-Column Sorting
       |           | 10102     | 10102 | s1-1-1              | t1-1-3              | fo1-1-1              |
       |           | 10110     | 10110 | s1-1-10             | t1-1-10             | fo1-1-10             |
       |           | 10111     | 10111 | s1-1-11             | t1-1-11             | fo1-1-11             |
-      |           | 10101     | 10101 | s1-1-2              | t1-1-1              | fo1-1-4              |
+      |           | 10104     | 10104 | s1-1-2              | t1-1-1              | fo1-1-2              |
     And The "Beginning DR (Base)" column sort indicator should be "asc"
     And The "Beginning CR (Base)" column sort indicator should be "asc"
 
@@ -834,7 +834,7 @@ Feature: Multi-Column Sorting
       |           | 10102     | 10102 | s1-1-1              | t1-1-3              | fo1-1-1              |
       |           | 10110     | 10110 | s1-1-10             | t1-1-10             | fo1-1-10             |
       |           | 10111     | 10111 | s1-1-11             | t1-1-11             | fo1-1-11             |
-      |           | 10101     | 10101 | s1-1-2              | t1-1-1              | fo1-1-4              |
+      |           | 10104     | 10104 | s1-1-2              | t1-1-1              | fo1-1-2              |
     When "command" click to sort as "ASC" for column "Net Beginning (Base)"
     Then I see grouped rows:
       | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
@@ -981,7 +981,7 @@ Feature: Multi-Column Sorting
       |           | 10102     | 10102 | s1-1-1              | t1-1-3              | fo1-1-1              |
       |           | 10110     | 10110 | s1-1-10             | t1-1-10             | fo1-1-10             |
       |           | 10111     | 10111 | s1-1-11             | t1-1-11             | fo1-1-11             |
-      |           | 10101     | 10101 | s1-1-2              | t1-1-1              | fo1-1-4              |
+      |           | 10104     | 10104 | s1-1-2              | t1-1-1              | fo1-1-2              |
     When Click to sort as "DESC" for column "Beginning DR (Base)"
     Then I see grouped rows:
       | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
