@@ -1,6 +1,5 @@
 import re
 import os
-from sort_condition_provider import SortConditionProvider
 
 class GroupMetadata:
     def __init__(self, zipped_row):
