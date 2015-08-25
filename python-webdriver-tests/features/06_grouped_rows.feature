@@ -420,11 +420,10 @@ Feature: Indicators for expanding and collapsing grouped rows
     Then I see grouped rows:
       | indicator | groupName | Id    |
       | -         | 1         | 1     |
+      | +         | 102       | 102   |
       | -         | 101       | 101   |
       |           | 10110     | 10110 |
       |           | 10109     | 10109 |
-      |           | 10108     | 10108 |
-      |           | 10107     | 10107 |
     And The "Id" column sort indicator should be "desc"
     And There should be 3 sections loaded
 
@@ -436,15 +435,15 @@ Feature: Indicators for expanding and collapsing grouped rows
     And Click "expand" for the 2 row
     And Click to sort as "ASC" for column "Id"
     And Click to sort as "DESC" for column "Id"
-    When Click "expand" for the 1 row
+    When Click "expand" for the 4 row
     Then I see grouped rows:
       | indicator | groupName | Id    |
       | -         | 1         | 1     |
-      | -         | 101       | 101   |
-      |           | 10102     | 10102 |
-      |           | 10101     | 10101 |
       | -         | 102       | 102   |
       |           | 10202     | 10202 |
+      |           | 10201     | 10201 |
+      | -         | 101       | 101   |
+      |           | 10102     | 10102 |
     And The "Id" column sort indicator should be "desc"
 
     Given I have the following partial loaded grouped data in MounteBank:
@@ -455,15 +454,15 @@ Feature: Indicators for expanding and collapsing grouped rows
     And Click "expand" for the 2 row
     And Click to sort as "ASC" for column "Id"
     And Click to sort as "DESC" for column "Id"
-    And Click "expand" for the 1 row
+    And Click "expand" for the 4 row
     And I see grouped rows:
       | indicator | groupName | Id    |
       | -         | 1         | 1     |
-      | -         | 101       | 101   |
-      |           | 10102     | 10102 |
-      |           | 10101     | 10101 |
       | -         | 102       | 102   |
       |           | 10202     | 10202 |
+      |           | 10201     | 10201 |
+      | -         | 101       | 101   |
+      |           | 10102     | 10102 |
     When And Click to sort as "ASC" for column "Id"
     Then I see grouped rows:
       | indicator | groupName | Id    |
@@ -486,11 +485,11 @@ Feature: Indicators for expanding and collapsing grouped rows
     Then I see grouped rows:
       | indicator | groupName | Id    |
       | -         | 1         | 1     |
-      | -         | 101       | 101   |
-      |           | 10102     | 10102 |
-      |           | 10101     | 10101 |
       | -         | 102       | 102   |
       |           | 10202     | 10202 |
+      |           | 10201     | 10201 |
+      | -         | 101       | 101   |
+      |           | 10102     | 10102 |
     And The "Id" column sort indicator should be "desc"
 
     Given I have the following partial loaded grouped data in MounteBank:
@@ -506,11 +505,11 @@ Feature: Indicators for expanding and collapsing grouped rows
     Then I see grouped rows:
       | indicator | groupName | Id    |
       | -         | 1         | 1     |
-      | +         | 101       | 101   |
-      | -         | 102       | 102   |
-      |           | 10210     | 10210 |
-      |           | 10209     | 10209 |
-      |           | 10208     | 10208 |
+      | +         | 102       | 102   |
+      | -         | 101       | 101   |
+      |           | 10110     | 10110 |
+      |           | 10109     | 10109 |
+      |           | 10108     | 10108 |
     And The "Id" column sort indicator should be "desc"
 
   @complete
@@ -607,17 +606,14 @@ Feature: Indicators for expanding and collapsing grouped rows
     And Click "expand" for the 1 row
     And Customer drags scroll bar by offset 60 with 2 times and wait loading section
     And Click to sort as "ASC" for column "Id"
-    When Click to sort as "DESC" for column "Id"
     Then I see grouped rows:
       | indicator | groupName | Id    |
-      |           | 10103     | 10103 |
-      |           | 10102     | 10102 |
-      |           | 10101     | 10101 |
+      |           | 10118     | 10118 |
+      |           | 10119     | 10119 |
+      |           | 10120     | 10120 |
       | -         | 102       | 102   |
-      |           | 10220     | 10220 |
-      |           | 10219     | 10219 |
-
-    Then There should be 7 sections loaded
+      |           | 10201     | 10201 |
+    Then There should be 6 sections loaded
 
     Given I have the following partial loaded grouped data in MounteBank:
       | groupName                                        | id | Beginning DR (Base) |

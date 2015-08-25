@@ -141,13 +141,14 @@ Feature: Multi-Column Sorting
     When Click to sort as "DESC" for column "Activity"
     Then I see grouped rows:
       | indicator | groupName        | Id     | Activity |
+      | +         | group3           | f3     | s3       |
+      | +         | group2           | f2     | s2       |
       | -         | group1           | f1     | s1       |
+      | +         | group1-chd2      | f1-2   | s1-2     |
       | -         | group1-chd1      | f1-1   | s1-1     |
       |           | group1-chd1-chd3 | f1-1-3 | s1-1-3   |
       |           | group1-chd1-chd2 | f1-1-2 | s1-1-2   |
       |           | group1-chd1-chd1 | f1-1-1 | s1-1-1   |
-      | +         | group1-chd2      | f1-2   | s1-2     |
-      | +         | group2           | f2     | s2       |
     And The "Activity" column sort indicator should be "desc"
 
     Given Prepare the grid with no existing sorting column for "fully load":
@@ -166,13 +167,13 @@ Feature: Multi-Column Sorting
     And Click "expand" for row "group1-chd1"
     And The grid sorted as "DESC" by "Activity" column:
       | indicator | groupName        | Id     | Activity |
+      | +         | group3           | f3     | s3       |
+      | +         | group2           | f2     | s2       |
       | -         | group1           | f1     | s1       |
+      | +         | group1-chd2      | f1-2   | s1-2     |
       | -         | group1-chd1      | f1-1   | s1-1     |
       |           | group1-chd1-chd3 | f1-1-3 | s1-1-3   |
       |           | group1-chd1-chd2 | f1-1-2 | s1-1-2   |
-      |           | group1-chd1-chd1 | f1-1-1 | s1-1-1   |
-      | +         | group1-chd2      | f1-2   | s1-2     |
-      | +         | group2           | f2     | s2       |
     When Click to sort as "ASC" for column "Activity"
     Then I see grouped rows:
       | indicator | groupName        | Id     | Activity |
@@ -264,8 +265,8 @@ Feature: Multi-Column Sorting
       | -         | group1           | f1     | s1       |
       | -         | group1-chd1      | f1-1   | s1-1     |
       |           | group1-chd1-chd1 | f1-1-1 | s1-1-1   |
-      |           | group1-chd1-chd3 | f1-1-3 | s1-1-3   |
       |           | group1-chd1-chd2 | f1-1-2 | s1-1-2   |
+      |           | group1-chd1-chd3 | f1-1-3 | s1-1-3   |
       | +         | group1-chd2      | f1-2   | s1-2     |
       | +         | group2           | f2     | s2       |
     And The "Id" column sort indicator should be "none"
