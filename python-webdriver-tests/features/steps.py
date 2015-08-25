@@ -106,6 +106,7 @@ def there_are_loans_in_chunk(step, total_count, chunk_size):
     with AssertContextManager(step):
         prepare_loans_in_chunk(int(total_count), int(chunk_size))
 
+
 @step('Presenting "(.*?)"')
 def list_all_loans(step, url):
     with AssertContextManager(step):
@@ -722,4 +723,3 @@ def click_grouper(step, name, direction):
         while direction.lower() not in world.browser.execute_script(
                                 "return $('.sort-grouper:contains(" + name + ")').text()"):
             element[0].click()
-            break
