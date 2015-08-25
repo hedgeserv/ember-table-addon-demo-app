@@ -19,7 +19,8 @@ export default Ember.Mixin.create({
             grouperSortDirection.push([item[0], item[2]]);
           }
         });
-        if (groupQuery.key && groupQuery.sortDirection) {
+        var isSortByGrouper = groupQuery.key && groupQuery.sortDirection;
+        if (isSortByGrouper) {
           grouperSortDirection.push([groupQuery.key, groupQuery.sortDirection]);
         }
 
@@ -27,7 +28,8 @@ export default Ember.Mixin.create({
           parameters['sortNames[' + idx + ']'] = item[0];
           parameters['sortDirects[' + idx + ']'] = item[1];
         });
-        if (self.isLastLevel(groupQuery.key) || self.get('groupingRowAffectedByColumnSort')) {
+
+        if (!isSortByGrouper) {
           var sortQuery = self.makeSortQuery(sortingColumns);
           Ember.setProperties(parameters, sortQuery);
         }
@@ -42,8 +44,7 @@ export default Ember.Mixin.create({
           };
         });
       },
-      groupingMetadata: groupingMetadata,
-      groupingRowAffectedByColumnSort: this.get('groupingRowAffectedByColumnSort')
+      groupingMetadata: groupingMetadata
     };
   },
 
