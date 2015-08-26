@@ -12,11 +12,7 @@ function (request, response, logger) {
     return getSortItem(request.query, name);
   });
 
-  var sortNameMap = {
-    accountSection: 'GL Account Section',
-    accountType: 'GL Account Type',
-    accountCode: 'GL Account Code'
-  };
+  var sortNameMap = %s;
   var sortNames = sorts[0].map(function (name) {
     return sortNameMap[name] || name;
   });

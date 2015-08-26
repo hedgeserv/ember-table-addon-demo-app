@@ -14,7 +14,7 @@ class Response:
 
     def to_mountebank(self):
         path = os.getcwd() + "/mountebank-server"
-        injection = open(path + "/sort-behaviors.js").read() % path
+        injection = open(path + "/sort-behaviors.js").read() % (path, '{}')
         return {
             "is": {
                 "headers": {
