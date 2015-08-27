@@ -720,6 +720,13 @@ def check_grouped_row_wrap(step, col_name):
 def click_grouper(step, name, direction):
     with AssertContextManager(step):
         element = world.browser.execute_script("return $('.sort-grouper:contains(" + name + ")')")
-        while direction.lower() not in world.browser.execute_script(
-                                "return $('.sort-grouper:contains(" + name + ")').text()"):
-            element[0].click()
+        if direction == 'ASC' or direction == 'DESC':
+            while direction.lower() not in world.browser.execute_script(
+                                    "return $('.sort-grouper:contains(" + name + ")').text()"):
+                element[0].click()
+        else:
+            while ('asc' in world.browser.execute_script(
+                            "return $('.sort-grouper:contains(" + name + ")').text()")) or (
+                        'desc' in world.browser.execute_script(
+                                "return $('.sort-grouper:contains(" + name + ")').text()")):
+                element[0].click()

@@ -26,10 +26,21 @@ var isNumber = function (value) {
   return !!(value + '').match(/^(-|\d+|\.)$/);
 };
 
+var sortFnMap = {
+  accountSection: function(prev, next){
+    return prev.toString().localeCompare(next.toString());
+  }
+}
+
+
 var compare = function (prev, next, key) {
   if (!!key) {
     prev = prev[key];
     next = next[key];
+  }
+  var sortFn = sortFnMap[key];
+  if(sortFn){
+    return sortFn(prev, next);
   }
   if (isNumber(prev) && isNumber(next)) {
     return prev - next;
