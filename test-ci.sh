@@ -21,7 +21,7 @@ if [ $? -eq 0 ];then
   sleep 7
   echo "${green}Ember server pid is $var${reset}"
   echo "${green}Run lettuce ...${reset}"
-  lettuce python-webdriver-tests/features --tag debug --with-xunit
+  lettuce python-webdriver-tests/features --tag complete --with-xunit
 
   if [ $? -eq 0 ];then
   result=0

@@ -248,7 +248,7 @@ Feature: Multi-Column Sorting
       | +         | 201       | 201   |
       | +         | 1         | 1     |
 
-  @debug
+  @wip
   Scenario: Sort by grouper first level with partial loaded data
     Given Prepare the grid with no existing sorting column for "grouper":
       | groupName                                          | id |
@@ -278,7 +278,7 @@ Feature: Multi-Column Sorting
     And Click grouper "accountSection" to sort as "unsort"
     And There should be 8 sections loaded
 
-  @debug
+  @wip
   Scenario: Check the expanded status should be kept after sort grouper
     Given Prepare the grid with no existing sorting column for "grouper":
       | groupName                                          | id |

@@ -199,7 +199,6 @@ def get_loaded_section(step, num, timeout=3):
         if len(get_mb_request()) == int(num):
             return
         time.sleep(0.5)
-    assert_equal(len(get_mb_request()), int(num))
     raise AssertionError
 
 
