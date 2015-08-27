@@ -207,7 +207,7 @@ def stop_mb():
 
 
 def start_mb():
-    os.system('mb --allowCORS --allowInjection &')
+    os.system('mb --allowCORS --allowInjection --loglevel error &')
 
 
 def command_ctrl_with_click(browser, col_name, command_or_ctrl):

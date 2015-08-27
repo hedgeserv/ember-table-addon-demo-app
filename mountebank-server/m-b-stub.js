@@ -38,10 +38,10 @@ MBStub.prototype.setBody = function (body) {
       "body": body
     },
     "_behaviors": {
-      "decorate": util.format(script, __dirname, "{
-        accountSection: 'GL Account Section',
-        accountType: 'GL Account Type',
-        accountCode: 'GL Account Code'
+      "decorate": util.format(script, __dirname, "{\
+        accountSection: 'GL Account Section',\
+        accountType: 'GL Account Type',\
+        accountCode: 'GL Account Code'\
       }")
     }
   };
