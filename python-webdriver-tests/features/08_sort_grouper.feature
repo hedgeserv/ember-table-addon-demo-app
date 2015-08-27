@@ -227,7 +227,7 @@ Feature: Multi-Column Sorting
       | +         | 1         | 1     |
     And There should be 3 sections loaded
 
-  @compete
+  @complete
   Scenario: Sort by grouper with unsort status
     Given Prepare the grid with no existing sorting column for "grouper":
       | groupName                                         | id    |
@@ -287,7 +287,7 @@ Feature: Multi-Column Sorting
     And Click "expand" for row "101"
     And Click grouper "accountSection" to sort as "DESC"
     And Customer drags scroll bar by offset 50 with 4 times and wait loading section
-    And I see grouped rows:
+    Then I see grouped rows:
       | indicator | groupName | Id    |
       | -         | 1         | 1     |
       | -         | 101       | 101   |

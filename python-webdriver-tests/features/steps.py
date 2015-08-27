@@ -199,6 +199,7 @@ def get_loaded_section(step, num, timeout=3):
         if len(get_mb_request()) == int(num):
             return
         time.sleep(0.5)
+    assert_equal(len(get_mb_request()), int(num))
     raise AssertionError
 
 
@@ -427,11 +428,11 @@ def verify_grouped_rows(step):
 def verify_grouped_row(index, row):
     indicator = row['indicator']
     if indicator == '-':
-        assert_true(step, is_the_row_expanded(index))
+        assert_equal(True, is_the_row_expanded(index))
     elif indicator == '+':
-        assert_true(step, (not is_the_row_expanded(index)) and (not is_the_leaf_node(index)))
+        assert_equal(True, (not is_the_row_expanded(index)) and (not is_the_leaf_node(index)))
     elif indicator == '':
-        assert_true(step, is_the_leaf_node(index))
+        assert_equal(True, is_the_leaf_node(index))
 
     for field in row:
         if field != 'indicator':
