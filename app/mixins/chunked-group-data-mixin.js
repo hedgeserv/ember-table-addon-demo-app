@@ -12,23 +12,11 @@ export default Ember.Mixin.create({
           section: chunkIndex + 1,
           groupQuery: groupQuery
         };
-        parameters.section = chunkIndex + 1;
-        var grouperSortDirection = [];
-        groupQuery.upperGroupings.forEach(function(item) {
-          if (item[2]) {
-            grouperSortDirection.push([item[0], item[2]]);
-          }
-        });
         var isSortByGrouper = groupQuery.key && groupQuery.sortDirection;
         if (isSortByGrouper) {
-          grouperSortDirection.push([groupQuery.key, groupQuery.sortDirection]);
+          parameters['sortNames[0]'] = groupQuery.key;
+          parameters['sortDirects[0]'] = groupQuery.sortDirection;
         }
-
-        grouperSortDirection.forEach(function(item, idx) {
-          parameters['sortNames[' + idx + ']'] = item[0];
-          parameters['sortDirects[' + idx + ']'] = item[1];
-        });
-
         if (!isSortByGrouper) {
           var sortQuery = self.makeSortQuery(sortingColumns);
           Ember.setProperties(parameters, sortQuery);
