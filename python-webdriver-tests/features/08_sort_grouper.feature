@@ -226,3 +226,77 @@ Feature: Multi-Column Sorting
       | +         | 201       | 201   |
       | +         | 1         | 1     |
     And There should be 3 sections loaded
+
+  @complete
+  Scenario: Sort by grouper with unsort status
+    Given Prepare the grid with no existing sorting column for "grouper":
+      | groupName                                         | id    |
+      | accountSection[2]-accountType[2]-accountCode[1,2] | [1,2] |
+    When Click grouper "accountSection" to sort as "DESC"
+    And Click grouper "accountType" to sort as "DESC"
+    And Click "expand" for row "2"
+    And Click "expand" for row "202"
+    And Click grouper "accountType" to sort as "unsort"
+    And Click grouper "accountCode" to sort as "ASC"
+    And Click grouper "accountCode" to sort as "unsort"
+    Then I see grouped rows:
+      | indicator | groupName | Id    |
+      | -         | 2         | 2     |
+      | -         | 202       | 202   |
+      |           | 20202     | 20202 |
+      |           | 20201     | 20201 |
+      | +         | 201       | 201   |
+      | +         | 1         | 1     |
+
+  @wip
+  Scenario: Sort by grouper first level with partial loaded data
+    Given Prepare the grid with no existing sorting column for "grouper":
+      | groupName                                          | id |
+      | accountSection[21]-accountType[21]-accountCode[21] |    |
+    When Click grouper "accountSection" to sort as "ASC"
+    And Click grouper "accountSection" to sort as "unsort"
+    Then There should be 8 sections loaded
+    And I see grouped rows:
+      | indicator | groupName | Id |
+      | +         | 1         | 1  |
+      | +         | 2         | 2  |
+      | +         | 3         | 3  |
+      | +         | 4         | 4  |
+      | +         | 5         | 5  |
+      | +         | 6         | 6  |
+
+#  The scenario tracks defect https://hedgeserv.leankit.com/Boards/View/200742377/237591318
+  @wip
+  Scenario: Sort by grouper by first and second level with partial load data
+    Given Prepare the grid with no existing sorting column for "grouper":
+      | groupName                                          | id |
+      | accountSection[21]-accountType[21]-accountCode[11] |    |
+    When Click "expand" for row "1"
+    And Click "expand" for row "101"
+    And Click grouper "accountSection" to sort as "ASC"
+    And There should be 5 sections loaded
+    And Click grouper "accountSection" to sort as "unsort"
+    And There should be 8 sections loaded
+
+  @wip
+  Scenario: Check the expanded status should be kept after sort grouper
+    Given Prepare the grid with no existing sorting column for "grouper":
+      | groupName                                          | id |
+      | accountSection[21]-accountType[21]-accountCode[11] |    |
+    When Click "expand" for row "1"
+    And Click "expand" for row "101"
+    And Click grouper "accountSection" to sort as "DESC"
+    And Customer drags scroll bar by offset 50 with 4 times and wait loading section
+    Then I see grouped rows:
+      | indicator | groupName | Id    |
+      | -         | 1         | 1     |
+      | -         | 101       | 101   |
+      |           | 10101     | 10101 |
+      |           | 10102     | 10102 |
+      |           | 10103     | 10103 |
+      |           | 10104     | 10104 |
+      |           | 10105     | 10105 |
+      |           | 10106     | 10106 |
+
+
+

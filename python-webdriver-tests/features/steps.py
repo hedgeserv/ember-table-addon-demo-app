@@ -427,11 +427,11 @@ def verify_grouped_rows(step):
 def verify_grouped_row(index, row):
     indicator = row['indicator']
     if indicator == '-':
-        assert_true(step, is_the_row_expanded(index))
+        assert_equal(True, is_the_row_expanded(index))
     elif indicator == '+':
-        assert_true(step, (not is_the_row_expanded(index)) and (not is_the_leaf_node(index)))
+        assert_equal(True, (not is_the_row_expanded(index)) and (not is_the_leaf_node(index)))
     elif indicator == '':
-        assert_true(step, is_the_leaf_node(index))
+        assert_equal(True, is_the_leaf_node(index))
 
     for field in row:
         if field != 'indicator':
@@ -720,6 +720,13 @@ def check_grouped_row_wrap(step, col_name):
 def click_grouper(step, name, direction):
     with AssertContextManager(step):
         element = world.browser.execute_script("return $('.sort-grouper:contains(" + name + ")')")
-        while direction.lower() not in world.browser.execute_script(
-                                "return $('.sort-grouper:contains(" + name + ")').text()"):
-            element[0].click()
+        if direction == 'ASC' or direction == 'DESC':
+            while direction.lower() not in world.browser.execute_script(
+                                    "return $('.sort-grouper:contains(" + name + ")').text()"):
+                element[0].click()
+        else:
+            while ('asc' in world.browser.execute_script(
+                            "return $('.sort-grouper:contains(" + name + ")').text()")) or (
+                        'desc' in world.browser.execute_script(
+                                "return $('.sort-grouper:contains(" + name + ")').text()")):
+                element[0].click()
