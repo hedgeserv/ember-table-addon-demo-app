@@ -675,8 +675,8 @@ Feature: Multi-Column Sorting
       | 0   | activity-0   | status0   | use0   | sector0   |
       | 1   | activity-1   | status1   | use1   | sector0   |
       | 2   | activity-2   | status2   | use2   | sector0   |
-      | 103 | activity-103 | status103 | use103 | sector102 |
       | 102 | activity-102 | status102 | use102 | sector102 |
+      | 103 | activity-103 | status103 | use103 | sector102 |
       | 104 | activity-104 | status104 | use104 | sector102 |
     And The "Activity" column sort indicator should be "none"
     And The "status" column sort indicator should be "none"
