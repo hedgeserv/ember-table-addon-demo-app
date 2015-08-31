@@ -4,7 +4,7 @@ import ColumnDefinition from 'ember-table/models/column-definition';
 export default Ember.Mixin.create({
   columns: function () {
     var columnTitleAndNames = [
-      ["Id", "id"],
+      ["Id", "id", "decimal"],
       ["Beginning DR (Base)", "beginningDr"],
       ["Beginning CR (Base)", "beginningCr"],
       ["Net Beginning (Base)", "netBeginning"],
@@ -19,18 +19,9 @@ export default Ember.Mixin.create({
       return ColumnDefinition.create({
         headerCellName: titleAndName[0],
         contentPath: titleAndName[1],
+        dataType: titleAndName[2],
         getCellContent: function (row) {
           return Ember.get(row, titleAndName[1]);
-        },
-        sortBy: function(prev, next){
-          var prevName = prev.get(titleAndName[1]);
-          var nextName = next.get(titleAndName[1]);
-          if(typeof prevName === 'number') {
-            return prevName - nextName;
-          }
-          else {
-            return (prevName < nextName) ? -1 : (prevName > nextName) ? 1 : 0;
-          }
         }
       });
     });
