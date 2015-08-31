@@ -406,6 +406,52 @@ Feature: Multi-Column Sorting
       | +         | 1107      | 1107 |
 
 
+  @complete
+  Scenario: Grouper with multi column sort
+    Given Prepare the grid with no existing sorting column for "grouper":
+      | groupName                                                               | id                        | beginningDr                | beginningCr                | netBeginning                |
+      | accountSection[11]-accountType[11]-accountCode[1,2,3,4,5,6,7,8,9,10,11] | [1,2,3,4,5,6,7,8,9,10,11] | s[2,1,2,2,3,6,7,8,9,10,11] | t[1,3,5,1,2,6,7,8,9,10,11] | fo[4,1,3,2,5,6,7,8,9,10,11] |
+    And Click "expand" for row "1"
+    And Click "expand" for row "101"
+    And The grid sorted as "ASC" by "Beginning DR (Base), Beginning CR (Base), Net Beginning (Base)" columns:
+      | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
+      | -         | 1         | 1     | s1                  | t1                  | fo1                  |
+      | -         | 101       | 101   | s1-1                | t1-1                | fo1-1                |
+      |           | 10102     | 10102 | s1-1-1              | t1-1-3              | fo1-1-1              |
+      |           | 10110     | 10110 | s1-1-10             | t1-1-10             | fo1-1-10             |
+      |           | 10111     | 10111 | s1-1-11             | t1-1-11             | fo1-1-11             |
+      |           | 10104     | 10104 | s1-1-2              | t1-1-1              | fo1-1-2              |
+    When Click grouper "accountCode" to sort as "ASC"
+    Then I see grouped rows:
+      | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
+      | -         | 1         | 1     | s1                  | t1                  | fo1                  |
+      | -         | 101       | 101   | s1-1                | t1-1                | fo1-1                |
+      |           | 10101     | 10101 | s1-1-2              | t1-1-1              | fo1-1-4              |
+      |           | 10102     | 10102 | s1-1-1              | t1-1-3              | fo1-1-1              |
+      |           | 10103     | 10103 | s1-1-2              | t1-1-5              | fo1-1-3              |
+      |           | 10104     | 10104 | s1-1-2              | t1-1-1              | fo1-1-2              |
 
-
-
+    Given Prepare the grid with no existing sorting column for "grouper":
+      | groupName                                                               | id                        | beginningDr                | beginningCr                | netBeginning                |
+      | accountSection[11]-accountType[11]-accountCode[1,2,3,4,5,6,7,8,9,10,11] | [1,2,3,4,5,6,7,8,9,10,11] | s[2,1,2,2,3,6,7,8,9,10,11] | t[1,3,5,1,2,6,7,8,9,10,11] | fo[4,1,3,2,5,6,7,8,9,10,11] |
+    And Click "expand" for row "1"
+    And Click "expand" for row "101"
+    And The grid sorted as "ASC" by "Beginning DR (Base), Beginning CR (Base), Net Beginning (Base)" columns:
+      | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
+      | -         | 1         | 1     | s1                  | t1                  | fo1                  |
+      | -         | 101       | 101   | s1-1                | t1-1                | fo1-1                |
+      |           | 10102     | 10102 | s1-1-1              | t1-1-3              | fo1-1-1              |
+      |           | 10110     | 10110 | s1-1-10             | t1-1-10             | fo1-1-10             |
+      |           | 10111     | 10111 | s1-1-11             | t1-1-11             | fo1-1-11             |
+      |           | 10104     | 10104 | s1-1-2              | t1-1-1              | fo1-1-2              |
+    When Click grouper "accountSection" to sort as "ASC"
+    When Click grouper "accountType" to sort as "ASC"
+    And "command" click to sort as "remove" for column "Beginning DR (Base)"
+    Then I see grouped rows:
+      | indicator | groupName | Id    | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
+      | -         | 1         | 1     | s1                  | t1                  | fo1                  |
+      | -         | 101       | 101   | s1-1                | t1-1                | fo1-1                |
+      |           | 10104     | 10104 | s1-1-2              | t1-1-1              | fo1-1-2              |
+      |           | 10101     | 10101 | s1-1-2              | t1-1-1              | fo1-1-4              |
+      |           | 10110     | 10110 | s1-1-10             | t1-1-10             | fo1-1-10             |
+      |           | 10111     | 10111 | s1-1-11             | t1-1-11             | fo1-1-11             |
