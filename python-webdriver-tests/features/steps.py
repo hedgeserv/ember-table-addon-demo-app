@@ -10,19 +10,19 @@ from nose.tools import assert_equal
 import sys
 import time
 
-current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parent_dir = os.path.dirname(current_dir)
-sys.path.insert(0, parent_dir)
-from prepare_loans import prepare_loans
-from prepare_loans import prepare_loans_in_chunk
-from prepare_loans import prepare_grouping_data
-from prepare_loans import prepare_grouped_loans
-from prepare_loans import prepare_lazy_loaded_grouped_loans
-from prepare_loans import prepare_grand_total_row
+# current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+# parent_dir = os.path.dirname(current_dir)
+# sys.path.insert(0, parent_dir)
+from stub.prepare_loans import prepare_loans
+from stub.prepare_loans import prepare_loans_in_chunk
+from stub.prepare_loans import prepare_grouping_data
+from stub.prepare_loans import prepare_grouped_loans
+from stub.prepare_loans import prepare_lazy_loaded_grouped_loans
+from stub.prepare_loans import prepare_grand_total_row
+import basic_opr_module as bo
 
 import requests
 import json
-import basic_opr_module as bo
 
 spanWidthPix = 1
 
@@ -561,26 +561,16 @@ def stop_mb(step):
         bo.stop_mb()
 
 
-@step('Start mountebank$')
-def start_mb(step):
-    with AssertContextManager(step):
-        bo.start_mb()
-
-
 @step('The default loading indicator should display on (\d+) items$')
 def check_default_loading_indicator(step, num, timeout=5):
     with AssertContextManager(step):
-        try:
-            start = time.time()
-            while time.time() - start < timeout:
-                indicator = world.browser.execute_script("return $('.row-loading-indicator.loading')")
-                if len(indicator) == int(num):
-                    return
-                time.sleep(0.2)
-            raise AssertionError
-        finally:
-            if int(num) != 0:
-                bo.start_mb()
+        start = time.time()
+        while time.time() - start < timeout:
+            indicator = world.browser.execute_script("return $('.row-loading-indicator.loading')")
+            if len(indicator) == int(num):
+                return
+            time.sleep(0.2)
+        raise AssertionError
 
 
 @step('The custom loading indicator should display on (\d+) items$')

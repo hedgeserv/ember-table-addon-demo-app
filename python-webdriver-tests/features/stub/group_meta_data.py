@@ -1,5 +1,4 @@
 import re
-import os
 
 class GroupMetadata:
     def __init__(self, zipped_row):

@@ -1,7 +1,9 @@
-import requests
 import json
+
+import requests
+
 from group_meta_data import GroupMetadata
-from mountebank_imposter import StubFactory, Predicate, Stub
+from mountebank_imposter import StubFactory
 
 
 class MountebankServer:
@@ -19,9 +21,17 @@ class MountebankServer:
         }
         requests.post(self.mb_url, data=json.dumps(params))
 
+    def delete_imposter(self):
+        stub_port = 8888
+        requests.delete(self.mb_url + str(stub_port))
+
 
 def create_imposter(stubs):
     MountebankServer().create_imposter(stubs)
+
+
+def delete_imposter():
+    MountebankServer().delete_imposter()
 
 
 def stub_loans(count, chunk_size=None, path="/loans"):

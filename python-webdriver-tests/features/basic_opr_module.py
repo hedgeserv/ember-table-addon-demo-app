@@ -1,12 +1,13 @@
-from selenium.webdriver.common.keys import Keys
-
-__author__ = 'Liang Zhen'
-from selenium.webdriver import ActionChains
 import time
-import os
+
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import StaleElementReferenceException
+
+from stub.prepare_loans import delete_imposter
 
 
 def drag_scroll_by_css(browser, offsetx, offsety):
@@ -27,8 +28,14 @@ def wait_for_elem(browser, script, timeout=20):
 
 
 def wait_element_clickable(browser, css):
-    WebDriverWait(browser, 30).until(
-        EC.element_to_be_clickable((By.CSS_SELECTOR, css)))
+    try:
+        WebDriverWait(browser, 30).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, css)))
+    except StaleElementReferenceException:
+        # Element may be recreated on page init
+        WebDriverWait(browser, 30).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, css)))
+
 
 
 def drag_scroll_by_css_with_times(browser, offsety, times):
@@ -203,11 +210,7 @@ def expand_collapse_row_by_index(browser, index):
 
 
 def stop_mb():
-    os.system("mb stop")
-
-
-def start_mb():
-    os.system('mb --allowCORS --allowInjection --loglevel error &')
+    delete_imposter()
 
 
 def command_ctrl_with_click(browser, col_name, command_or_ctrl):
