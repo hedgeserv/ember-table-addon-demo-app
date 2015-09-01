@@ -2,18 +2,16 @@ import time
 
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import StaleElementReferenceException
-
 from stub.prepare_loans import delete_imposter
 
 
 def drag_scroll_by_css(browser, offsetx, offsety):
-    scroll = browser.find_element_by_css_selector("div.antiscroll-scrollbar.antiscroll-scrollbar-vertical")
+    scroll = wait_element_clickable(browser)
     action = ActionChains(browser)
-    action.click_and_hold(scroll).move_by_offset(int(offsetx), int(offsety)).release().perform()
+    try:
+        action.click_and_hold(scroll[0]).move_by_offset(int(offsetx), int(offsety)).release().perform()
+    except AssertionError:
+        drag_scroll_by_css(browser, offsetx, offsety)
 
 
 def wait_for_elem(browser, script, timeout=20):
@@ -27,30 +25,27 @@ def wait_for_elem(browser, script, timeout=20):
     return elems
 
 
-def wait_element_clickable(browser, css):
-    try:
-        WebDriverWait(browser, 30).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, css)))
-    except StaleElementReferenceException:
-        # Element may be recreated on page init
-        WebDriverWait(browser, 30).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, css)))
-
+def wait_element_clickable(browser):
+    start = time.time()
+    while time.time() - start < 15:
+        find_result = browser.execute_script(
+            "return $('.ember-table-body-container.antiscroll-wrap>div:eq(1)').hasClass('antiscroll-scrollbar-vertical')")
+        if find_result:
+            return browser.execute_script("return $('.ember-table-body-container.antiscroll-wrap>div:eq(1)')")
+        time.sleep(0.5)
 
 
 def drag_scroll_by_css_with_times(browser, offsety, times):
     start = time.time()
-    css = "div.antiscroll-scrollbar.antiscroll-scrollbar-vertical"
-    wait_element_clickable(browser, css)
 
     while time.time() - start < 15:
+        wait_element_clickable(browser)
         drag_scroll_by_css(browser, 0, offsety)
-        wait_element_clickable(browser, css)
-        eles = browser.find_elements_by_css_selector(css)
+        eles = wait_element_clickable(browser)
         value = int(eles[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
         if value > int(offsety) * int(times):
             break
-        time.sleep(1)
+        time.sleep(0.5)
 
 
 def drag_scroll_by_css_with_times_after_loading(browser, offsety, times):
@@ -62,10 +57,11 @@ def drag_scroll_by_css_with_times_after_loading(browser, offsety, times):
 
 def drag_scroll_to_top(browser, offsety):
     start = time.time()
-    css = "div.antiscroll-scrollbar.antiscroll-scrollbar-vertical"
+
     while time.time() - start < 15:
+        wait_element_clickable(browser)
         drag_scroll_by_css(browser, 0, offsety)
-        eles = browser.find_elements_by_css_selector(css)
+        eles = wait_element_clickable(browser)
         value = int(eles[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
         if value == 0:
             break
@@ -74,10 +70,10 @@ def drag_scroll_to_top(browser, offsety):
 
 def drag_scroll_to_bottom(browser, offsety):
     start = time.time()
-    css = "div.antiscroll-scrollbar.antiscroll-scrollbar-vertical"
     while time.time() - start < 15:
+        wait_element_clickable(browser)
         drag_scroll_by_css(browser, 0, offsety)
-        eles = browser.find_elements_by_css_selector(css)
+        eles = wait_element_clickable(browser)
         value = int(eles[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
         if value > 242:
             break

@@ -273,8 +273,7 @@ Feature: Multi-Column Sorting
       | +         | 5         | 5  |
       | +         | 6         | 6  |
 
-#  The scenario tracks defect https://hedgeserv.leankit.com/Boards/View/200742377/237591318
-  @wip
+  @complete
   Scenario: Sort by grouper first and second level with partial loaded data
     Given Prepare the grid with no existing sorting column for "grouper":
       | groupName                                          | id |
@@ -282,9 +281,9 @@ Feature: Multi-Column Sorting
     When Click "expand" for row "1"
     And Click "expand" for row "101"
     And Click grouper "accountSection" to sort as "ASC"
-    And There should be 5 sections loaded
+    And There should be 4 sections loaded
     And Click grouper "accountSection" to sort as "unsort"
-    Then There should be 8 sections loaded
+    Then There should be 6 sections loaded
 
   @complete
   Scenario: Check the expanded status should be kept after sort grouper
@@ -359,7 +358,6 @@ Feature: Multi-Column Sorting
       |           | 11103     | 11103 |
       |           | 11104     | 11104 |
 
-#    The scenario tracks defect https://hedgeserv.leankit.com/Boards/View/200742377/237591318
 #    Given Prepare the grid with no existing sorting column for "grouper":
 #      | groupName                                          | id   |
 #      | accountSection[21]-accountType[11]-accountCode[11] | [11] |
@@ -368,14 +366,36 @@ Feature: Multi-Column Sorting
 #    And Click "expand" for row "111"
 #    And Click to sort as "ASC" for column "Id"
 #    And Click to sort as "DESC" for column "Id"
+#    Then I see grouped rows:
 #      | indicator | groupName | Id |
-#      | +         | 11        | 11 |
-#      | +         | 10        | 10 |
-#      | +         | 9         | 9  |
-#      | +         | 8         | 8  |
-#      | +         | 8         | 8  |
-#      | +         | 7         | 7  |
-#    Then There should be 6 sections loaded
+#      | +         | 21        | 21 |
+#      | +         | 20        | 20 |
+#      | +         | 19        | 19 |
+#      | +         | 18        | 18 |
+#      | +         | 18        | 18 |
+#      | +         | 17        | 17 |
+#    And There should be 6 sections loaded
+#    And The "Id" column sort indicator should be "desc"
+
+#    Given Prepare the grid with no existing sorting column for "grouper":
+#      | groupName                                          | id   |
+#      | accountSection[21]-accountType[11]-accountCode[11] | [11] |
+#    When Customer drags scroll bar by offset 150 with 2 times and wait loading section
+#    And Click "expand" for row "21"
+#    And Customer drags scroll bar by offset 150 with 2 times and wait loading section
+#    And Click "expand" for row "2111"
+#    And Drag scroll bar to "top"
+#    And Click to sort as "ASC" for column "Id"
+#    And Click to sort as "DESC" for column "Id"
+#    Then I see grouped rows:
+#      | indicator | groupName | Id |
+#      | +         | 21        | 21 |
+#      | +         | 20        | 20 |
+#      | +         | 19        | 19 |
+#      | +         | 18        | 18 |
+#      | +         | 18        | 18 |
+#      | +         | 17        | 17 |
+#    And There should be 7 sections loaded
 #    And The "Id" column sort indicator should be "desc"
 
   @complete
