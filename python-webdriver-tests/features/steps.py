@@ -367,7 +367,7 @@ def check_reorder_column(step, index, name, timeout=5):
 def check_sort_indicator(step, column_name, sort):
     with AssertContextManager(step):
         class_content = world.browser.execute_script(
-            "return $('.ember-table-header-container .ember-table-content:contains(" + column_name + ") .column-sort-indicator').attr(\'class\')")
+            "return $('.ember-table-header-container .ember-table-content:contains(" + column_name + ") + .column-sort-indicator').attr(\'class\')")
 
         options = {"none": "",
                    "asc": "sort-indicator-icon sort-indicator-icon-up",
@@ -382,7 +382,7 @@ def check_sort_indicator(step, column_name, sort):
 def check_sort_column_queue(step, col_name, queue_num):
     with AssertContextManager(step):
         queue = world.browser.execute_script(
-            "return $('.ember-table-header-container .ember-table-content:contains(" + col_name + ") .column-sort-indicator span').text().trim()")
+            "return $('.ember-table-header-container .ember-table-content:contains(" + col_name + ") + .column-sort-indicator span').text().trim()")
         assert_true(step, str(queue) == str(queue_num)) if str(queue_num) != "blank" else assert_true(step,
                                                                                                       str(queue) == "")
 
