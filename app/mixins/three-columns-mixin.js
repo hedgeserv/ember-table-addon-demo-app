@@ -1,5 +1,6 @@
 import Ember from 'ember';
-import ColumnDefinition from 'ember-table/models/column-definition';
+import AppColumnDefinition from '../models/app-column-definition';
+
 var defaultSortFn = function(prev, next){
   var prevStr = this.getCellContent(prev).toString();
   var nextStr = this.getCellContent(next).toString();
@@ -10,7 +11,7 @@ export default Ember.Mixin.create({
   columns: function() {
     var columnsMetadata = this.get('columnsMetadata');
     return columnsMetadata.map(function(c) {
-      return ColumnDefinition.create({
+      return AppColumnDefinition.create({
         width: c[2],
         headerCellName: c[1],
         contentPath: c[0],

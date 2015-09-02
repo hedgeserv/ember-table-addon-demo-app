@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import ColumnDefinition from 'ember-table/models/column-definition';
+import AppColumnDefinition from '../models/app-column-definition';
 import ColumnGroupDefinition from 'ember-table/models/column-group-definition';
 import tablesMixin from '../mixins/features';
 
@@ -11,7 +11,7 @@ export default Ember.Controller.extend(tablesMixin, {
     var idColumn, activityColumn, statusColumn,
       nameColumn, useColumn, sectorColumn;
 
-    idColumn = ColumnDefinition.create({
+    idColumn = AppColumnDefinition.create({
       width: 60,
       textAlign: 'text-align-left',
       headerCellName: 'Id',
@@ -20,7 +20,7 @@ export default Ember.Controller.extend(tablesMixin, {
       }
     });
 
-    activityColumn = ColumnDefinition.create({
+    activityColumn = AppColumnDefinition.create({
       columnWidth: 150,
       textAlign: 'text-align-left',
       headerCellName: 'Activity',
@@ -29,7 +29,7 @@ export default Ember.Controller.extend(tablesMixin, {
       }
     });
 
-    statusColumn = ColumnDefinition.create({
+    statusColumn = AppColumnDefinition.create({
       columnWidth: 100,
       headerCellName: 'Status',
       getCellContent: function (row) {
@@ -37,7 +37,7 @@ export default Ember.Controller.extend(tablesMixin, {
       }
     });
 
-    nameColumn = ColumnDefinition.create({
+    nameColumn = AppColumnDefinition.create({
       columnWidth: 100,
       headerCellName: 'Name',
       getCellContent: function (row) {
@@ -45,7 +45,7 @@ export default Ember.Controller.extend(tablesMixin, {
       }
     });
 
-    useColumn = ColumnDefinition.create({
+    useColumn = AppColumnDefinition.create({
       columnWidth: 100,
       headerCellName: 'Use',
       getCellContent: function (row) {
@@ -53,7 +53,7 @@ export default Ember.Controller.extend(tablesMixin, {
       }
     });
 
-    sectorColumn = ColumnDefinition.create({
+    sectorColumn = AppColumnDefinition.create({
       columnWidth: 260,
       headerCellName: 'Sector',
       getCellContent: function (row) {
