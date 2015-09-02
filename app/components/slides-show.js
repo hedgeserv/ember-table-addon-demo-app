@@ -94,6 +94,6 @@ export default Ember.Component.extend({
   },
 
   disableSliders: function () {
-    $('.slider-banner').destroyRevolution();
+    Ember.$('.slider-banner').destroyRevolution();
   }
 });
