@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import ColumnDefinition from 'ember-table/models/column-definition';
+import AppColumnDefinition from '../models/app-column-definition';
 import tablesMixin from '../mixins/features';
 
 export default Ember.Controller.extend(tablesMixin, {
@@ -8,7 +8,7 @@ export default Ember.Controller.extend(tablesMixin, {
 
   columns: function () {
     var idColumn, activityColumn, statusColumn;
-    idColumn = ColumnDefinition.create({
+    idColumn = AppColumnDefinition.create({
       width: 60,
       textAlign: 'text-align-left',
       headerCellName: 'Id',
@@ -17,7 +17,7 @@ export default Ember.Controller.extend(tablesMixin, {
       }
     });
 
-    activityColumn = ColumnDefinition.create({
+    activityColumn = AppColumnDefinition.create({
       columnWidth: 150,
       textAlign: 'text-align-left',
       headerCellName: 'Activity',
@@ -26,7 +26,7 @@ export default Ember.Controller.extend(tablesMixin, {
       }
     });
 
-    statusColumn = ColumnDefinition.create({
+    statusColumn = AppColumnDefinition.create({
       columnWidth: 100,
       headerCellName: 'status',
       getCellContent: function (row) {

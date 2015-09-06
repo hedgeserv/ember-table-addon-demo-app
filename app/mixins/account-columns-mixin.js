@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import ColumnDefinition from 'ember-table/models/column-definition';
+import AppColumnDefinition from '../models/app-column-definition';
 
 export default Ember.Mixin.create({
   columns: function () {
@@ -16,7 +16,7 @@ export default Ember.Mixin.create({
       ["Net Ending (Base)", "netEnding"]
     ];
     return columnTitleAndNames.map(function (titleAndName) {
-      return ColumnDefinition.create({
+      return AppColumnDefinition.create({
         headerCellName: titleAndName[0],
         contentPath: titleAndName[1],
         dataType: titleAndName[2],

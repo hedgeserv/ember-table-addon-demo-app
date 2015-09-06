@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import ColumnDefinition from 'ember-table/models/column-definition';
+import AppColumnDefinition from '../models/app-column-definition';
 import TableFeatures from '../mixins/features';
 
 export default Ember.Controller.extend(TableFeatures, {
@@ -20,7 +20,7 @@ export default Ember.Controller.extend(TableFeatures, {
       ["Net Ending (Base)", "netEnding"]
     ];
     return columnTitleAndNames.map(function (titleAndName) {
-      return ColumnDefinition.create({
+      return AppColumnDefinition.create({
         headerCellName: titleAndName[0],
         getCellContent: function (row) {
           return row.get(titleAndName[1]);
