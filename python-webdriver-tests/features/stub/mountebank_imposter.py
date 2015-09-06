@@ -21,8 +21,8 @@ class Response:
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",
                     "_hidden": {
-                      "dirName": path,
-                      "sortNameMap": {}
+                        "dirName": path,
+                        "sortNameMap": {}
                     }
                 },
 
