@@ -94,9 +94,9 @@ You will need to install required Python package and download chrome driver
 * TBD: verify compatibility with Jenkins
 * TBD: integrate python webdriver tests
 
-### Deploying
+### Deployment
 
-TBD.
+* `ember build --environment production`
 
 ## Further Reading / Useful Links
 
