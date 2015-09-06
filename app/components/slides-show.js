@@ -68,7 +68,7 @@ export default Ember.Component.extend({
           }
         },
         {
-          selector: '.slider-banner-2',
+          selector: '.slider-banner-3',
           options: {
             navigationStyle: "preview5",
             parallax: "mouse",
@@ -86,5 +86,14 @@ export default Ember.Component.extend({
           .revolution(options);
       });
     }
+
+  },
+
+  willDestroyElement: function() {
+    this.disableSliders();
+  },
+
+  disableSliders: function () {
+    Ember.$('.slider-banner').destroyRevolution();
   }
 });
