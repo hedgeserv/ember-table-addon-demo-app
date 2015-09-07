@@ -23,7 +23,7 @@ module.exports = function(environment) {
     'default-src': "'none'",
     'script-src': "'self' https://www.youtube.com https://s.ytimg.com",
     'font-src': "'self'",
-    'connect-src': "'self' http://localhost:5555 http://localhost:2525",
+    'connect-src': "'self' http://localhost:5555",
     'img-src': "'self'",
     'style-src': "'self' 'unsafe-inline'",
     'media-src': "'self'",
@@ -42,7 +42,6 @@ module.exports = function(environment) {
 
   if (environment === 'test' || environment === 'ci') {
     ENV.loansServerHost = "http://localhost:8888";
-    ENV.mountebankServerHost = "http://localhost:2525";
     ENV.contentSecurityPolicy['connect-src'] += " http://localhost:8888"
   }
 
