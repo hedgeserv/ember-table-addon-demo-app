@@ -33,18 +33,22 @@ MBStub.prototype.setBody = function (body) {
     "is": {
       "headers": {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": "*",
+        "_hidden": {
+          dirName: __dirname,
+          sortNameMap: {
+            accountSection: 'GL Account Section',
+            accountType: 'GL Account Type',
+            accountCode: 'GL Account Code'
+          }
+        }
       },
       "body": body
     },
     "_behaviors": {
-      "decorate": util.format(script, __dirname, "{\
-        accountSection: 'GL Account Section',\
-        accountType: 'GL Account Type',\
-        accountCode: 'GL Account Code'\
-      }")
+      "decorate": script
     }
   };
-}
+};
 
 module.exports = MBStub;

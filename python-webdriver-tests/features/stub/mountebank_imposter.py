@@ -14,12 +14,16 @@ class Response:
 
     def to_mountebank(self):
         path = os.getcwd() + "/mountebank-server"
-        injection = open(path + "/sort-behaviors.js").read() % (path, '{}')
+        injection = open(path + "/sort-behaviors.js").read()
         return {
             "is": {
                 "headers": {
                     "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*"
+                    "Access-Control-Allow-Origin": "*",
+                    "_hidden": {
+                        "dirName": path,
+                        "sortNameMap": {}
+                    }
                 },
 
                 "body": json.dumps({

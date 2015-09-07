@@ -6,7 +6,7 @@ var SortConditionProvider = require('./sort-condition-provider');
 var totalCount = 200;
 var pageSize = 50;
 var loans = helper.loadAllLoans().slice(0, 1000);
-var url = '/loans'
+var url = '/loans';
 
 var stub = new MBStub({
   "path": url
@@ -19,6 +19,6 @@ stub.setBody({
     "date": new Date()
   },
   "loans": loans
-})
+});
 
-module.exports = stub
+module.exports = stub;
