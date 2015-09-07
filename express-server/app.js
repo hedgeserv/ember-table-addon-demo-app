@@ -20,6 +20,15 @@ app.get('/loans', function(req, res) {
   res.send(response.body);
 });
 
+var groupedStubs = require('../mountebank-server/stubs-for-grouped-data');
+groupedStubs.forEach(function(stub) {
+  app.get(stub.predicates[0]['and'][0]['deepEquals']['path'], function (req, res) {
+    var response = decorateResponse(stub, req);
+    res.set(response.headers);
+    res.send(response.body);
+  });
+});
+
 var server = app.listen(5555, function() {
 
 });
