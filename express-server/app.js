@@ -14,8 +14,13 @@ function decorateResponse(loadStub, req) {
 }
 
 app.get('/loans', function(req, res) {
-  var loadStub = require('../mountebank-server/stubs-for-lazy-load');
-  var response = decorateResponse(loadStub, req);
+  var stub;
+  if (req.query.group) {
+    stub = require('../mountebank-server/stub-for-grouping-column');
+  } else {
+    stub = require('../mountebank-server/stubs-for-lazy-load');
+  }
+  var response = decorateResponse(stub, req);
   res.set(response.headers);
   res.send(response.body);
 });
