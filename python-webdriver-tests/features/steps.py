@@ -150,16 +150,16 @@ def wait_page_load(step):
 
 
 @step('I want to drag element by class "(.*?)" and the (\d+) column to "(.*?)" with (-?\d+)$')
-def drag_element_offset(step, class_name, index, right_or_left, offsetx):
+def drag_element_offset(step, class_name, index, right_or_left, offset_x):
     with AssertContextManager(step):
         original_width = bo.get_column_width_by_class_name(world.browser, index)
-        drag_element_by_offset_class_name(world.browser, class_name, index, right_or_left, offsetx)
+        drag_element_by_offset_class_name(world.browser, class_name, index, right_or_left, offset_x)
         changed_width = bo.get_column_width_by_class_name(world.browser, index)
 
         if str(right_or_left) == "left":
-            assert_true(step, (int(changed_width) - int(original_width)) == (-int(offsetx) - int(1)))
+            assert_true(step, (int(changed_width) - int(original_width)) == (-int(offset_x) - int(1)))
         else:
-            assert_true(step, (int(changed_width) - int(original_width)) == (int(offsetx) - int(1)))
+            assert_true(step, (int(changed_width) - int(original_width)) == (int(offset_x) - int(1)))
 
 
 @step('I want to sort column with index (\d+) by css "(.*?)"')
@@ -204,14 +204,14 @@ def get_loaded_section(step, num, timeout=3):
 
 @step(
     'Scroll bar by offset (\d+) with (\d+) times to load next chunks in total (\d+) and drag scroll bar to top without rerender')
-def check_next_chunk_loaded(step, offsety, times, num):
+def check_next_chunk_loaded(step, offset_y, times, num):
     get_url(world.browser, "http://localhost:4200/lazy-loaded-loans?totalCount=" + str(num))
 
-    bo.drag_scroll_by_css_with_times(world.browser, offsety, times)
-    assert_equal(len(get_mb_request()), int(times) + 1)
+    bo.drag_scroll_by_css_with_times(world.browser, offset_y, times)
+    assert len(get_mb_request()) == int(times) + 1
 
-    bo.drag_scroll_to_top(world.browser, -int(offsety))
-    assert_equal(len(get_mb_request()), int(times) + 1)
+    bo.drag_scroll_to_top(world.browser, -int(offset_y))
+    assert len(get_mb_request()) == int(times) + 1
 
 
 @step('The page should style for entire group, inner column, first column and last column')
@@ -255,17 +255,17 @@ def check_sort_column(step, record_index, record_content):
 @step('Drag scroll bar to "(.*?)"')
 def drag_scroll_bar(step, top_or_bottom):
     with AssertContextManager(step):
-        offsety = 60
+        offset_y = 60
         if top_or_bottom == "bottom":
-            bo.drag_scroll_to_bottom(world.browser, offsety)
+            bo.drag_scroll_to_bottom(world.browser, offset_y)
         else:
-            bo.drag_scroll_to_top(world.browser, -int(offsety))
+            bo.drag_scroll_to_top(world.browser, -int(offset_y))
 
 
 @step('Drag horizontal scroll bar with (\d+) pixel$')
-def drag_horizontal_scroll_bar(step, offsetx):
+def drag_horizontal_scroll_bar(step, offset_x):
     with AssertContextManager(step):
-        bo.drag_horizontal_offset(world.browser, offsetx)
+        bo.drag_horizontal_offset(world.browser, offset_x)
 
 
 @step('The column header block should has "(.*?)" and same as body scroll left$')
@@ -299,21 +299,21 @@ def get_column_cursor(step, column_name):
 
 
 @step('The user drags the "(.*?)" on column to "(.*?)" with (\d+) pixel')
-def drag_column_with_pixel(step, column_name, left_or_right, offsetx):
+def drag_column_with_pixel(step, column_name, left_or_right, offset_x):
     with AssertContextManager(step):
         if str(column_name) == "GroupingColumn":
-            bo.resize_column_by_index(world.browser, 0, left_or_right, offsetx)
+            bo.resize_column_by_index(world.browser, 0, left_or_right, offset_x)
         else:
-            bo.resize_column(world.browser, column_name, left_or_right, offsetx)
+            bo.resize_column(world.browser, column_name, left_or_right, offset_x)
 
 
 @step('Reorder an inner column "(.*?)" header to "(.*?)" with (\d+) pixel')
-def reorder_column_with_pixel(step, column_name, left_or_right, offsetx):
+def reorder_column_with_pixel(step, column_name, left_or_right, offset_x):
     with AssertContextManager(step):
         if str(column_name) == "GroupingColumn":
-            bo.reorder_column_by_index(world.browser, 0, left_or_right, offsetx)
+            bo.reorder_column_by_index(world.browser, 0, left_or_right, offset_x)
         else:
-            bo.reorder_column(world.browser, column_name, left_or_right, offsetx)
+            bo.reorder_column(world.browser, column_name, left_or_right, offset_x)
 
 
 @step('The reorder indicator line should be (\d+) from left$')
@@ -327,16 +327,16 @@ def get_reorder_indicator(step, pixel):
 
 
 @step('Drag and hold column "(.*?)" to "(.*?)" with (\d+) pixel$')
-def drag_hold_column(step, column_name, left_or_right, offsetx):
+def drag_hold_column(step, column_name, left_or_right, offset_x):
     with AssertContextManager(step):
         chains = ActionChains(world.browser)
         wait_for_elem(world.browser, "return $('.ember-table-content-container')")
         element = world.browser.execute_script(
             "return $('.ember-table-content-container .ember-table-content:contains(" + column_name + ")')")
         if left_or_right == "left":
-            chains.click_and_hold(element[0]).move_by_offset(-int(offsetx), 0).perform()
+            chains.click_and_hold(element[0]).move_by_offset(-int(offset_x), 0).perform()
         else:
-            chains.click_and_hold(element[0]).move_by_offset(int(offsetx), 0).perform()
+            chains.click_and_hold(element[0]).move_by_offset(int(offset_x), 0).perform()
 
 
 @step('The "(.*?)" column width should be (\d+) pixel')
