@@ -13,7 +13,7 @@ class Response:
         self.meta = meta
 
     def to_mountebank(self):
-        path = os.getcwd() + "/mountebank-server"
+        path = os.getcwd() + "/lib/ember-cli-stub-server/lib/stubs"
         injection = open(path + "/sort-behaviors.js").read()
         return {
             "is": {

@@ -208,10 +208,10 @@ def check_next_chunk_loaded(step, offsety, times, num):
     get_url(world.browser, "http://localhost:4200/lazy-loaded-loans?totalCount=" + str(num))
 
     bo.drag_scroll_by_css_with_times(world.browser, offsety, times)
-    assert len(get_mb_request()) == int(times) + 1
+    assert_equal(len(get_mb_request()), int(times) + 1)
 
     bo.drag_scroll_to_top(world.browser, -int(offsety))
-    assert len(get_mb_request()) == int(times) + 1
+    assert_equal(len(get_mb_request()), int(times) + 1)
 
 
 @step('The page should style for entire group, inner column, first column and last column')
