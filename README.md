@@ -80,7 +80,7 @@ You will need to install required Python package and download chrome driver
 * `npm install -g ember-cli@1.13.8`
 * `rm -rf node_modules bower_components dist tmp`
 * `npm install`
-* `bower isntall`
+* `bower install`
 * re-link ember-table `npm link ember-table`
 
 * please refer to: [ember-cli-upgrading](http://www.ember-cli.com/user-guide/#upgrading)
@@ -94,9 +94,9 @@ You will need to install required Python package and download chrome driver
 * TBD: verify compatibility with Jenkins
 * TBD: integrate python webdriver tests
 
-### Deploying
+### Deployment
 
-TBD.
+* `ember build --environment production`
 
 ## Further Reading / Useful Links
 
