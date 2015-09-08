@@ -263,7 +263,7 @@ Feature: Indicators for expanding and collapsing grouped rows
       | accountSection[30]-accountType[15]-accountCode[4] |    | s                   |
     And Presenting "grouping column present partial loaded children"
     And Stop mountebank
-    When Customer drags scroll bar by offset 40 with 1 times
+    When Customer drags scroll bar by offset 66 with 1 times
     Then The default loading indicator should display on 1 items
 
   @complete

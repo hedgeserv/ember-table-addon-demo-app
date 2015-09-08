@@ -5,13 +5,13 @@ from selenium.webdriver import ActionChains
 from stub.prepare_loans import delete_imposter
 
 
-def drag_scroll_by_css(browser, offsetx, offsety):
-    scroll = wait_element_clickable(browser)
+def drag_scroll_by_css(browser, offset_x, offset_y):
+    scroll, height = wait_element_present(browser)
     action = ActionChains(browser)
     try:
-        action.click_and_hold(scroll[0]).move_by_offset(int(offsetx), int(offsety)).release().perform()
+        action.click_and_hold(scroll[0]).move_by_offset(int(offset_x), int(offset_y) + 1).release().perform()
     except AssertionError:
-        drag_scroll_by_css(browser, offsetx, offsety)
+        drag_scroll_by_css(browser, offset_x, offset_y)
 
 
 def wait_for_elem(browser, script, timeout=20):
@@ -25,56 +25,55 @@ def wait_for_elem(browser, script, timeout=20):
     return elems
 
 
-def wait_element_clickable(browser):
+def wait_element_present(browser):
     start = time.time()
     while time.time() - start < 15:
-        find_result = browser.execute_script(
-            "return $('.ember-table-body-container.antiscroll-wrap>div:eq(1)').hasClass('antiscroll-scrollbar-vertical')")
-        if find_result:
-            return browser.execute_script("return $('.ember-table-body-container.antiscroll-wrap>div:eq(1)')")
+        elems = browser.execute_script("return $('.ember-table-body-container.antiscroll-wrap>div:eq(1)')")
+        if elems[0] and 'antiscroll-scrollbar-vertical' in str(browser.execute_script(
+                "return $('.ember-table-body-container.antiscroll-wrap>div:eq(1)').attr('class')")):
+            return elems, browser.execute_script(
+                "return $('.ember-table-body-container.antiscroll-wrap>div:eq(1)').css('top')")
         time.sleep(0.5)
 
 
-def drag_scroll_by_css_with_times(browser, offsety, times):
+def drag_scroll_by_css_with_times(browser, offset_y, times):
     start = time.time()
 
     while time.time() - start < 15:
-        wait_element_clickable(browser)
-        drag_scroll_by_css(browser, 0, offsety)
-        eles = wait_element_clickable(browser)
-        value = int(eles[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
-        if value > int(offsety) * int(times):
+        drag_scroll_by_css(browser, 0, offset_y)
+        elems, top = wait_element_present(browser)
+        if int(str(top).split('.')[0]) >= int(offset_y) * int(times):
             break
         time.sleep(0.5)
 
 
-def drag_scroll_by_css_with_times_after_loading(browser, offsety, times):
+def drag_scroll_by_css_with_times_after_loading(browser, offset_y, times):
     while not times == 0:
         time.sleep(1)
-        drag_scroll_by_css(browser, 0, offsety)
+        drag_scroll_by_css(browser, 0, offset_y)
         times = int(times) - 1
 
 
-def drag_scroll_to_top(browser, offsety):
+def drag_scroll_to_top(browser, offset_y):
     start = time.time()
 
     while time.time() - start < 15:
-        wait_element_clickable(browser)
-        drag_scroll_by_css(browser, 0, offsety)
-        eles = wait_element_clickable(browser)
-        value = int(eles[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
+        wait_element_present(browser)
+        drag_scroll_by_css(browser, 0, offset_y)
+        elems, top = wait_element_present(browser)
+        value = int(elems[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
         if value == 0:
             break
         time.sleep(0.5)
 
 
-def drag_scroll_to_bottom(browser, offsety):
+def drag_scroll_to_bottom(browser, offset_y):
     start = time.time()
     while time.time() - start < 15:
-        wait_element_clickable(browser)
-        drag_scroll_by_css(browser, 0, offsety)
-        eles = wait_element_clickable(browser)
-        value = int(eles[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
+        wait_element_present(browser)
+        drag_scroll_by_css(browser, 0, offset_y)
+        elems, top = wait_element_present(browser)
+        value = int(elems[0].get_attribute("style").split("top: ")[1].split("px")[0].split(".")[0])
         if value > 242:
             break
         time.sleep(0.5)
@@ -98,12 +97,12 @@ def get_record_content(browser, index):
     return result
 
 
-def drag_horizontal_offset(browser, offsetx):
+def drag_horizontal_offset(browser, offset_x):
     horizontal_css = ".antiscroll-scrollbar.antiscroll-scrollbar-horizontal"
     elements = browser.find_elements_by_css_selector(horizontal_css)
 
     action = ActionChains(browser)
-    action.click_and_hold(elements[0]).move_by_offset(int(offsetx), 0).release().perform()
+    action.click_and_hold(elements[0]).move_by_offset(int(offset_x), 0).release().perform()
 
 
 def get_head_block_scroll_left(browser):
@@ -114,47 +113,47 @@ def get_body_scroll_left(browser):
     return browser.execute_script("return $('.lazy-list-container').scrollLeft()")
 
 
-def resize_column(browser, column_name, left_or_right, offsetx):
+def resize_column(browser, column_name, left_or_right, offset_x):
     action_chains = ActionChains(browser)
     element = browser.execute_script(
         "return $('.ember-table-header-container .ember-table-content:contains(" + column_name + ")').parent().parent().children()[1]")
     if left_or_right == "left":
-        action_chains.drag_and_drop_by_offset(element, -int(offsetx), 0).release().perform()
+        action_chains.drag_and_drop_by_offset(element, -int(offset_x), 0).release().perform()
     else:
-        action_chains.drag_and_drop_by_offset(element, int(offsetx), 0).release().perform()
+        action_chains.drag_and_drop_by_offset(element, int(offset_x), 0).release().perform()
 
 
-def resize_column_by_index(browser, index, left_or_right, offsetx):
+def resize_column_by_index(browser, index, left_or_right, offset_x):
     action_chains = ActionChains(browser)
     element = browser.execute_script(
         "return $('.ember-table-header-container .ember-table-content:eq(" + str(
             index) + ")').parent().parent().children()[1]")
     if left_or_right == "left":
-        action_chains.drag_and_drop_by_offset(element, -int(offsetx), 0).release().perform()
+        action_chains.drag_and_drop_by_offset(element, -int(offset_x), 0).release().perform()
     else:
-        action_chains.drag_and_drop_by_offset(element, int(offsetx), 0).release().perform()
+        action_chains.drag_and_drop_by_offset(element, int(offset_x), 0).release().perform()
 
 
-def reorder_column(browser, col_name, left_or_right, offsetx):
+def reorder_column(browser, col_name, left_or_right, offset_x):
     chains = ActionChains(browser)
     wait_for_elem(browser, "return $('.ember-table-content-container')")
     element = browser.execute_script(
         "return $('.ember-table-content-container .ember-table-content:contains(" + col_name + ")')")
     if left_or_right == "left":
-        chains.click_and_hold(element[0]).move_by_offset(-int(offsetx), 0).release().perform()
+        chains.click_and_hold(element[0]).move_by_offset(-int(offset_x), 0).release().perform()
     else:
-        chains.click_and_hold(element[0]).move_by_offset(int(offsetx), 0).release().perform()
+        chains.click_and_hold(element[0]).move_by_offset(int(offset_x), 0).release().perform()
 
 
-def reorder_column_by_index(browser, index, left_or_right, offsetx):
+def reorder_column_by_index(browser, index, left_or_right, offset_x):
     chains = ActionChains(browser)
     wait_for_elem(browser, "return $('.ember-table-content-container')")
     element = browser.execute_script(
         "return $('.ember-table-content-container .ember-table-content:eq(" + str(index) + ")')")
     if left_or_right == "left":
-        chains.click_and_hold(element[0]).move_by_offset(-int(offsetx), 0).release().perform()
+        chains.click_and_hold(element[0]).move_by_offset(-int(offset_x), 0).release().perform()
     else:
-        chains.click_and_hold(element[0]).move_by_offset(int(offsetx), 0).release().perform()
+        chains.click_and_hold(element[0]).move_by_offset(int(offset_x), 0).release().perform()
 
 
 def get_col_width(browser, col_name):
@@ -173,7 +172,7 @@ def get_col_header_height(browser, col_name):
 
 
 def get_col_name_by_index(browser, index, timeout=5):
-    list = []
+    elems = []
 
     start = time.time()
     while time.time() - start < timeout:
@@ -185,8 +184,8 @@ def get_col_name_by_index(browser, index, timeout=5):
     for i in range(0, len(elements)):
         column = browser.execute_script(
             "return $('.ember-table-content-container .ember-table-content:eq(" + str(i) + ")').text()")
-        list.append(str(column).strip())
-    return list[int(index)]
+        elems.append(str(column).strip())
+    return elems[int(index)]
 
 
 def sort_column(browser, col_name):
