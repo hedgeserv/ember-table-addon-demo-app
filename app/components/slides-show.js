@@ -53,7 +53,8 @@ export default Ember.Component.extend({
         hideSliderAtLimit: 0,
         hideCaptionAtLimit: 0,
         hideAllCaptionAtLimit: 0,
-        startWithSlide: 0
+        startWithSlide: 0,
+        hideTimerBar: 'on'
       });
 
       var sliders = [
