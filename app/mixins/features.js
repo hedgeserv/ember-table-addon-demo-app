@@ -2,56 +2,17 @@ import Ember from 'ember';
 
 export default Ember.Mixin.create({
   _tables: [{
-    name: "Sort By Groupers",
+    name: "Tree Data",
     description: "sort group data by groupers and columns",
-    link: "sortByGrouper"
+    link: "treeData"
   },{
-    name: "Lazy Loaded Loans",
+    name: "Array Data",
     description: "this is a faster experience for the end user because of lazy loading.",
-    link: "lazyLoadedLoans"
+    link: "arrayData"
   }, {
-    name: "Column Groups",
+    name: "Style Customization",
     description: '',
-    link: "groups"
-  }, {
-    name: "Column Groups Reorder",
-    link: "groupsReorder",
-    description: ""
-  }, {
-    name: "Column Groups Sort inner column",
-    description: "",
-    link: "groupsSort"
-  }, {
-    name: "Grouping Column",
-    description: "",
-    link: "groupingColumn"
-  }, {
-    name: "Grouping Column And Fixed Columns",
-    description: "",
-    link: "groupingColumnAndFixed"
-  }, {
-    name: "Custom Group Indicator",
-    description: "",
-    link: "customGroupIndicator"
-  }, {
-    name: "Chunked Grouping Rows",
-    description: "",
-    link: "chunkedGroupingRows"
-  }, {
-    name: "Rows with loading indicator",
-    description: "",
-    link: "groupedRowLoadingIndicator"
-  }, {
-    name: "Grand total Row",
-    description: "",
-    link: "grandTotalRow"
-  }, {
-    name: "Grouped rows Error handling",
-    link: "groupedRowsErrorHandling"
-  }, {
-    name: "Fully Loaded Loans",
-    description: "this is a vanilla usage of Ember Table that is slow to load because of a large dataset.i.e.expect this page to load slowly ",
-    link: 'fullyLoadedLoans'
+    link: "styleCustomization"
   }],
 
   tables: Ember.computed.filter('_tables', function (table, index) {

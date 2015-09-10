@@ -19,4 +19,7 @@ export default Router.map(function() {
   this.route('grandTotalRow', {path: 'grand-total-row'});
   this.route('groupedRowsErrorHandling', {path: 'grouped-rows-error-handling'});
   this.route('sortByGrouper', {path: 'sort-by-grouper'});
+  this.route('arrayData', {path: 'array-data'});
+  this.route('treeData', {path: 'tree-data'});
+  this.route('styleCustomization', {path: 'style-customization'});
 });

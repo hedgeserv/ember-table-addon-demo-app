@@ -6,13 +6,7 @@
                 <div class="sidebar">
                     <div class="block clearfix">
                         <nav>
-                            <ul class="nav nav-pills nav-stacked">
-                            	{{#each tables as |table| }}
-                    				{{#link-to table.link tagName='li' class=table.labelClass href=false}}
-                    					{{#link-to table.link }}{{table.name}}{{/link-to}}
-                    				{{/link-to}}
-                            	{{/each}}
-                            </ul>
+                          {{feature-pages-nav tables=tables }}
                         </nav>
                     </div>
                 </div>
@@ -26,7 +20,7 @@
                 <h1 class="page-title">{{title}}</h1>
                 <hr>
                 <!-- page-title end -->
-               {{yield}}
+              {{yield}}
             </div>
             <!-- main end -->
         </div>
