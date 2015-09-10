@@ -1,0 +1,20 @@
+<div class="panel-group" id="accordion">
+    {{#each features as |feature index|}}
+    <div class="panel panel-default">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{index}}" aria-expanded="false" class="collapsed">
+                        <i class="fa {{feature.icon}}"></i>{{feature.name}}
+                    </a>
+                </h4>
+            </div>
+            <div id="collapse{{index}}" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                <div class="panel-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>

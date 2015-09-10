@@ -5,15 +5,14 @@
                 <div class="sidebar">
                     <div class="block clearfix">
                         <nav>
-                          {{features-nav
-                          tables=tables
-                          }}
+                          {{feature-pages-nav tables=tables }}
                         </nav>
                     </div>
                 </div>
             </aside>
             <div class="main col-md-9">
                 <h1 class="page-title">{{title}}</h1>
+                {{features-list features=features}}
                 <hr>
                {{yield}}
             </div>

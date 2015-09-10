@@ -6,7 +6,21 @@ import tablesMixin from '../mixins/features';
 
 export default Ember.Controller.extend(ThreeColumnsMixin, SortQueryMixin, tablesMixin, {
 
-  title: "Lazy Loaded Loans",
+  title: "Array Data",
+  features: [
+    {
+      name: 'Lazy loading',
+      icon: 'fa-flash'
+    },
+    {
+      name: 'Column group',
+      icon: 'fa-arrows-v'
+    },
+    {
+      name: 'Sort',
+      icon: 'fa-sort'
+    }
+  ],
 
   queryParams:['totalCount'],
   sortName: null,
