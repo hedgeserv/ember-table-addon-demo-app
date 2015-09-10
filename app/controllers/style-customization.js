@@ -1,61 +1,33 @@
 import Ember from 'ember';
-import AppColumnDefinition from '../models/app-column-definition';
-import ColumnGroupDefinition from 'ember-table/models/column-group-definition';
 import TableFeatures from '../mixins/features';
+import TreeDataGridMixin from '../mixins/tree-data-grid';
 
-export default Ember.Controller.extend(TableFeatures, {
+export default Ember.Controller.extend(TableFeatures, TreeDataGridMixin, {
   tableContent: [],
   title: "Style Customization",
   features: [
     {
-      name: 'Lazy Loading',
+      name: 'Column Group Headers',
       icon: 'fa-flash'
     },
     {
-      name: 'Column Group',
+      name: 'Sorting Indicator',
       icon: 'fa-arrows-v'
     },
     {
-      name: 'Sort',
+      name: 'Group Row Indicator',
       icon: 'fa-sort'
     }
   ],
-  groupingMetadata: Ember.computed.oneWay('model.groupingMetadata'),
 
-  columns: function () {
-    var idColumn = this._makeColumn('Id', 'id');
-    var groupColumns = ['Beginning', 'Activity', 'Ending'].map(function(groupTitle) {
-      var titleLowerCase = groupTitle.toLowerCase();
-      return ColumnGroupDefinition.create({
-        cellStyle: "text-red",
-        innerColumnStyle: "text-blue",
-        firstColumnStyle: "bg-gray",
-        lastColumnStyle: "bg-lightgray",
-        groupStyle: "text-center",
-        headerCellName: groupTitle,
-        innerColumns: [
-          this._makeColumn(groupTitle + ' DR', titleLowerCase + 'Dr'),
-          this._makeColumn(groupTitle + ' CR', titleLowerCase + 'Cr'),
-          this._makeColumn('Net ' + groupTitle, 'net' + groupTitle)
-        ]
-      })
-    }.bind(this));
-    return [idColumn].concat(groupColumns);
-  }.property(),
-
-  _makeColumn: function (headerCellName, contentPath) {
-    return AppColumnDefinition.create({
-      headerCellName: headerCellName,
-      contentPath: contentPath
-    });
-  },
-
-  actions: {
-    sortGrouper: function (grouper) {
-      var states = ['asc', 'desc', undefined];
-      var oldState = Ember.get(grouper, 'sortDirection');
-      var index = states.indexOf(oldState) + 1;
-      Ember.set(grouper, 'sortDirection', states[index % 3]);
-    }
+  getColumnGroupStyles: function () {
+    return {
+      cellStyle: "text-red",
+      innerColumnStyle: "text-blue",
+      firstColumnStyle: "bg-gray",
+      lastColumnStyle: "bg-lightgray",
+      groupStyle: "text-center"
+    };
   }
+
 });

@@ -13,45 +13,6 @@ export default Ember.Mixin.create({
     name: "Style Customization",
     description: '',
     link: "styleCustomization"
-  }, {
-    name: "Column Groups Reorder",
-    link: "groupsReorder",
-    description: ""
-  }, {
-    name: "Column Groups Sort inner column",
-    description: "",
-    link: "groupsSort"
-  }, {
-    name: "Grouping Column",
-    description: "",
-    link: "groupingColumn"
-  }, {
-    name: "Grouping Column And Fixed Columns",
-    description: "",
-    link: "groupingColumnAndFixed"
-  }, {
-    name: "Custom Group Indicator",
-    description: "",
-    link: "customGroupIndicator"
-  }, {
-    name: "Chunked Grouping Rows",
-    description: "",
-    link: "chunkedGroupingRows"
-  }, {
-    name: "Rows with loading indicator",
-    description: "",
-    link: "groupedRowLoadingIndicator"
-  }, {
-    name: "Grand total Row",
-    description: "",
-    link: "grandTotalRow"
-  }, {
-    name: "Grouped rows Error handling",
-    link: "groupedRowsErrorHandling"
-  }, {
-    name: "Fully Loaded Loans",
-    description: "this is a vanilla usage of Ember Table that is slow to load because of a large dataset.i.e.expect this page to load slowly ",
-    link: 'fullyLoadedLoans'
   }],
 
   tables: Ember.computed.filter('_tables', function (table, index) {
