@@ -6,9 +6,9 @@ export default Ember.Mixin.create({
     description: "sort group data by groupers and columns",
     link: "sortByGrouper"
   },{
-    name: "Lazy Loaded Loans",
+    name: "Array Data",
     description: "this is a faster experience for the end user because of lazy loading.",
-    link: "lazyLoadedLoans"
+    link: "arrayData"
   }, {
     name: "Column Groups",
     description: '',
