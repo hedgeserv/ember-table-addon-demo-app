@@ -1,0 +1,21 @@
+<div class="btn-group" role="group" aria-label="...">
+  {{#each grouper in groupingMetadata}}
+      <button
+        type="button"
+        class="btn btn-sm btn-default sort-grouper"
+        {{action 'sortGrouper' grouper}}>
+        {{grouper.id}} - {{grouper.sortDirection}}
+      </button>
+  {{/each}}
+</div>
+
+<div class="height-13-rows">
+  {{ember-table
+  hasFooter=false
+  enableContentSelection=true
+  content=tableContent
+  columns=columns
+  sortAction='sortAction'
+  groupMeta=model
+  }}
+</div>
