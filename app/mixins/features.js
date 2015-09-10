@@ -10,9 +10,9 @@ export default Ember.Mixin.create({
     description: "this is a faster experience for the end user because of lazy loading.",
     link: "arrayData"
   }, {
-    name: "Column Groups",
+    name: "Style Customization",
     description: '',
-    link: "groups"
+    link: "styleCustomization"
   }, {
     name: "Column Groups Reorder",
     link: "groupsReorder",
