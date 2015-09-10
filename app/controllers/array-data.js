@@ -1,10 +1,11 @@
 import Ember from 'ember';
 import LazyArray from 'ember-table/models/lazy-array';
-import ThreeColumnsMixin from '../mixins/three-columns-mixin';
 import SortQueryMixin from '../mixins/sort-query-mixin';
 import tablesMixin from '../mixins/features';
+import AppColumnDefinition from '../models/app-column-definition';
+import ColumnGroupDefinition from 'ember-table/models/column-group-definition';
 
-export default Ember.Controller.extend(ThreeColumnsMixin, SortQueryMixin, tablesMixin, {
+export default Ember.Controller.extend(SortQueryMixin, tablesMixin, {
 
   title: "Array Data",
   features: [
@@ -22,7 +23,6 @@ export default Ember.Controller.extend(ThreeColumnsMixin, SortQueryMixin, tables
     }
   ],
 
-  queryParams:['totalCount'],
   sortName: null,
   sortDirect: null,
 
@@ -42,22 +42,75 @@ export default Ember.Controller.extend(ThreeColumnsMixin, SortQueryMixin, tables
     });
   }.property(),
 
-  columnsMetadata: [
-    ["id", "Id", 60, function(prev, next){
-      return Ember.get(prev, 'id') - Ember.get(next, 'id');
-    }],
-    ["activity", "Activity", 150],
-    ["status", "status", 150],
-    ["use", "Use", 150],
-    ["sector", "Sector", 150]
-  ],
+  columns: function () {
+
+    var idColumn = AppColumnDefinition.create({
+      width: 80,
+      headerCellName: 'Id',
+      getCellContent: function (row) {
+        return row.get('id');
+      }
+    });
+
+    var nameColumn = AppColumnDefinition.create({
+      width: 100,
+      headerCellName: 'Name',
+      getCellContent: function (row) {
+        return row.get('name');
+      }
+    });
+
+    var countryColumn = AppColumnDefinition.create({
+      width: 100,
+      headerCellName: 'Country',
+      getCellContent: function (row) {
+        return row.get('country');
+      }
+    });
+
+    var townColumn = AppColumnDefinition.create({
+      width: 150,
+      headerCellName: 'Town',
+      getCellContent: function (row) {
+        return row.get('town');
+      }
+    });
+
+    var activityColumn = AppColumnDefinition.create({
+      width: 150,
+      headerCellName: 'Activity',
+      getCellContent: function (row) {
+        return row.get('activity');
+      }
+    });
+
+    var statusColumn = AppColumnDefinition.create({
+      width: 120,
+      headerCellName: 'Status',
+      getCellContent: function (row) {
+        return row.get('status');
+      }
+    });
+    var useColumn = AppColumnDefinition.create({
+      width: 150,
+      headerCellName: 'Use',
+      getCellContent: function (row) {
+        return row.get('use');
+      }
+    });
+
+    var locationColumnGroup = ColumnGroupDefinition.create({
+      groupStyle: "text-center",
+      headerCellName: 'Location',
+      innerColumns: [countryColumn, townColumn]
+    });
+
+    return [idColumn, nameColumn, locationColumnGroup, activityColumn, statusColumn, useColumn];
+
+  }.property(),
 
   actions: {
-    apply:function(){
-      window.location.reload(true);
-    },
-
-    sortAction: function(sortingColumns) {
+    sortAction: function (sortingColumns) {
       this.set('sortingColumns', sortingColumns);
     }
   }
