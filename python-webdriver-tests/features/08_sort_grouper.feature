@@ -358,45 +358,45 @@ Feature: Multi-Column Sorting
       |           | 11103     | 11103 |
       |           | 11104     | 11104 |
 
-#    Given Prepare the grid with no existing sorting column for "grouper":
-#      | groupName                                          | id   |
-#      | accountSection[21]-accountType[11]-accountCode[11] | [11] |
-#    When Click grouper "accountType" to sort as "DESC"
-#    And Click "expand" for row "1"
-#    And Click "expand" for row "111"
-#    And Click to sort as "ASC" for column "Id"
-#    And Click to sort as "DESC" for column "Id"
-#    Then I see grouped rows:
-#      | indicator | groupName | Id |
-#      | +         | 21        | 21 |
-#      | +         | 20        | 20 |
-#      | +         | 19        | 19 |
-#      | +         | 18        | 18 |
-#      | +         | 18        | 18 |
-#      | +         | 17        | 17 |
-#    And There should be 6 sections loaded
-#    And The "Id" column sort indicator should be "desc"
+    Given Prepare the grid with no existing sorting column for "grouper":
+      | groupName                                          | id   |
+      | accountSection[21]-accountType[11]-accountCode[11] | [11] |
+    When Click grouper "accountType" to sort as "DESC"
+    And Click "expand" for row "1"
+    And Click "expand" for row "111"
+    And Click to sort as "ASC" for column "Id"
+    And Click to sort as "DESC" for column "Id"
+    Then I see grouped rows:
+      | indicator | groupName | Id |
+      | +         | 21        | 21 |
+      | +         | 20        | 20 |
+      | +         | 19        | 19 |
+      | +         | 18        | 18 |
+      | +         | 17        | 17 |
+      | +         | 16        | 16 |
+    And There should be 6 sections loaded
+    And The "Id" column sort indicator should be "desc"
 
-#    Given Prepare the grid with no existing sorting column for "grouper":
-#      | groupName                                          | id   |
-#      | accountSection[21]-accountType[11]-accountCode[11] | [11] |
-#    When Customer drags scroll bar by offset 150 with 2 times and wait loading section
-#    And Click "expand" for row "21"
-#    And Customer drags scroll bar by offset 150 with 2 times and wait loading section
-#    And Click "expand" for row "2111"
-#    And Drag scroll bar to "top"
-#    And Click to sort as "ASC" for column "Id"
-#    And Click to sort as "DESC" for column "Id"
-#    Then I see grouped rows:
-#      | indicator | groupName | Id |
-#      | +         | 21        | 21 |
-#      | +         | 20        | 20 |
-#      | +         | 19        | 19 |
-#      | +         | 18        | 18 |
-#      | +         | 18        | 18 |
-#      | +         | 17        | 17 |
-#    And There should be 7 sections loaded
-#    And The "Id" column sort indicator should be "desc"
+    Given Prepare the grid with no existing sorting column for "grouper":
+      | groupName                                          | id   |
+      | accountSection[21]-accountType[11]-accountCode[11] | [11] |
+    When Customer drags scroll bar by offset 150 with 2 times and wait loading section
+    And Click "expand" for row "21"
+    And Customer drags scroll bar by offset 150 with 2 times and wait loading section
+    And Click "expand" for row "2111"
+    And Drag scroll bar to "top"
+    And Click to sort as "ASC" for column "Id"
+    And Click to sort as "DESC" for column "Id"
+    Then I see grouped rows:
+      | indicator | groupName | Id     |
+      | -         | 21        | 21     |
+      | -         | 2111      | 2111   |
+      |           | 211111    | 211111 |
+      |           | 211110    | 211110 |
+      |           | 211109    | 211109 |
+      |           | 211108    | 211108 |
+    And There should be 8 sections loaded
+    And The "Id" column sort indicator should be "desc"
 
   @complete
   Scenario: Remove the grouper sort with column sort
