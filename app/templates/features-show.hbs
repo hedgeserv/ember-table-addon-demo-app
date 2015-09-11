@@ -1,12 +1,12 @@
-<div class="container main-container">
+<section class="container main-container">
     <div class="row">
         <div class="main col-md-9">
             <h2 class="page-title">{{title}}</h2>
           {{features-list features=features}}
           {{yield}}
         </div>
-        <aside class="col-md-3 hidden-xs hidden-sm">
+        <aside class="col-md-3">
           {{feature-pages-nav tables=tables }}
         </aside>
     </div>
-</div>
+</section>
