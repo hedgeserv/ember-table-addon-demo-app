@@ -1,7 +1,9 @@
-<ul class="nav nav-pills nav-stacked">
-  {{#each tables as |table| }}
-    {{#link-to table.link tagName='li' class=table.labelClass href=false}}
-      {{#link-to table.link }}{{table.name}}{{/link-to}}
-    {{/link-to}}
-  {{/each}}
-</ul>
+<nav class="affix-menu scrollspy">
+    <ul class="nav nav-pills nav-stacked">
+      {{#each tables as |table| }}
+        {{#link-to table.link tagName='li' class=table.labelClass href=false}}
+          {{#link-to table.link }}{{table.name}}{{/link-to}}
+        {{/link-to}}
+      {{/each}}
+    </ul>
+</nav>
