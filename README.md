@@ -45,14 +45,12 @@ Ensure you're cd'd to the cloned ember-table-addon-demo-app working-copy directo
 
 ## Running / Development
 
-* `./demo.sh`
+* `ember serve`
 * Visit [http://localhost:4200](http://localhost:4200) for a list of links to demonstrations of all of the features added on top of out-of-the-box ember-table
-* Visit [http://localhost:4200/fully-loaded-loans](http://localhost:4200/fully-loaded-loans) for demo of [Fully Loaded Set of Loans](https://github.com/hedgeserv/ember-table-addon-demo-app/wiki/Fully-Loaded-Set-of-Loans).
 
 
 ### Running Ember Tests
 
-* `mb start --allowCORS` (start Mountebank as stub server)
 * `ember test` (runs tests with phantomjs and just reports a pass/fail)
 * `ember test --server` (runs tests with chrome and just reports a pass/fail)
 
