@@ -1,4 +1,4 @@
-<div class="container main-container">
+<section class="container main-container">
     <div class="row">
         <div class="main col-md-9">
             <h2 class="page-title">{{title}}</h2>
@@ -6,11 +6,7 @@
           {{yield}}
         </div>
         <aside class="col-md-3">
-            <div class="sidebar">
-                <nav class="affix-menu scrollspy">
-                  {{feature-pages-nav tables=tables }}
-                </nav>
-            </div>
+          {{feature-pages-nav tables=tables }}
         </aside>
     </div>
-</div>
+</section>
