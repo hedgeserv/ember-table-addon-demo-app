@@ -1,11 +1,15 @@
-<div class="btn-group" role="group" aria-label="...">
-  {{#each grouper in groupingMetadata}}
-      <button
-        type="button"
-        class="btn btn-sm btn-default sort-grouper"
-        {{action 'sortGrouper' grouper}}>
-        {{grouper.id}} - {{grouper.sortDirection}}
-      </button>
+<div class="row">
+  {{#each styleParts as |part| }}
+      <div class="form-group col-md-2">
+          <label>{{part.title}}:</label>
+          {{view "select" class="form-control"
+            content=styleOptions
+            optionValuePath="content.id"
+            optionLabelPath="content.title"
+            value=part.selectedStyle
+            prompt="Please select a style"
+          }}
+      </div>
   {{/each}}
 </div>
 

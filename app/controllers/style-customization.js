@@ -20,14 +20,68 @@ export default Ember.Controller.extend(TableFeatures, TreeDataGridMixin, {
     }
   ],
 
-  getColumnGroupStyles: function () {
-    return {
-      cellStyle: "text-red",
-      innerColumnStyle: "text-blue",
-      firstColumnStyle: "bg-gray",
-      lastColumnStyle: "bg-lightgray",
-      groupStyle: "text-center"
-    };
-  }
+  styleParts: Ember.computed(function() {
+    var self = this;
+    var StylePart = Ember.Object.extend({
+      selectedStyle: null,
+      partName: null,
+      selectedStyleDidChange: Ember.observer('selectedStyle', function () {
+        var partName = this.get('partName');
+        var selectedStyle = this.get('selectedStyle');
+        Ember.run(function() {
+          console.log('selectedStyle Did change', selectedStyle);
+          self.get('columns').forEach(function(c) {
+            Ember.set(c, partName, selectedStyle);
+
+          });
+        });
+      })
+    });
+    return [
+      StylePart.create({
+        title: 'First Column',
+        partName: 'firstColumnStyle'
+      }),
+      StylePart.create({
+        title: 'Inner Column',
+        partName: 'innerColumnStyle'
+      }),
+      StylePart.create({
+        title: 'Last Column',
+        partName: 'lastColumnStyle'
+      }),
+      StylePart.create({
+        title: 'Cell Style',
+        partName: 'cellStyle'
+      }),
+      StylePart.create({
+        title: 'Group Style',
+        partName: 'groupStyle'
+      })
+    ];
+  }),
+
+  styleOptions: [
+    {
+      title: 'Text in red',
+      id: 'text-red'
+    },
+    {
+      title: 'Text in blue',
+      id: 'text-blue'
+    },
+    {
+      title: 'Text center',
+      id: 'text-center'
+    },
+    {
+      title: 'Background gray',
+      id: 'bg-gray'
+    },
+    {
+      title: 'Background light gray',
+      id: 'bg-lightgray'
+    }
+  ]
 
 });

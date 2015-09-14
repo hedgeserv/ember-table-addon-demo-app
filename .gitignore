@@ -30,3 +30,4 @@ demo.pid
 lettucetests.xml
 test-result.xml
 temp.xml
+.vagrant
