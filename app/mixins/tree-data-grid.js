@@ -6,7 +6,7 @@ export default Ember.Mixin.create({
   groupingMetadata: Ember.computed.oneWay('model.groupingMetadata'),
 
   columns: function () {
-    var idColumn = this._makeColumn('Id', 'id');
+    var idColumn = this._makeColumn('Id', 'id', {width: 100});
     var groupColumns = ['Beginning', 'Activity', 'Ending'].map(function (groupTitle) {
       var titleLowerCase = groupTitle.toLowerCase();
       var columnGroup = ColumnGroupDefinition.create({
@@ -23,11 +23,15 @@ export default Ember.Mixin.create({
     return [idColumn].concat(groupColumns);
   }.property(),
 
-  _makeColumn: function (headerCellName, contentPath) {
-    return AppColumnDefinition.create({
+  _makeColumn: function (headerCellName, contentPath, options) {
+    var column = AppColumnDefinition.create({
       headerCellName: headerCellName,
       contentPath: contentPath
     });
+    if (options) {
+      column.setProperties(options);
+    }
+    return column;
   },
 
   getColumnGroupStyles: function() {
