@@ -12,7 +12,35 @@
       </div>
   {{/each}}
 </div>
-
+<div class="row">
+    <div class="form-group col-md-2">
+        <label>Sorting indicator</label>
+        {{view "select" class="form-control"
+          content=sortingIndicatorOptions
+          optionValuePath="content.id"
+          optionLabelPath="content.title"
+          prompt="Please select a style"
+        }}
+    </div>
+    <div class="form-group col-md-2">
+        <label>Group indicator</label>
+        {{view "select" class="form-control"
+          content=groupIndicatorOptions
+          optionValuePath="content.id"
+          optionLabelPath="content.title"
+          prompt="Please select a style"
+        }}
+    </div>
+    <div class="form-group col-md-2">
+        <label>Loading indicator</label>
+        {{view "select" class="form-control"
+          content=loadingIndicatorOptions
+          optionValuePath="content.id"
+          optionLabelPath="content.title"
+          prompt="Please select a style"
+        }}
+    </div>
+</div>
 <div class="height-13-rows">
   {{ember-table
   hasFooter=false

@@ -29,7 +29,6 @@ export default Ember.Controller.extend(TableFeatures, TreeDataGridMixin, {
         var partName = this.get('partName');
         var selectedStyle = this.get('selectedStyle');
         Ember.run(function() {
-          console.log('selectedStyle Did change', selectedStyle);
           self.get('columns').forEach(function(c) {
             Ember.set(c, partName, selectedStyle);
 
@@ -51,12 +50,12 @@ export default Ember.Controller.extend(TableFeatures, TreeDataGridMixin, {
         partName: 'lastColumnStyle'
       }),
       StylePart.create({
-        title: 'Cell Style',
-        partName: 'cellStyle'
+        title: 'Grouping Cells',
+        partName: 'cellStyle' //apply to grouping header cell only
       }),
       StylePart.create({
-        title: 'Group Style',
-        partName: 'groupStyle'
+        title: 'Group Block',
+        partName: 'groupStyle' //apply to all header cells
       })
     ];
   }),
@@ -82,6 +81,18 @@ export default Ember.Controller.extend(TableFeatures, TreeDataGridMixin, {
       title: 'Background light gray',
       id: 'bg-lightgray'
     }
+  ],
+
+  sortingIndicatorOptions: [
+
+  ],
+
+  groupIndicatorOptions: [
+
+  ],
+
+  loadingIndicatorOptions: [
+
   ]
 
 });
