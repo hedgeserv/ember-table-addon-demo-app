@@ -81,6 +81,18 @@ export default Ember.Controller.extend(TableFeatures, TreeDataGridMixin, {
       title: 'Background light gray',
       id: 'bg-lightgray'
     }
+  ],
+
+  sortingIndicatorOptions: [
+
+  ],
+
+  groupIndicatorOptions: [
+
+  ],
+
+  loadingIndicatorOptions: [
+
   ]
 
 });
