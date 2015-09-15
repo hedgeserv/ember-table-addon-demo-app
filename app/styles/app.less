@@ -15,16 +15,61 @@
   height: @height-13-rows;
 }
 
+
 .inline-header {
   display: inline-block;
 }
 
+/**
+  Group style customization
+**/
+
+.ember-table-header-block.text-red {
+  .ember-table-header-row {
+    .ember-table-header-cell {
+      color: red;
+    }
+  }
+}
+
+.ember-table-header-block.text-blue {
+  .ember-table-header-row {
+    .ember-table-header-cell {
+      color: blue;
+    }
+  }
+}
+
+.ember-table-header-block.bg-gray {
+  .ember-table-header-row {
+    .ember-table-header-cell {
+      background-color: gray;
+    }
+  }
+}
+
+.ember-table-header-block.bg-lightgray {
+  .ember-table-header-row {
+    .ember-table-header-cell {
+      background-color: lightgray;
+    }
+  }
+}
+
+.ember-table-header-block.text-center {
+  .ember-table-header-row {
+    .ember-table-header-cell {
+      text-align: center;
+    }
+  }
+}
+
 .text-red {
-  color: red;
+  color: red
 }
 
 .text-blue {
-  color: blue;
+  color: blue
 }
 
 .bg-gray {
