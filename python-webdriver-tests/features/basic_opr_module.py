@@ -28,7 +28,7 @@ def wait_for_elem(browser, script, timeout=20):
 def wait_element_present(browser):
     start = time.time()
     while time.time() - start < 15:
-        elems = browser.execute_script("return $('.ember-table-body-container.antiscroll-wrap>div:eq(1)')")
+        elems = wait_for_elem(browser, "return $('.ember-table-body-container.antiscroll-wrap>div:eq(1)')")
         if elems[0] and 'antiscroll-scrollbar-vertical' in str(browser.execute_script(
                 "return $('.ember-table-body-container.antiscroll-wrap>div:eq(1)').attr('class')")):
             return elems, browser.execute_script(
