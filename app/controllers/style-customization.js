@@ -54,7 +54,7 @@ export default Ember.Controller.extend(TableFeatures, TreeDataGridMixin, {
         partName: 'cellStyle' //apply to grouping header cell only
       }),
       StylePart.create({
-        title: 'All Cells',
+        title: 'Group Block',
         partName: 'groupStyle' //apply to all header cells
       })
     ];
