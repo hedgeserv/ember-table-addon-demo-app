@@ -84,7 +84,10 @@ export default Ember.Controller.extend(TableFeatures, TreeDataGridMixin, {
   ],
 
   sortingIndicatorOptions: [
-
+    {
+      title: 'Text Indicator',
+      id: 'custom-column-sort-indicator'
+    }
   ],
 
   groupIndicatorOptions: [
@@ -93,6 +96,14 @@ export default Ember.Controller.extend(TableFeatures, TreeDataGridMixin, {
 
   loadingIndicatorOptions: [
 
-  ]
+  ],
+
+  sortIndicatorViewName: Ember.computed(function() {
+    return this.get('selectedSortIndicatorViewName');
+  }).property('selectedSortIndicatorViewName'),
+
+  sortIndicatorViewNameDidChange: Ember.observer('sortIndicatorViewName', function() {
+    console.log(this.get('sortIndicatorViewName'));
+  })
 
 });
