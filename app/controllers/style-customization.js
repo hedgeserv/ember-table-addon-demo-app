@@ -2,6 +2,7 @@ import Ember from 'ember';
 import TableFeatures from '../mixins/features';
 import TreeDataGridMixin from '../mixins/tree-data-grid';
 import GroupedRowIndicatorWithLevel from './../views/grouped-row-indicator-with-level';
+import CustomRowLoadingIndicator from './../views/custom-row-loading-indicator';
 
 export default Ember.Controller.extend(TableFeatures, TreeDataGridMixin, {
   tableContent: [],
@@ -91,8 +92,6 @@ export default Ember.Controller.extend(TableFeatures, TreeDataGridMixin, {
     }
   ],
 
-  loadingIndicatorOptions: [],
-
   groupIndicatorOptions: [
     {
       title: 'With Level',
@@ -103,6 +102,12 @@ export default Ember.Controller.extend(TableFeatures, TreeDataGridMixin, {
   groupIndicatorWidth: Ember.computed(function () {
     var view = this.get('selectedGroupIndicatorView');
     return view ? 25 : 10;
-  }).property('selectedGroupIndicatorView')
+  }).property('selectedGroupIndicatorView'),
 
+  loadingIndicatorOptions: [
+    {
+      title: 'Custom background',
+      id: CustomRowLoadingIndicator
+    }
+  ]
 });
