@@ -1,6 +1,8 @@
 import Ember from 'ember';
 import TableFeatures from '../mixins/features';
 import TreeDataGridMixin from '../mixins/tree-data-grid';
+import GroupedRowIndicatorWithLevel from './../views/grouped-row-indicator-with-level';
+import CustomRowLoadingIndicator from './../views/custom-row-loading-indicator';
 
 export default Ember.Controller.extend(TableFeatures, TreeDataGridMixin, {
   tableContent: [],
@@ -20,7 +22,7 @@ export default Ember.Controller.extend(TableFeatures, TreeDataGridMixin, {
     }
   ],
 
-  styleParts: Ember.computed(function() {
+  styleParts: Ember.computed(function () {
     var self = this;
     var StylePart = Ember.Object.extend({
       selectedStyle: null,
@@ -28,8 +30,8 @@ export default Ember.Controller.extend(TableFeatures, TreeDataGridMixin, {
       selectedStyleDidChange: Ember.observer('selectedStyle', function () {
         var partName = this.get('partName');
         var selectedStyle = this.get('selectedStyle');
-        Ember.run(function() {
-          self.get('columns').forEach(function(c) {
+        Ember.run(function () {
+          self.get('columns').forEach(function (c) {
             Ember.set(c, partName, selectedStyle);
 
           });
@@ -84,15 +86,28 @@ export default Ember.Controller.extend(TableFeatures, TreeDataGridMixin, {
   ],
 
   sortingIndicatorOptions: [
-
+    {
+      title: 'Text Indicator',
+      id: 'custom-column-sort-indicator'
+    }
   ],
 
   groupIndicatorOptions: [
-
+    {
+      title: 'With Level',
+      id: GroupedRowIndicatorWithLevel
+    }
   ],
 
+  groupIndicatorWidth: Ember.computed(function () {
+    var view = this.get('selectedGroupIndicatorView');
+    return view ? 25 : 10;
+  }).property('selectedGroupIndicatorView'),
+
   loadingIndicatorOptions: [
-
+    {
+      title: 'Custom background',
+      id: CustomRowLoadingIndicator
+    }
   ]
-
 });

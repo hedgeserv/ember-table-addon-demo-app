@@ -19,6 +19,7 @@
           content=sortingIndicatorOptions
           optionValuePath="content.id"
           optionLabelPath="content.title"
+          value=selectedSortIndicatorViewName
           prompt="Please select a style"
         }}
     </div>
@@ -28,6 +29,7 @@
           content=groupIndicatorOptions
           optionValuePath="content.id"
           optionLabelPath="content.title"
+          value=selectedGroupIndicatorView
           prompt="Please select a style"
         }}
     </div>
@@ -37,6 +39,7 @@
           content=loadingIndicatorOptions
           optionValuePath="content.id"
           optionLabelPath="content.title"
+          value=selectedRowLoadingIndicatorView
           prompt="Please select a style"
         }}
     </div>
@@ -49,5 +52,9 @@
   columns=columns
   sortAction='sortAction'
   groupMeta=model
+  sortIndicatorViewName=selectedSortIndicatorViewName
+  groupedRowIndicatorView=selectedGroupIndicatorView
+  groupIndicatorWidth=groupIndicatorWidth
+  rowLoadingIndicatorView=selectedRowLoadingIndicatorView
   }}
 </div>
