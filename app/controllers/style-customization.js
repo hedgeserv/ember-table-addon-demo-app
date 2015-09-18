@@ -38,24 +38,20 @@ export default Ember.Controller.extend(TableFeatures, TreeDataGridMixin, {
     });
     return [
       StylePart.create({
-        title: 'First Column',
+        title: 'First Inner Column',
         partName: 'firstColumnStyle'
       }),
       StylePart.create({
-        title: 'Inner Column',
+        title: 'All Inner Columns',
         partName: 'innerColumnStyle'
       }),
       StylePart.create({
-        title: 'Last Column',
+        title: 'Last Inner Column',
         partName: 'lastColumnStyle'
       }),
       StylePart.create({
         title: 'Grouping Cells',
         partName: 'cellStyle' //apply to grouping header cell only
-      }),
-      StylePart.create({
-        title: 'Group Block',
-        partName: 'groupStyle' //apply to all header cells
       })
     ];
   }),
