@@ -1,11 +1,7 @@
-import DS from 'ember-data';
 import Ember from 'ember';
-import ENV from '../config/environment';
+import ApplicationAdapter from './application';
 
-export default DS.RESTAdapter.extend({
-
-  host: ENV.loansServerHost,
-
+export default ApplicationAdapter.extend({
   findQuery: function(store, type, options) {
     var query = options || {};
     var urlSections = [];

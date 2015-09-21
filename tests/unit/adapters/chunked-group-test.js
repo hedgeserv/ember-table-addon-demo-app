@@ -35,7 +35,7 @@ test('only one level', function(assert) {
   };
   Ember.run(function () {
     store.find('chunkedGroup', params).then(function () {
-      assert.equal(passedUrl, hostUrl + '/chunkedGroups/accountSections/1/accountTypes');
+      assert.equal(passedUrl, '/api/chunkedGroups/accountSections/1/accountTypes');
     });
   });
 });
@@ -48,7 +48,7 @@ test('three level data', function(assert) {
   };
   Ember.run(function () {
     store.find('chunkedGroup', params).then(function () {
-      assert.equal(passedUrl, hostUrl + '/chunkedGroups/accountSections/2/accountTypes/3/accountCodes');
+      assert.equal(passedUrl, '/api/chunkedGroups/accountSections/2/accountTypes/3/accountCodes');
     });
   });
 });

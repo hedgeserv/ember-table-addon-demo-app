@@ -23,14 +23,12 @@ module.exports = function(environment) {
     'default-src': "'none'",
     'script-src': "'self' https://www.youtube.com https://s.ytimg.com",
     'font-src': "'self'",
-    'connect-src': "'self' http://localhost:5555",
+    'connect-src': "'self'",
     'img-src': "'self'",
     'style-src': "'self' 'unsafe-inline'",
     'media-src': "'self'",
     'frame-src': "https://www.youtube.com"
   };
-
-  ENV.loansServerHost = "http://localhost:5555";
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
@@ -38,11 +36,6 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
-  }
-
-  if (environment === 'test' || environment === 'ci') {
-    ENV.loansServerHost = "http://localhost:8888";
-    ENV.contentSecurityPolicy['connect-src'] += " http://localhost:8888"
   }
 
   if (environment === 'test') {
