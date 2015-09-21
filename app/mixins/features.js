@@ -2,13 +2,13 @@ import Ember from 'ember';
 
 export default Ember.Mixin.create({
   _tables: [{
-    name: "Tree Data",
-    description: "sort group data by groupers and columns",
-    link: "treeData"
-  },{
     name: "Array Data",
     description: "this is a faster experience for the end user because of lazy loading.",
     link: "arrayData"
+  }, {
+    name: "Tree Data",
+    description: "sort group data by groupers and columns",
+    link: "treeData"
   }, {
     name: "Style Customization",
     description: '',
