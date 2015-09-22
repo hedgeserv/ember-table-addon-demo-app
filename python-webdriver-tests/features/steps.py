@@ -127,6 +127,7 @@ def list_all_loans(step, url):
             "grouper sort": "http://localhost:4200/sort-by-grouper"
         }
         get_url(world.browser, options.get(url))
+        wait_for_elem(world.browser, "return $('.ember-table-tables-container')")
 
 
 @step('The content "(.*?)" should display in page$')
