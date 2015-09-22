@@ -3,6 +3,7 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   afterRenderEvent: function () {
     this.initAffixMenu();
+    this.addPreventAffixedListener();
   },
 
   initAffixMenu: function () {
@@ -29,6 +30,16 @@ export default Ember.Component.extend({
     }
   },
 
+  addPreventAffixedListener: function() {
+    let $sideBar = this.$();
+    $sideBar.on('affix.bs.affix', function (event) {
+      // prevent `$sideBar` fixed when shrinking page.
+      if (Ember.$('.main').offset().top !== $sideBar.offset().top) {
+        event.preventDefault();
+      }
+    });
+  },
+
   scrollSpy: function () {
     if(this.$(".scrollspy").length>0) {
       Ember.$("body").addClass("scroll-spy");
@@ -44,6 +55,5 @@ export default Ember.Component.extend({
         });
       }
     }
-
   }
 });
