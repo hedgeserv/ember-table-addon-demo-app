@@ -184,27 +184,27 @@ Feature: Indicators for expanding and collapsing grouped rows
     When Presenting "grouping column"
     Then The "GroupingColumn" column width should be 149 pixel
     When Click "expand" for row "group1"
-    Then The "GroupingColumn" column width should be 159 pixel
+    Then The "GroupingColumn" column width should be 149 pixel
     When Click "expand" for row "group1-chd1"
-    Then The "GroupingColumn" column width should be 169 pixel
+    Then The "GroupingColumn" column width should be 149 pixel
     When Click "expand" for row "group1-chd2"
-    Then The "GroupingColumn" column width should be 169 pixel
+    Then The "GroupingColumn" column width should be 149 pixel
     When Click "expand" for row "group2"
-    Then The "GroupingColumn" column width should be 169 pixel
+    Then The "GroupingColumn" column width should be 149 pixel
     When Click "collapse" for row "group1"
-    Then The "GroupingColumn" column width should be 159 pixel
+    Then The "GroupingColumn" column width should be 149 pixel
     When Click "collapse" for row "group2"
     Then The "GroupingColumn" column width should be 149 pixel
     When Click "expand" for row "group1"
-    Then The "GroupingColumn" column width should be 169 pixel
+    Then The "GroupingColumn" column width should be 149 pixel
     When Click "collapse" for row "group1-chd1"
-    Then The "GroupingColumn" column width should be 169 pixel
+    Then The "GroupingColumn" column width should be 149 pixel
     When Click "expand" for row "group2"
-    Then The "GroupingColumn" column width should be 169 pixel
+    Then The "GroupingColumn" column width should be 149 pixel
     When Click "collapse" for row "group1-chd2"
-    Then The "GroupingColumn" column width should be 159 pixel
+    Then The "GroupingColumn" column width should be 149 pixel
     When Click "collapse" for row "group1"
-    Then The "GroupingColumn" column width should be 159 pixel
+    Then The "GroupingColumn" column width should be 149 pixel
     When Click "collapse" for row "group2"
     Then The "GroupingColumn" column width should be 149 pixel
 
@@ -302,7 +302,7 @@ Feature: Indicators for expanding and collapsing grouped rows
     Then The "GroupingColumn" column width should be 149 pixel
     Then The index 0 should be "GroupingColumn" column
     When The user drags the "GroupingColumn" on column to "right" with 100 pixel
-    Then The "GroupingColumn" column width should be 149 pixel
+    Then The "GroupingColumn" column width should be 248 pixel
     When Reorder an inner column "GroupingColumn" header to "right" with 300 pixel
     Then The index 0 should be "GroupingColumn" column
 
