@@ -40,9 +40,11 @@ def drag_scroll_by_css_with_times(browser, offset_y, times):
     start = time.time()
 
     while time.time() - start < 15:
+        wait_element_present(browser)
         drag_scroll_by_css(browser, 0, offset_y)
         elems, top = wait_element_present(browser)
-        if int(str(top).split('.')[0]) >= int(offset_y) * int(times):
+
+        if int(str(top).replace("px", "").split('.')[0]) >= int(offset_y) * int(times):
             break
         time.sleep(0.5)
 
