@@ -475,3 +475,51 @@ Feature: Multi-Column Sorting
       |           | 10101     | 10101 | s1-1-2              | t1-1-1              | fo1-1-4              |
       |           | 10110     | 10110 | s1-1-10             | t1-1-10             | fo1-1-10             |
       |           | 10111     | 10111 | s1-1-11             | t1-1-11             | fo1-1-11             |
+
+  @wip
+  Scenario: Unsort grouper and column sort should be effective
+    Given Prepare the grid with no existing sorting column for "grouper":
+      | groupName         | id | beginningDr | beginningCr | netBeginning |
+      | accountSection[9] |    | s           | t           | fo           |
+    When Click grouper "accountSection" to sort as "DESC"
+    And Click to sort as "ASC" for column "Id"
+    And I see grouped rows:
+      | indicator | groupName | Id | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
+      | +         | 9         | 9  | s9                  | t9                  | fo9                  |
+      | +         | 8         | 8  | s8                  | t8                  | fo8                  |
+      | +         | 7         | 7  | s7                  | t7                  | fo7                  |
+      | +         | 6         | 6  | s6                  | t6                  | fo6                  |
+      | +         | 5         | 5  | s5                  | t5                  | fo5                  |
+      | +         | 4         | 4  | s4                  | t4                  | fo4                  |
+    And Click grouper "accountSection" to sort as "unsort"
+    Then I see grouped rows:
+      | indicator | groupName | Id | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
+      | +         | 1         | 1  | s1                  | t1                  | fo1                  |
+      | +         | 2         | 2  | s2                  | t2                  | fo2                  |
+      | +         | 3         | 3  | s3                  | t3                  | fo3                  |
+      | +         | 4         | 4  | s4                  | t4                  | fo4                  |
+      | +         | 5         | 5  | s5                  | t5                  | fo5                  |
+      | +         | 6         | 6  | s6                  | t6                  | fo6                  |
+
+    Given Prepare the grid with no existing sorting column for "grouper":
+      | groupName                        | id  | beginningDr | beginningCr | netBeginning |
+      | accountSection[9]-accountType[5] | [5] | [5]         | [5]         | [5]          |
+    When Click "expand" for row "1"
+    And Click grouper "accountSection" to sort as "DESC"
+    And Click to sort as "ASC" for column "Id"
+    And I see grouped rows:
+      | indicator | groupName | Id  | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
+      | +         | 9         | 9   | 9                   | 9                   | 9                    |
+      | +         | 901       | 901 | 901                 | 901                 | 901                  |
+      | +         | 902       | 902 | 902                 | 902                 | 902                  |
+      | +         | 903       | 903 | 903                 | 903                 | 903                  |
+      | +         | 904       | 904 | 904                 | 904                 | 904                  |
+      | +         | 905       | 905 | 905                 | 905                 | 905                  |
+    Then I see grouped rows:
+      | indicator | groupName | Id | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
+      | +         | 1         | 1  | 1                   | 1                   | 1                    |
+      | +         | 2         | 2  | 2                   | 2                   | 2                    |
+      | +         | 3         | 3  | 3                   | 3                   | 3                    |
+      | +         | 4         | 4  | 4                   | 4                   | 4                    |
+      | +         | 5         | 5  | 5                   | 5                   | 5                    |
+      | +         | 6         | 6  | 6                   | 6                   | 6                    |
