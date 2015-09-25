@@ -476,7 +476,7 @@ Feature: Multi-Column Sorting
       |           | 10110     | 10110 | s1-1-10             | t1-1-10             | fo1-1-10             |
       |           | 10111     | 10111 | s1-1-11             | t1-1-11             | fo1-1-11             |
 
-  @wip
+  @complete
   Scenario: Unsort grouper and column sort should be effective
     Given Prepare the grid with no existing sorting column for "grouper":
       | groupName         | id | beginningDr | beginningCr | netBeginning |
@@ -503,23 +503,25 @@ Feature: Multi-Column Sorting
 
     Given Prepare the grid with no existing sorting column for "grouper":
       | groupName                        | id  | beginningDr | beginningCr | netBeginning |
-      | accountSection[9]-accountType[5] | [5] | [5]         | [5]         | [5]          |
-    When Click "expand" for row "1"
+      | accountSection[3]-accountType[5] | [5] | [5]         | [5]         | [5]          |
+    When Click "expand" for row "3"
     And Click grouper "accountSection" to sort as "DESC"
+    And Click grouper "accountType" to sort as "DESC"
     And Click to sort as "ASC" for column "Id"
+    And Click grouper "accountSection" to sort as "unsort"
     And I see grouped rows:
       | indicator | groupName | Id  | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
-      | +         | 9         | 9   | 9                   | 9                   | 9                    |
-      | +         | 901       | 901 | 901                 | 901                 | 901                  |
-      | +         | 902       | 902 | 902                 | 902                 | 902                  |
-      | +         | 903       | 903 | 903                 | 903                 | 903                  |
-      | +         | 904       | 904 | 904                 | 904                 | 904                  |
-      | +         | 905       | 905 | 905                 | 905                 | 905                  |
+      | +         | 1         | 1   | 1                   | 1                   | 1                    |
+      | +         | 2         | 2   | 2                   | 2                   | 2                    |
+      | -         | 3         | 3   | 3                   | 3                   | 3                    |
+      | +         | 305       | 305 | 305                 | 305                 | 305                  |
+      | +         | 304       | 304 | 304                 | 304                 | 304                  |
+    And Click grouper "accountType" to sort as "unsort"
     Then I see grouped rows:
-      | indicator | groupName | Id | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
-      | +         | 1         | 1  | 1                   | 1                   | 1                    |
-      | +         | 2         | 2  | 2                   | 2                   | 2                    |
-      | +         | 3         | 3  | 3                   | 3                   | 3                    |
-      | +         | 4         | 4  | 4                   | 4                   | 4                    |
-      | +         | 5         | 5  | 5                   | 5                   | 5                    |
-      | +         | 6         | 6  | 6                   | 6                   | 6                    |
+      | indicator | groupName | Id  | Beginning DR (Base) | Beginning CR (Base) | Net Beginning (Base) |
+      | +         | 1         | 1   | 1                   | 1                   | 1                    |
+      | +         | 2         | 2   | 2                   | 2                   | 2                    |
+      | -         | 3         | 3   | 3                   | 3                   | 3                    |
+      | +         | 301       | 301 | 301                 | 301                 | 301                  |
+      | +         | 302       | 302 | 302                 | 302                 | 302                  |
+      | +         | 303       | 303 | 303                 | 303                 | 303                  |
