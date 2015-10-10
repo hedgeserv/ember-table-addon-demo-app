@@ -38,7 +38,7 @@
     "express-http-proxy": "^0.6.0"
   },
   "dependencies": {
-    "ember-table": "*"
+    "ember-table": "https://github.com/hedgeserv/ember-table.git#master"
   },
   "ember-addon": {
     "paths": [
