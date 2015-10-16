@@ -16,13 +16,6 @@ export default Ember.Component.extend({
             top: function () {
               var offsetTop = $sideBar.offset().top;
               return (this.top = offsetTop - 65);
-            },
-            bottom: function () {
-              var affixBottom = Ember.$(".footer").outerHeight(true) + Ember.$(".subfooter").outerHeight(true);
-              if (self.$(".footer-top").length > 0) {
-                affixBottom = affixBottom + self.$(".footer-top").outerHeight(true);
-              }
-              return (this.bottom = affixBottom + 50);
             }
           }
         });
