@@ -27,7 +27,7 @@ You will need the following things properly installed on your computer.
 * [PhantomJS](http://phantomjs.org/) - `npm install -g phantomjs`
 * [ember-table](https://github.com/hedgeserv/ember-table) - see below
 * [Python](https://www.python.org/) (2.7) - `brew install python`
-* [Mountebank](http://www.mbtest.org/)(^1.2.122) - `npm install -g mountebank --production`
+* [Mountebank](http://www.mbtest.org/)(^1.3.1) - `npm install -g mountebank --production`
 
 ### Npm link for ember-table-addon (for reuse later)
 
